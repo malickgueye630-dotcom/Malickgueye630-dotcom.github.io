@@ -227,18 +227,7 @@ footer {
 <script>
 /* 🔒 Protection iPad / iPhone — empêche enregistrer & glisser */
 
-document.querySelectorAll('.gallery img').forEach(img => {
 
-  // Empêche appui long (menu Enregistrer)
-  img.addEventListener('touchstart', e => e.preventDefault());
-
-  // Empêche sélection
-  img.addEventListener('selectstart', e => e.preventDefault());
-
-  // Empêche drag
-  img.addEventListener('dragstart', e => e.preventDefault());
-
-});
 // ✅ Visionneuse plein écran
 const viewer = document.getElementById('viewer');
 const viewerImg = document.getElementById('viewerImg');
@@ -246,7 +235,7 @@ const viewerClose = document.getElementById('viewerClose');
 // bloque drag + menu sur l'image en plein écran
 viewerImg.setAttribute('draggable', 'false');
 viewerImg.addEventListener('dragstart', (e) => e.preventDefault());
-viewerImg.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+
 document.querySelectorAll('.gallery img').forEach(img => {
   img.addEventListener('click', () => {
     viewerImg.src = img.getAttribute('src');
