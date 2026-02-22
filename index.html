@@ -47,7 +47,26 @@ footer {
     text-align: center;
     padding: 30px;
     color: #888;
+
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+}
+
+/* 🔒 Protection images */
+img {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+ 
 </style>
 </head>
 
@@ -70,6 +89,25 @@ footer {
 <footer>
 <p>© 2026 Malick Gueye — All Rights Reserved</p>
 </footer>
+<script>
+  // Désactive clic droit
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
 
+  // Désactive le drag & drop des images
+  document.addEventListener('dragstart', (e) => {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  });
+
+  // Bloque quelques raccourcis classiques (pas infaillible)
+  document.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    if (
+      (e.ctrlKey && (key === 's' || key === 'u' || key === 'p')) || // save / view source / print
+      (e.ctrlKey && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) // devtools
+    ) {
+      e.preventDefault();
+    }
+  });
+</script>
 </body>
 </html>
