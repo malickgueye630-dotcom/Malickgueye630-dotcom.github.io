@@ -61,11 +61,17 @@ footer {
   color: #888;
 }
 
-/* 🔒 Protection images */
-img {
-  user-select: none;
+/* 🔒 Protection images (iPad / iPhone / Safari) */
+.gallery img{
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
-  pointer-events: none;
+  user-select: none;
+
+  -webkit-user-drag: none;
+  user-drag: none;
+
+  pointer-events: auto; /* IMPORTANT */
+}
  
 </style>
 </head>
@@ -108,6 +114,22 @@ img {
       e.preventDefault();
     }
   });
+</script>
+<script>
+/* 🔒 Protection iPad / iPhone — empêche enregistrer & glisser */
+
+document.querySelectorAll('.gallery img').forEach(img => {
+
+  // Empêche appui long (menu Enregistrer)
+  img.addEventListener('touchstart', e => e.preventDefault());
+
+  // Empêche sélection
+  img.addEventListener('selectstart', e => e.preventDefault());
+
+  // Empêche drag
+  img.addEventListener('dragstart', e => e.preventDefault());
+
+});
 </script>
 </body>
 </html>
