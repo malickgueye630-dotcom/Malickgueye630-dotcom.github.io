@@ -105,6 +105,18 @@ def build_hadith():
         d = json.loads(gzip.open(SRC / rel).read())
         chapters = d["chapters"]
         hadiths = d["hadiths"]
+        # certains recueils ont un chapitre sans id (ex. an-Nasa'i) : on lui en attribue un
+        next_id = max((c["id"] for c in chapters if isinstance(c["id"], int)), default=0) + 1
+        remap = {}
+        for c in chapters:
+            if not isinstance(c["id"], int):
+                remap[c["id"]] = next_id
+                c["id"] = next_id
+                next_id += 1
+        if remap:
+            for h in hadiths:
+                if h.get("chapterId") in remap:
+                    h["chapterId"] = remap[h["chapterId"]]
         by_chapter = {}
         for h in hadiths:
             en = h.get("english") or {}
