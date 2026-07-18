@@ -16,7 +16,8 @@
     "mort": "Mort & au-delà",
     "paradis": "Paradis & Enfer",
     "dhikr": "Invocation & rappel",
-    "misericorde": "Miséricorde"
+    "misericorde": "Miséricorde",
+    "langue": "Langue, médisance & mensonge"
   },
   "hadiths": [
     {
@@ -796,6 +797,85 @@
         "dhikr"
       ],
       "refId": 6167
+    },
+    {
+      "id": 54,
+      "ar": "أَتَدْرُونَ مَا الْغِيبَةُ؟ قَالُوا: اللَّهُ وَرَسُولُهُ أَعْلَمُ. قَالَ: ذِكْرُكَ أَخَاكَ بِمَا يَكْرَهُ. قِيلَ: أَفَرَأَيْتَ إِنْ كَانَ فِي أَخِي مَا أَقُولُ؟ قَالَ: إِنْ كَانَ فِيهِ مَا تَقُولُ فَقَدِ اغْتَبْتَهُ، وَإِنْ لَمْ يَكُنْ فِيهِ فَقَدْ بَهَتَّهُ",
+      "fr": "« Savez-vous ce qu'est la médisance (ghiba) ? » Ils dirent : « Allah et Son Messager savent mieux. » Il dit : « C'est mentionner ton frère par ce qu'il déteste. » On demanda : « Et si ce que je dis est vraiment en lui ? » Il répondit : « Si c'est en lui, tu as fait de la médisance ; et si ce n'est pas en lui, tu l'as calomnié. »",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 2589,
+      "source": "Sahih Muslim 2589",
+      "grade": "Sahih",
+      "themes": [
+        "langue",
+        "comportement"
+      ],
+      "refId": 6431
+    },
+    {
+      "id": 55,
+      "ar": "آيَةُ الْمُنَافِقِ ثَلاَثٌ: إِذَا حَدَّثَ كَذَبَ، وَإِذَا وَعَدَ أَخْلَفَ، وَإِذَا اؤْتُمِنَ خَانَ",
+      "fr": "Les signes de l'hypocrite sont au nombre de trois : quand il parle, il ment ; quand il promet, il ne tient pas sa promesse ; et quand on lui fait confiance, il trahit.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 33,
+      "source": "Sahih al-Bukhari 33 ; Sahih Muslim 59",
+      "grade": "Sahih",
+      "themes": [
+        "langue",
+        "comportement",
+        "foi"
+      ],
+      "refId": 33
+    },
+    {
+      "id": 56,
+      "ar": "عَلَيْكُمْ بِالصِّدْقِ فَإِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ وَإِنَّ الْبِرَّ يَهْدِي إِلَى الْجَنَّةِ... وَإِيَّاكُمْ وَالْكَذِبَ فَإِنَّ الْكَذِبَ يَهْدِي إِلَى الْفُجُورِ وَإِنَّ الْفُجُورَ يَهْدِي إِلَى النَّارِ",
+      "fr": "Attachez-vous à la véracité, car la véracité guide vers la piété et la piété guide vers le Paradis… Et gardez-vous du mensonge, car le mensonge guide vers la perversité et la perversité guide vers le Feu.",
+      "narrator": "Ibn Mas'ud",
+      "collection": "muslim",
+      "num": 2607,
+      "source": "Sahih Muslim 2607 ; Sahih al-Bukhari 6094",
+      "grade": "Sahih",
+      "themes": [
+        "langue",
+        "comportement",
+        "paradis"
+      ],
+      "refId": 6476
+    },
+    {
+      "id": 57,
+      "ar": "لِكُلِّ غَادِرٍ لِوَاءٌ يَوْمَ الْقِيَامَةِ يُقَالُ هَذِهِ غَدْرَةُ فُلاَنِ بْنِ فُلاَنٍ",
+      "fr": "Tout traître aura un étendard le Jour de la Résurrection, et l'on dira : « Voici la trahison d'untel, fils d'untel. »",
+      "narrator": "Ibn 'Umar",
+      "collection": "muslim",
+      "num": 1735,
+      "source": "Sahih Muslim 1735 ; Sahih al-Bukhari 6177",
+      "grade": "Sahih",
+      "themes": [
+        "comportement",
+        "langue",
+        "mort"
+      ],
+      "refId": 4401
+    },
+    {
+      "id": 58,
+      "ar": "لاَ تَدْخُلُونَ الْجَنَّةَ حَتَّى تُؤْمِنُوا، وَلاَ تُؤْمِنُوا حَتَّى تَحَابُّوا. أَوَلاَ أَدُلُّكُمْ عَلَى شَىْءٍ إِذَا فَعَلْتُمُوهُ تَحَابَبْتُمْ؟ أَفْشُوا السَّلاَمَ بَيْنَكُمْ",
+      "fr": "Vous n'entrerez pas au Paradis tant que vous ne croirez pas, et vous ne croirez pas vraiment tant que vous ne vous aimerez pas les uns les autres. Voulez-vous que je vous indique une chose qui, si vous la faites, vous amènera à vous aimer ? Répandez le salam (la salutation de paix) entre vous.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 54,
+      "source": "Sahih Muslim 54",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite",
+        "foi",
+        "paradis"
+      ],
+      "refId": 101
     }
   ]
 }

@@ -4,10 +4,12 @@ import * as data from './data.js';
 import { viewHome } from './views-home.js';
 import { viewQuranList, viewSurah } from './views-quran.js';
 import { viewSearch } from './views-search.js';
-import { viewHadithHome, viewCollection, viewChapter, viewTheme } from './views-hadith.js';
+import { viewHadithHome, viewCollection, viewChapter, viewTheme, viewFindHadith } from './views-hadith.js';
 import { viewDuas, viewDuaCategory } from './views-duas.js';
 import { viewFavorites } from './views-favorites.js';
 import { viewAbout } from './views-about.js';
+import { viewPrayer } from './views-prayer.js';
+import { startScheduler, notifGranted } from './notify.js';
 
 export const $view = document.getElementById('view');
 
@@ -117,6 +119,8 @@ const routes = [
   [/^#\/search(?:\?q=(.*))?$/, (m) => viewSearch(m[1] ? decodeURIComponent(m[1]) : '')],
   [/^#\/hadith$/, () => viewHadithHome()],
   [/^#\/hadith\/theme\/([\w-]+)$/, (m) => viewTheme(m[1])],
+  [/^#\/hadith\/([\w-]+)\/find\/(\d+)$/, (m) => viewFindHadith(m[1], +m[2])],
+  [/^#\/prayer$/, () => viewPrayer()],
   [/^#\/hadith\/([\w-]+)\/(\d+)(?:\?.*)?$/, (m) => viewChapter(m[1], +m[2])],
   [/^#\/hadith\/([\w-]+)$/, (m) => viewCollection(m[1])],
   [/^#\/duas$/, () => viewDuas()],
@@ -185,6 +189,7 @@ export function openSettings() {
       <div class="lab">Hors-ligne<small>Télécharger tout le Coran pour un accès sans connexion</small></div>
       <button class="btn btn-ghost" id="btnOffline">Télécharger</button>
     </div>
+    <div class="setrow"><div class="lab">Horaires de prière & notifications</div><a class="backlink" href="#/prayer" onclick="document.getElementById('sheet-root').innerHTML=''">Ouvrir →</a></div>
     <div class="setrow"><div class="lab">Sources & à propos</div><a class="backlink" href="#/about" onclick="document.getElementById('sheet-root').innerHTML=''">Voir →</a></div>
   `, (el) => {
     const segT = el.querySelector('#segTheme');
@@ -209,7 +214,7 @@ export function openSettings() {
       const btn = e.target;
       btn.textContent = '0 %'; btn.disabled = true;
       try {
-        const urls = ['data/quran/search-fr.json'];
+        const urls = ['data/quran/search-fr.json', 'data/quran/search-ar.json', 'data/quran/phonetic.json'];
         for (let i = 1; i <= 114; i++) urls.push(`data/quran/s/${i}.json`);
         let done = 0;
         // par lots de 10
@@ -267,3 +272,4 @@ iosInstallHint();
 if ('serviceWorker' in navigator) {
   addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
+if (notifGranted()) startScheduler();

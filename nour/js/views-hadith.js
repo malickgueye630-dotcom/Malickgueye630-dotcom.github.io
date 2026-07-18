@@ -1,8 +1,12 @@
 // Hadiths : sélection thématique FR + les six recueils complets (AR/EN).
 import { $view, esc, toast, topbar, bindTopbar, copyText, shareText } from './app.js';
-import { toggleFav, isFav } from './state.js';
+import { state, toggleFav, isFav } from './state.js';
 import * as data from './data.js';
 import { fold } from './search.js';
+import { arToLatin } from './translit.js';
+
+const tlLine = ar => state.settings.showTl
+  ? `<div class="tl" style="color:var(--ink-2);font-style:italic;font-size:.85rem;margin:4px 0">${esc(arToLatin(ar))}</div>` : '';
 
 const gradeClass = g => {
   const t = (g || '').toLowerCase();
@@ -15,6 +19,7 @@ const gradeClass = g => {
 export function hadithFrCard(h, themes, q = '') {
   return `<div class="card hcard" id="hfr${h.id}">
     <div class="ar">${esc(h.ar)}</div>
+    ${tlLine(h.ar)}
     <p class="fr">${esc(h.fr)}</p>
     <div class="src">
       <span class="badge ${gradeClass(h.grade)}">${esc(h.grade)}</span>
@@ -141,6 +146,15 @@ export async function viewCollection(key) {
   };
 }
 
+// ---------------- résolveur : ouvre un hadith par son numéro de base ----------------
+export async function viewFindHadith(key, refId) {
+  const cat = await data.hadithIndex();
+  const col = cat.find(c => c.key === key);
+  const ch = col?.chapters.find(c => c.first <= refId && refId <= c.last);
+  if (ch) location.replace(`#/hadith/${key}/${ch.id}?h=${refId}`);
+  else location.replace(`#/hadith/${key}`);
+}
+
 // ---------------- vue chapitre ----------------
 export async function viewChapter(key, chId) {
   // supporte #/hadith/col/12?h=345
@@ -176,6 +190,7 @@ export async function viewChapter(key, chId) {
         </div>
       </div>
       <div class="ar">${esc(ar)}</div>
+      ${tlLine(ar)}
       ${narrator || text ? `<p class="en">${narrator ? `<b>${esc(narrator)}</b> ` : ''}${esc(text)}</p>` : ''}
     </div>`;
 

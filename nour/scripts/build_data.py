@@ -85,7 +85,26 @@ def build_quran():
         "sajda": sajda,
     })
     write(OUT / "quran/search-fr.json", search_fr)
-    print(f"Coran : 114 sourates, {offset} versets")
+
+    # index phonétique : translittération brute par verset (normalisée côté client)
+    phonetic = []
+    for s in tr:
+        for v in s["verses"]:
+            phonetic.append([s["id"], v["id"], v["transliteration"]])
+    write(OUT / "quran/phonetic.json", phonetic)
+
+    # index arabe sans diacritiques pour la recherche dans le texte arabe
+    def strip_ar(t):
+        t = re.sub(r"[ً-ٰٟۖ-ۭـ]", "", t)
+        t = (t.replace("أ", "ا").replace("إ", "ا").replace("آ", "ا").replace("ٱ", "ا")
+              .replace("ى", "ي").replace("ة", "ه").replace("ؤ", "و").replace("ئ", "ي"))
+        return t
+    search_ar = []
+    for s_fr in fr:
+        for v in s_fr["verses"]:
+            search_ar.append([s_fr["id"], v["id"], strip_ar(v["text"])])
+    write(OUT / "quran/search-ar.json", search_ar)
+    print(f"Coran : 114 sourates, {offset} versets (+ index phonétique + index arabe)")
 
 
 # ---------------------------------------------------------------- Hadiths

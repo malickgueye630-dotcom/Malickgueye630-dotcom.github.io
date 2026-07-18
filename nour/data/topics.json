@@ -1,0 +1,547 @@
+{
+  "note": "Thésaurus de sujets islamiques : chaque sujet relie des mots-clés français (et variantes) à des passages précis du Coran, des hadiths de la sélection et des invocations. La recherche sémantique n'utilise QUE ces références vérifiées.",
+  "lexicon": [
+    ["traitre", "trahison", "trahir", "perfidie", "deloyal", "deloyaute", "felonie"],
+    ["medisance", "medire", "calomnie", "calomnier", "diffamation", "ragot", "ragots", "critiquer"],
+    ["patience", "patienter", "patient", "endurance", "endurer", "perseverance", "perseverer", "sabr"],
+    ["mensonge", "mentir", "menteur", "menteuse", "mensonger"],
+    ["verite", "veracite", "sincere", "sincerite", "franchise", "honnete", "honnetete"],
+    ["colere", "enerve", "enervement", "fache", "rage", "fureur", "irrite"],
+    ["peur", "crainte", "craindre", "effraye", "terreur", "frayeur", "apeure"],
+    ["tristesse", "triste", "chagrin", "deprime", "depression", "malheureux", "desespoir", "souci", "soucis", "angoisse", "anxiete", "stress"],
+    ["argent", "richesse", "riche", "fortune", "biens", "economie"],
+    ["epouse", "femme", "mari", "epoux", "conjoint", "conjointe", "couple"],
+    ["enfant", "enfants", "fils", "fille", "descendance", "progeniture", "bebe"],
+    ["pardon", "pardonner", "repentir", "istighfar", "tawba", "absolution", "peche", "peches", "faute", "fautes"],
+    ["aumone", "zakat", "sadaqa", "charite", "don", "generosite"],
+    ["jeune", "jeuner", "sawm", "siyam"],
+    ["priere", "prier", "salat", "salah"],
+    ["mort", "mourir", "deces", "defunt", "tombe", "cimetiere", "funerailles"],
+    ["paradis", "jannah", "janna", "eden"],
+    ["enfer", "jahannam", "gehenne", "feu"],
+    ["maladie", "malade", "guerison", "guerir", "sante", "soigner"],
+    ["voyage", "voyager", "voyageur", "trajet", "deplacement"],
+    ["mosquee", "masjid"],
+    ["misericorde", "misericordieux", "clemence", "compassion", "rahma"],
+    ["orgueil", "arrogance", "arrogant", "fierte", "vantard", "hautain"],
+    ["humilite", "humble", "modestie", "modeste"],
+    ["envie", "jalousie", "jaloux", "hasad", "convoitise"],
+    ["amour", "aimer", "affection", "amitie", "fraternite", "frere", "freres", "soeur"],
+    ["parents", "pere", "mere", "papa", "maman"],
+    ["mariage", "marier", "noces", "nikah"],
+    ["divorce", "divorcer", "separation", "repudiation", "talaq"],
+    ["voisin", "voisins", "voisinage"],
+    ["invocation", "invoquer", "doua", "dua", "duaa", "priere personnelle"],
+    ["hypocrite", "hypocrisie", "munafiq"],
+    ["justice", "juste", "equite", "injustice", "injuste", "oppression", "opprime"],
+    ["science", "savoir", "connaissance", "apprendre", "etudier", "etude"],
+    ["gratitude", "remercier", "remerciement", "reconnaissance", "shukr"],
+    ["confiance", "tawakkul", "remettre", "compter sur"]
+  ],
+  "topics": [
+    {
+      "id": "isra-miraj",
+      "label": "Le voyage nocturne (al-Isrâ' wal-Mi'râj)",
+      "keys": ["voyage nocturne", "isra", "israa", "miraj", "mi3raj", "miraaj", "ascension", "jerusalem", "quds", "bouraq", "buraq", "mosquee al aqsa", "al aqsa", "sept cieux", "voyage de nuit", "prophete monte au ciel"],
+      "desc": "Le voyage nocturne du Prophète ﷺ de La Mecque à la mosquée al-Aqsa, puis son ascension à travers les cieux, où les cinq prières ont été prescrites.",
+      "quran": [[17, 1, 1], [53, 1, 18]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "dhul-qarnayn",
+      "label": "Dhul-Qarnayn (l'homme aux deux cornes)",
+      "keys": ["dhul qarnayn", "dhoul qarnayn", "zoul qarnayn", "dul qarnayn", "deux cornes", "coucher du soleil voyage", "voyage jusqu'au coucher du soleil", "peuple entre les deux montagnes", "entre deux montagnes", "barrage de fer", "gog et magog", "yajuj", "majuj", "yagog", "magog"],
+      "desc": "Les voyages de Dhul-Qarnayn racontés dans la sourate Al-Kahf : l'homme qui voyagea jusqu'au couchant et au levant du soleil, puis bâtit un barrage contre Gog et Magog pour le peuple vivant entre les deux montagnes.",
+      "quran": [[18, 83, 98], [21, 96, 96]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "gens-caverne",
+      "label": "Les gens de la caverne",
+      "keys": ["gens de la caverne", "dormants", "caverne", "ashab al kahf", "jeunes endormis", "chien de la caverne"],
+      "desc": "L'histoire des jeunes croyants réfugiés dans une caverne, endormis par Allah pendant de longues années (sourate Al-Kahf).",
+      "quran": [[18, 9, 26]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "medisance",
+      "label": "La médisance (ghiba)",
+      "keys": ["medisance", "ghiba", "ghibah", "parler dans le dos", "parle dans le dos", "parlent dans le dos", "critiquer les gens", "rapporter les paroles", "calomnie", "diffamation", "ragots", "manger la chair de son frere", "namima"],
+      "desc": "Parler d'une personne en son absence d'une manière qu'elle détesterait. Le Coran la compare à manger la chair de son frère mort.",
+      "quran": [[49, 12, 12], [104, 1, 1]],
+      "hadiths": [54, 3, 5],
+      "duas": []
+    },
+    {
+      "id": "trahison",
+      "label": "La trahison et la traîtrise",
+      "keys": ["trahison", "traitre", "trahir", "trahit", "perfidie", "tromper la confiance", "abus de confiance", "manquer a sa parole", "briser un engagement", "ghadr"],
+      "desc": "Trahir une confiance, un engagement ou un dépôt est un signe d'hypocrisie ; le traître sera exposé au Jour de la Résurrection.",
+      "quran": [[8, 27, 27], [4, 107, 107], [12, 52, 52]],
+      "hadiths": [55, 57, 20],
+      "duas": []
+    },
+    {
+      "id": "mensonge",
+      "label": "Le mensonge et la véracité",
+      "keys": ["mensonge", "mentir", "menteur", "verite", "veracite", "sincerite", "dire la verite", "franchise", "kidhb", "sidq"],
+      "desc": "L'Islam ordonne la véracité, qui mène au Paradis, et interdit le mensonge, qui mène à la perversité.",
+      "quran": [[61, 2, 3], [22, 30, 30]],
+      "hadiths": [56, 55],
+      "duas": []
+    },
+    {
+      "id": "colere",
+      "label": "La colère et la maîtrise de soi",
+      "keys": ["colere", "enerver", "fache", "rage", "se maitriser", "maitrise de soi", "controler sa colere", "retenir sa colere", "ghadab"],
+      "desc": "Maîtriser sa colère est un signe de force ; le Prophète ﷺ a conseillé : « Ne te mets pas en colère. »",
+      "quran": [[3, 134, 134], [42, 37, 37]],
+      "hadiths": [6, 7],
+      "duas": ["colere"]
+    },
+    {
+      "id": "patience",
+      "label": "La patience (sabr)",
+      "keys": ["patience", "sabr", "endurance", "perseverance", "epreuve", "epreuves", "supporter", "tenir bon", "difficultes"],
+      "desc": "La patience face aux épreuves est immensément récompensée : « Allah est avec les patients. »",
+      "quran": [[2, 153, 153], [2, 155, 157], [3, 200, 200], [39, 10, 10], [94, 5, 6], [103, 1, 3]],
+      "hadiths": [46, 45, 47],
+      "duas": ["angoisse-2", "difficulte-1"]
+    },
+    {
+      "id": "pardon-repentir",
+      "label": "Le pardon d'Allah et le repentir",
+      "keys": ["pardon", "repentir", "tawba", "istighfar", "peches", "se repentir", "demander pardon", "misericorde d'allah", "desespoir du pardon"],
+      "desc": "Quels que soient les péchés, la porte du repentir reste ouverte : « Ne désespérez pas de la miséricorde d'Allah. »",
+      "quran": [[39, 53, 53], [3, 135, 135], [24, 22, 22], [66, 8, 8]],
+      "hadiths": [],
+      "duas": ["pardon-1", "pardon-2", "matin-2", "laylat-qadr"]
+    },
+    {
+      "id": "parents",
+      "label": "Les parents",
+      "keys": ["parents", "pere", "mere", "bonte envers les parents", "respect des parents", "obeir aux parents", "birr al walidayn", "s'occuper de ses parents", "parents ages"],
+      "desc": "La bonté envers les parents vient juste après l'adoration d'Allah ; la mère a droit à trois fois plus de compagnie.",
+      "quran": [[17, 23, 24], [31, 14, 14], [46, 15, 15]],
+      "hadiths": [8, 9, 10],
+      "duas": ["parents-1"]
+    },
+    {
+      "id": "mariage",
+      "label": "Le mariage",
+      "keys": ["mariage", "se marier", "epouse", "epoux", "couple", "nikah", "choisir son conjoint", "vie conjugale", "amour dans le couple"],
+      "desc": "Le mariage est un signe d'Allah : Il a mis entre les époux affection et miséricorde.",
+      "quran": [[30, 21, 21], [4, 1, 1], [25, 74, 74]],
+      "hadiths": [37, 38, 35, 36],
+      "duas": ["mariage-felicitation", "rapports-conjugaux", "famille-1"]
+    },
+    {
+      "id": "enfants-famille",
+      "label": "Les enfants et la famille",
+      "keys": ["enfants", "fils", "fille", "descendance", "education des enfants", "famille", "foyer", "proteger ses enfants"],
+      "desc": "Les enfants sont un dépôt confié : le Prophète ﷺ demandait pour eux la protection d'Allah.",
+      "quran": [[25, 74, 74], [66, 6, 6], [18, 46, 46]],
+      "hadiths": [35, 43],
+      "duas": ["enfants-protection", "famille-1"]
+    },
+    {
+      "id": "paradis",
+      "label": "Le Paradis",
+      "keys": ["paradis", "jannah", "recompense eternelle", "jardins", "houris", "vie eternelle", "entrer au paradis"],
+      "desc": "Ce qu'Allah a préparé pour Ses serviteurs : « ce que nul œil n'a vu, nulle oreille n'a entendu ».",
+      "quran": [[55, 46, 60], [56, 10, 26], [76, 5, 22]],
+      "hadiths": [25, 24, 34, 30],
+      "duas": []
+    },
+    {
+      "id": "enfer",
+      "label": "L'Enfer",
+      "keys": ["enfer", "jahannam", "gehenne", "feu", "chatiment", "punition"],
+      "desc": "La demeure de ceux qui rejettent Allah ; s'en protéger, même par la moitié d'une datte donnée en aumône.",
+      "quran": [[66, 6, 6], [4, 56, 56], [78, 21, 30]],
+      "hadiths": [17, 56],
+      "duas": ["dormir-4"]
+    },
+    {
+      "id": "mort",
+      "label": "La mort et l'au-delà",
+      "keys": ["mort", "mourir", "deces", "defunt", "tombe", "cimetiere", "funerailles", "condoleances", "apres la mort", "ame"],
+      "desc": "« Toute âme goûtera la mort. » Se souvenir de la mort adoucit le cœur et prépare à la rencontre d'Allah.",
+      "quran": [[3, 185, 185], [21, 35, 35], [62, 8, 8]],
+      "hadiths": [22, 23, 51],
+      "duas": ["defunt-1", "cimetiere", "condoleances"]
+    },
+    {
+      "id": "jour-jugement",
+      "label": "Le Jour du Jugement",
+      "keys": ["jour du jugement", "jugement dernier", "resurrection", "qiyama", "fin du monde", "balance", "comptes", "jour dernier"],
+      "desc": "Le jour où chacun verra le bien et le mal qu'il aura faits, ne serait-ce que le poids d'un atome.",
+      "quran": [[99, 1, 8], [101, 1, 11], [21, 47, 47]],
+      "hadiths": [22, 57],
+      "duas": ["dormir-4"]
+    },
+    {
+      "id": "priere",
+      "label": "La prière (salat)",
+      "keys": ["priere", "salat", "prier", "salah", "namaz", "cinq prieres", "faire la priere", "abandonner la priere", "priere a l'heure"],
+      "desc": "Deuxième pilier de l'Islam, la prière préserve du mal et est la première œuvre jugée.",
+      "quran": [[2, 43, 43], [29, 45, 45], [20, 14, 14], [4, 103, 103]],
+      "hadiths": [10, 11, 12],
+      "duas": ["adhan", "entrer-mosquee", "sortir-mosquee", "apres-priere-1", "apres-priere-2", "apres-wudu"]
+    },
+    {
+      "id": "istikhara",
+      "label": "La prière de consultation (al-Istikhara)",
+      "keys": ["istikhara", "istikharah", "priere de consultation", "salat al istikhara", "demander conseil a allah", "prendre une decision", "hesiter", "choix difficile", "comment faire istikhara"],
+      "desc": "Quand on hésite sur une décision : prier deux unités surérogatoires puis dire l'invocation enseignée par le Prophète ﷺ (Sahih al-Bukhari 1162), en mentionnant son affaire.",
+      "quran": [],
+      "hadiths": [],
+      "duas": ["istikhara", "guidance-1", "coeur-ferme"]
+    },
+    {
+      "id": "jeune-ramadan",
+      "label": "Le jeûne et le Ramadan",
+      "keys": ["jeune", "ramadan", "jeuner", "sawm", "siyam", "mois de ramadan", "rupture du jeune", "iftar", "sahur", "tarawih"],
+      "desc": "Le jeûne du Ramadan, pilier de l'Islam : ses portes du Paradis ouvertes et ses péchés pardonnés.",
+      "quran": [[2, 183, 185]],
+      "hadiths": [13, 14, 15],
+      "duas": ["iftar", "laylat-qadr"]
+    },
+    {
+      "id": "laylat-qadr",
+      "label": "La nuit du Destin (Laylat al-Qadr)",
+      "keys": ["nuit du destin", "laylat al qadr", "laylatoul qadr", "nuit meilleure que mille mois", "27e nuit", "dix dernieres nuits"],
+      "desc": "Une nuit meilleure que mille mois, dans les dix dernières nuits du Ramadan.",
+      "quran": [[97, 1, 5], [44, 3, 3]],
+      "hadiths": [15],
+      "duas": ["laylat-qadr"]
+    },
+    {
+      "id": "aumone",
+      "label": "L'aumône et la générosité",
+      "keys": ["aumone", "zakat", "sadaqa", "charite", "donner", "don", "generosite", "aider les pauvres", "depenser pour allah"],
+      "desc": "L'aumône ne diminue pas la richesse ; elle purifie les biens et protège du Feu.",
+      "quran": [[2, 261, 261], [2, 271, 271], [9, 103, 103], [57, 18, 18]],
+      "hadiths": [16, 17, 18, 26, 27],
+      "duas": []
+    },
+    {
+      "id": "hajj",
+      "label": "Le pèlerinage (Hajj et 'Umrah)",
+      "keys": ["pelerinage", "hajj", "hadj", "omra", "umrah", "mecque", "kaaba", "arafat", "talbiya", "ihram"],
+      "desc": "Cinquième pilier de l'Islam pour qui en a la capacité.",
+      "quran": [[3, 97, 97], [2, 196, 197], [22, 27, 28]],
+      "hadiths": [2],
+      "duas": ["talbiya", "jour-arafa"]
+    },
+    {
+      "id": "tawhid",
+      "label": "L'unicité d'Allah (tawhid)",
+      "keys": ["unicite", "tawhid", "allah unique", "shirk", "association", "associer a allah", "adorer allah seul", "idoles", "monotheisme"],
+      "desc": "Le fondement de l'Islam : adorer Allah seul, sans rien Lui associer.",
+      "quran": [[112, 1, 4], [2, 255, 255], [59, 22, 24], [31, 13, 13]],
+      "hadiths": [2, 11],
+      "duas": ["matin-2"]
+    },
+    {
+      "id": "coran-merites",
+      "label": "La lecture du Coran",
+      "keys": ["lire le coran", "lecture du coran", "apprendre le coran", "memoriser le coran", "merite du coran", "reciter"],
+      "desc": "Le Coran intercédera pour ses lecteurs au Jour de la Résurrection ; le meilleur est celui qui l'apprend et l'enseigne.",
+      "quran": [[17, 9, 9], [54, 17, 17], [73, 4, 4]],
+      "hadiths": [28, 29],
+      "duas": []
+    },
+    {
+      "id": "science",
+      "label": "La science et le savoir",
+      "keys": ["science", "savoir", "connaissance", "apprendre", "etudier", "chercher la science", "savant", "ignorance"],
+      "desc": "Chercher la science ouvre un chemin vers le Paradis ; Allah élève ceux qui ont reçu le savoir.",
+      "quran": [[20, 114, 114], [39, 9, 9], [58, 11, 11]],
+      "hadiths": [30, 28],
+      "duas": []
+    },
+    {
+      "id": "peur-tristesse",
+      "label": "La peur, l'angoisse et la tristesse",
+      "keys": ["peur", "angoisse", "anxiete", "stress", "tristesse", "chagrin", "depression", "deprime", "inquietude", "souci", "desespoir", "epreuve difficile", "coeur apaise"],
+      "desc": "C'est par l'évocation d'Allah que les cœurs s'apaisent ; le Prophète ﷺ a enseigné des invocations précises contre le souci et la tristesse.",
+      "quran": [[13, 28, 28], [2, 286, 286], [9, 40, 40], [94, 5, 6], [65, 3, 3]],
+      "hadiths": [46, 45],
+      "duas": ["angoisse-1", "angoisse-2", "angoisse-3", "detresse-dhun-nun", "difficulte-1"]
+    },
+    {
+      "id": "confiance-allah",
+      "label": "La confiance en Allah (tawakkul)",
+      "keys": ["confiance en allah", "tawakkul", "s'en remettre a allah", "compter sur allah", "allah suffit", "hasbunallah"],
+      "desc": "« Quiconque place sa confiance en Allah, Il lui suffit. »",
+      "quran": [[65, 3, 3], [3, 159, 159], [8, 2, 2], [25, 58, 58]],
+      "hadiths": [46],
+      "duas": ["sortir-maison", "angoisse-3"]
+    },
+    {
+      "id": "hypocrisie",
+      "label": "L'hypocrisie",
+      "keys": ["hypocrite", "hypocrisie", "munafiq", "nifaq", "double visage", "faux croyant"],
+      "desc": "Les signes de l'hypocrite : mentir, ne pas tenir ses promesses, trahir la confiance.",
+      "quran": [[2, 8, 10], [4, 142, 143], [63, 1, 4]],
+      "hadiths": [55],
+      "duas": []
+    },
+    {
+      "id": "voisinage",
+      "label": "Le voisin",
+      "keys": ["voisin", "voisinage", "droits du voisin", "bon voisinage", "nuire au voisin"],
+      "desc": "Jibril n'a cessé de recommander le voisin, au point qu'on crut qu'il hériterait.",
+      "quran": [[4, 36, 36]],
+      "hadiths": [48, 3],
+      "duas": []
+    },
+    {
+      "id": "amour-fraternite",
+      "label": "L'amour et la fraternité",
+      "keys": ["amour", "aimer", "fraternite", "freres", "amitie", "entraide", "solidarite", "s'aimer en allah", "communaute unie"],
+      "desc": "Les croyants sont frères ; nul ne croit vraiment tant qu'il n'aime pas pour son frère ce qu'il aime pour lui-même.",
+      "quran": [[49, 10, 10], [8, 63, 63], [3, 103, 103]],
+      "hadiths": [4, 32, 33, 49, 58],
+      "duas": []
+    },
+    {
+      "id": "misericorde",
+      "label": "La miséricorde",
+      "keys": ["misericorde", "clemence", "compassion", "rahma", "douceur", "bienveillance", "faire misericorde"],
+      "desc": "Faites miséricorde à ceux qui sont sur terre, Celui qui est au ciel vous fera miséricorde.",
+      "quran": [[21, 107, 107], [7, 156, 156], [39, 53, 53]],
+      "hadiths": [42, 43, 33],
+      "duas": []
+    },
+    {
+      "id": "justice",
+      "label": "La justice et l'équité",
+      "keys": ["justice", "equite", "injustice", "oppression", "opprime", "juger", "droits", "rendre les depots"],
+      "desc": "Allah ordonne l'équité et la bienfaisance, et interdit l'injustice — même envers un ennemi.",
+      "quran": [[4, 58, 58], [5, 8, 8], [16, 90, 90]],
+      "hadiths": [49],
+      "duas": []
+    },
+    {
+      "id": "orgueil",
+      "label": "L'orgueil et l'humilité",
+      "keys": ["orgueil", "arrogance", "fierte", "hautain", "humilite", "modestie", "se vanter", "mepriser les gens"],
+      "desc": "N'entrera pas au Paradis celui qui a un atome d'orgueil ; l'orgueil, c'est rejeter la vérité et mépriser les gens.",
+      "quran": [[31, 18, 18], [17, 37, 37], [25, 63, 63]],
+      "hadiths": [34],
+      "duas": []
+    },
+    {
+      "id": "envie",
+      "label": "L'envie et le mauvais œil",
+      "keys": ["envie", "jalousie", "hasad", "mauvais oeil", "ayn", "envieux", "proteger du mauvais oeil"],
+      "desc": "Se protéger de l'envieux par les sourates protectrices et les invocations du matin et du soir.",
+      "quran": [[113, 1, 5], [4, 54, 54]],
+      "hadiths": [49],
+      "duas": ["matin-3", "matin-7", "enfants-protection", "voyage-halte"]
+    },
+    {
+      "id": "commerce",
+      "label": "Le commerce et l'argent",
+      "keys": ["commerce", "vente", "achat", "vendre", "acheter", "commercant", "dette", "usure", "riba", "interet", "credit", "fraude", "tromperie dans la vente", "argent", "richesse"],
+      "desc": "Le commerçant honnête sera avec les prophètes ; la fraude et l'usure sont interdites.",
+      "quran": [[2, 275, 275], [83, 1, 3], [62, 10, 10]],
+      "hadiths": [19, 20, 21, 40],
+      "duas": ["dette"]
+    },
+    {
+      "id": "voyage",
+      "label": "Le voyage",
+      "keys": ["voyage", "voyager", "partir en voyage", "trajet", "route", "avion", "voiture", "transport", "safar"],
+      "desc": "Les invocations du voyageur : en montant dans le véhicule, en route, et lors des haltes.",
+      "quran": [[43, 13, 14]],
+      "hadiths": [],
+      "duas": ["monture", "voyage-1", "voyage-halte"]
+    },
+    {
+      "id": "maladie",
+      "label": "La maladie et la guérison",
+      "keys": ["maladie", "malade", "guerison", "guerir", "sante", "soigner", "douleur", "visite du malade", "ruqya"],
+      "desc": "« Quand je suis malade, c'est Lui qui me guérit. » Aucun mal n'atteint le croyant sans effacer des péchés.",
+      "quran": [[26, 80, 80], [17, 82, 82]],
+      "hadiths": [45, 47],
+      "duas": ["malade-1", "malade-2", "visite-malade"]
+    },
+    {
+      "id": "vendredi",
+      "label": "Le vendredi (jumu'a)",
+      "keys": ["vendredi", "jumua", "joumoua", "priere du vendredi", "sourate al kahf vendredi", "jour du vendredi"],
+      "desc": "Le meilleur jour de la semaine : la prière en commun y est prescrite, et la lecture de la sourate Al-Kahf y est recommandée.",
+      "quran": [[62, 9, 10], [18, 1, 10]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "dhikr",
+      "label": "Le rappel d'Allah (dhikr)",
+      "keys": ["dhikr", "rappel", "evocation", "evoquer allah", "subhanallah", "alhamdulillah", "allahou akbar", "tasbih", "adhkar", "zikr"],
+      "desc": "C'est par l'évocation d'Allah que les cœurs s'apaisent ; deux paroles légères sur la langue, lourdes dans la balance.",
+      "quran": [[13, 28, 28], [33, 41, 42], [2, 152, 152]],
+      "hadiths": [44, 52, 53],
+      "duas": ["matin-6", "apres-priere-2", "salat-prophete"]
+    },
+    {
+      "id": "gratitude",
+      "label": "La gratitude (shukr)",
+      "keys": ["gratitude", "remercier", "reconnaissance", "shukr", "remercier allah", "bienfaits"],
+      "desc": "« Si vous êtes reconnaissants, Je vous accorderai davantage. »",
+      "quran": [[14, 7, 7], [2, 152, 152], [31, 12, 12]],
+      "hadiths": [46],
+      "duas": ["apres-manger"]
+    },
+    {
+      "id": "pudeur",
+      "label": "La pudeur et le regard",
+      "keys": ["pudeur", "voile", "hijab", "regard", "baisser le regard", "chastete", "haya", "vetement"],
+      "desc": "Le Coran ordonne aux croyants et croyantes de baisser leurs regards et de préserver leur chasteté.",
+      "quran": [[24, 30, 31], [33, 59, 59]],
+      "hadiths": [38],
+      "duas": []
+    },
+    {
+      "id": "interdits-alimentaires",
+      "label": "Le licite et l'illicite (nourriture, alcool)",
+      "keys": ["halal", "haram", "alcool", "vin", "khamr", "jeux de hasard", "porc", "nourriture licite", "boire de l'alcool", "drogue"],
+      "desc": "Allah a rendu licites les bonnes choses ; le vin et les jeux de hasard sont une souillure de Satan.",
+      "quran": [[5, 90, 91], [2, 219, 219], [2, 172, 173]],
+      "hadiths": [40],
+      "duas": []
+    },
+    {
+      "id": "anges",
+      "label": "Les anges",
+      "keys": ["anges", "ange", "jibril", "gabriel", "mikail", "israfil", "malak"],
+      "desc": "Serviteurs d'Allah créés de lumière, qui ne Lui désobéissent jamais.",
+      "quran": [[2, 97, 98], [35, 1, 1], [66, 6, 6]],
+      "hadiths": [48],
+      "duas": []
+    },
+    {
+      "id": "salutation",
+      "label": "Le salam (salutation)",
+      "keys": ["salam", "salutation", "saluer", "dire salam", "repandre le salam", "assalamu alaykum"],
+      "desc": "Répandre le salam fait naître l'amour entre les croyants.",
+      "quran": [[4, 86, 86], [24, 61, 61]],
+      "hadiths": [58, 3],
+      "duas": []
+    },
+    {
+      "id": "prophete-yusuf",
+      "label": "L'histoire de Yusuf (Joseph)",
+      "keys": ["yusuf", "youssouf", "joseph", "puits", "egypte", "reve du roi", "chemise", "freres de yusuf", "zulaykha"],
+      "desc": "« Le plus beau des récits » : la sourate Yusuf raconte toute son histoire.",
+      "quran": [[12, 3, 6], [12, 101, 101]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "prophete-musa",
+      "label": "L'histoire de Musa (Moïse)",
+      "keys": ["musa", "moussa", "moise", "pharaon", "firaun", "mer fendue", "baton", "torah", "sinai", "khidr"],
+      "desc": "Le prophète le plus cité du Coran : sa confrontation avec Pharaon et l'exode des Fils d'Israël, et sa rencontre avec al-Khidr (Al-Kahf).",
+      "quran": [[20, 9, 36], [26, 10, 68], [18, 60, 82]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "prophete-ibrahim",
+      "label": "L'histoire d'Ibrahim (Abraham)",
+      "keys": ["ibrahim", "abraham", "feu refroidi", "idoles brisees", "sacrifice", "ismail", "kaaba construite"],
+      "desc": "L'ami intime d'Allah : jeté au feu pour son monothéisme, bâtisseur de la Kaaba avec Ismail.",
+      "quran": [[21, 51, 70], [37, 99, 111], [2, 124, 129]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "prophete-nuh",
+      "label": "L'histoire de Nuh (Noé) et l'arche",
+      "keys": ["nuh", "nouh", "noe", "arche", "deluge", "inondation", "bateau"],
+      "desc": "Le prophète qui appela son peuple 950 ans, et l'arche qui sauva les croyants du déluge.",
+      "quran": [[11, 36, 48], [71, 1, 28]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "issa-maryam",
+      "label": "'Issa (Jésus) et Maryam (Marie)",
+      "keys": ["issa", "jesus", "maryam", "marie", "vierge", "naissance miraculeuse", "messie", "evangile"],
+      "desc": "La naissance miraculeuse de 'Issa, fils de Maryam, serviteur et messager d'Allah.",
+      "quran": [[3, 45, 59], [19, 16, 36]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "luqman",
+      "label": "Les conseils de Luqman à son fils",
+      "keys": ["luqman", "louqman", "conseils a son fils", "sagesse", "conseil aux enfants"],
+      "desc": "Les recommandations pleines de sagesse de Luqman : le tawhid, la prière, la patience et l'humilité.",
+      "quran": [[31, 12, 19]],
+      "hadiths": [],
+      "duas": []
+    },
+    {
+      "id": "sommeil",
+      "label": "Le sommeil et le réveil",
+      "keys": ["dormir", "sommeil", "se coucher", "avant de dormir", "reveil", "se reveiller", "insomnie", "cauchemar"],
+      "desc": "Les invocations du coucher et du réveil, et la protection de la nuit.",
+      "quran": [[78, 9, 9], [25, 47, 47]],
+      "hadiths": [],
+      "duas": ["dormir-1", "dormir-2", "dormir-3", "dormir-4", "reveil-1"]
+    },
+    {
+      "id": "toilettes",
+      "label": "Entrer et sortir des toilettes",
+      "keys": ["toilettes", "wc", "salle de bain", "besoins", "entrer aux toilettes", "sortir des toilettes"],
+      "desc": "Les invocations avant d'entrer et en sortant des toilettes.",
+      "quran": [],
+      "hadiths": [],
+      "duas": ["toilettes-entree", "toilettes-sortie"]
+    },
+    {
+      "id": "maison",
+      "label": "Entrer et sortir de chez soi",
+      "keys": ["sortir de chez soi", "sortir de la maison", "quitter la maison", "entrer chez soi", "rentrer a la maison", "partir de chez moi"],
+      "desc": "Les invocations en franchissant la porte de chez soi, pour être guidé et protégé.",
+      "quran": [],
+      "hadiths": [],
+      "duas": ["sortir-maison", "entrer-maison"]
+    },
+    {
+      "id": "repas",
+      "label": "Manger et boire",
+      "keys": ["manger", "repas", "boire", "avant de manger", "apres avoir mange", "table", "nourriture"],
+      "desc": "Mentionner le nom d'Allah avant de manger, et Le louer après.",
+      "quran": [],
+      "hadiths": [39],
+      "duas": ["avant-manger", "apres-manger"]
+    },
+    {
+      "id": "mosquee",
+      "label": "La mosquée",
+      "keys": ["mosquee", "masjid", "entrer a la mosquee", "sortir de la mosquee", "adhan", "appel a la priere"],
+      "desc": "Les invocations liées à la mosquée et à l'appel à la prière.",
+      "quran": [[9, 18, 18], [24, 36, 36]],
+      "hadiths": [],
+      "duas": ["adhan", "entrer-mosquee", "sortir-mosquee"]
+    },
+    {
+      "id": "adhkar-matin-soir",
+      "label": "Les adhkar du matin et du soir",
+      "keys": ["adhkar du matin", "adhkar du soir", "invocations du matin", "invocations du soir", "protection quotidienne", "matin et soir"],
+      "desc": "Les formules de protection et de rappel à dire chaque matin et chaque soir.",
+      "quran": [[33, 41, 42]],
+      "hadiths": [],
+      "duas": ["matin-1", "matin-2", "matin-3", "matin-4", "matin-5", "matin-6", "matin-7"]
+    }
+  ]
+}

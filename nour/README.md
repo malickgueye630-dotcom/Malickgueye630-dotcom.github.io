@@ -19,10 +19,30 @@ des favoris, l'audio du Coran et un mode sombre.
   sélection thématique traduite en français avec degré d'authenticité et référence vérifiée.
 - 🤲 **Invocations** : 44 du'â du Coran et de la Sunna (type Hisn al-Muslim), classées
   par situation, avec arabe, phonétique, français, source et nombre de répétitions.
-- 🔍 **Recherche globale** : langage naturel (« doua avant de dormir »), tolérance aux
-  fautes (dua/doua/du'â, sourate/surat, hadith/hadis…), résultats par catégorie,
-  toujours sourcés. Aucun contenu religieux n'est généré : si rien n'est trouvé,
-  l'application le dit.
+- 🔍 **Moteur de recherche islamique** multicouche :
+  - plein texte français avec racines légères, synonymes et tolérance aux fautes ;
+  - **recherche phonétique** de versets : « lakhadjaakoul » retrouve *Laqad jâakum* (9:128),
+    avec normalisation des variantes (kh/7, gh/3, q/k/9, ou/oo, dj/j…) et alignement
+    semi-global à distance d'édition bornée ;
+  - **recherche sémantique** par thésaurus de 56 sujets vérifiés (`data/topics.json`) :
+    « le peuple entre les deux montagnes » → Dhul-Qarnayn (Coran 18:83-98) ;
+  - **questions naturelles** → réponse structurée (🤲 invocations, 📜 hadiths, 📖 versets)
+    assemblée uniquement depuis la base, avec le message honnête « je n'ai pas trouvé de
+    source suffisamment fiable » quand c'est le cas ;
+  - recherche dans le **texte arabe** (index sans diacritiques) et suggestions en temps réel ;
+  - badges « Correspondance exacte » / « Lié au sujet » / « Correspondance phonétique ».
+  Aucun contenu religieux n'est généré : chaque résultat vient de la base et cite sa source.
+- 🕌 **Horaires de prière** : calcul local (bibliothèque `adhan`, MIT) par géolocalisation ou
+  ville (base hors-ligne), méthodes configurables (12° Musulmans de France, 15°, 18°, MWL,
+  Umm al-Qura, ISNA, Diyanet…), madhhab pour l'Asr, ajustements manuels par prière,
+  prochaine prière + compte à rebours sur l'accueil.
+- 🔔 **Notifications** : rappels par prière (à l'heure, −5/−10/−15 min), adhkar matin/soir,
+  Al-Kahf le vendredi — notifications locales quand l'app est ouverte (limite iOS des PWA
+  sans serveur push, expliquée dans l'interface) + **export calendrier .ics avec alarmes**
+  pour des rappels fiables même app fermée.
+- 🔤 **Translittération partout** : versets (Tanzil), invocations (rédigée), et hadiths
+  (générée automatiquement depuis l'arabe vocalisé par `js/translit.js`), chaque couche
+  (arabe / phonétique / français) activable séparément dans les réglages.
 - 📱 **PWA iOS** : installable depuis Safari (Partager → Sur l'écran d'accueil),
   fonctionne hors-ligne (app + données visitées ; téléchargement complet du Coran
   possible dans les réglages), icône et écran adaptés, safe-areas iPhone.

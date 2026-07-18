@@ -1,7 +1,8 @@
-// Accueil : salutation, recherche, reprise de lecture, contenus du jour.
+// Accueil : salutation, recherche, prochaine prière, reprise de lecture, contenus du jour.
 import { $view, esc, bindTopbar, openSettings } from './app.js';
 import { state } from './state.js';
 import * as data from './data.js';
+import { hasLocation, nextPrayer, timesFor, fmtTime, fmtCountdown, PRAYERS } from './prayer.js';
 
 // versets choisis pour « le verset du jour » (références connues et porteuses de sens)
 const DAILY_VERSES = [
@@ -45,6 +46,28 @@ export async function viewHome() {
         <span>🔍</span><span class="ph">Verset, hadith, invocation… ex : « doua avant de dormir »</span>
       </div>
     </div>
+
+    ${hasLocation() ? (() => {
+      const now = new Date();
+      const np = nextPrayer(now);
+      const t = timesFor(now);
+      return `<a class="card" style="display:block;text-decoration:none;color:inherit;background:var(--hero-grad);color:#f3efe2;border:none" href="#/prayer">
+        <div class="row" style="justify-content:space-between">
+          <div><div style="font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75">Prochaine prière</div>
+          <div style="font-size:1.35rem;font-weight:800">${esc(np.name)} — ${fmtTime(np.time)}</div>
+          <div style="font-size:.8rem;opacity:.85">Dans ${fmtCountdown(np.time - now)}</div></div>
+          <div style="font-size:1.8rem">🕌</div>
+        </div>
+        <div class="row" style="justify-content:space-between;margin-top:10px;font-size:.72rem;opacity:.9">
+          ${PRAYERS.map(([k, n]) => `<span style="text-align:center${np.key === k ? ';font-weight:800' : ';opacity:.75'}">${n.slice(0, 4)}<br>${fmtTime(t[k])}</span>`).join('')}
+        </div>
+      </a>`;
+    })() : `
+    <a class="card" style="display:block;text-decoration:none;color:inherit" href="#/prayer">
+      <div class="row"><span style="font-size:1.5rem">🕌</span>
+      <div class="grow"><b>Horaires de prière</b><br><span class="tiny">Activez la localisation pour voir vos cinq prières et la prochaine à venir</span></div>
+      <span style="color:var(--brand);font-weight:700">→</span></div>
+    </a>`}
 
     ${lastMeta ? `
     <a class="list-item" href="#/quran/s/${last.s}?v=${last.v}">

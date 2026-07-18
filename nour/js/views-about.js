@@ -36,6 +36,20 @@ export function viewAbout() {
         <li>Invocations du Coran et de la Sunna authentique (répertoire type <i>Hisn al-Muslim</i>),
           chacune avec sa référence (Bukhari, Muslim, Abu Dawud, Tirmidhi…).</li>
       </ul>
+      <p><b>🕌 Horaires de prière</b></p>
+      <ul class="muted" style="padding-left:18px;margin:6px 0">
+        <li>Calcul local par la bibliothèque open source <i>adhan</i> (MIT), selon la position,
+          la méthode de calcul et le madhhab choisis. Les horaires sont indicatifs : ils varient
+          selon la méthode — choisissez celle de votre mosquée et ajustez si besoin.</li>
+      </ul>
+      <p><b>🔎 Recherche</b></p>
+      <ul class="muted" style="padding-left:18px;margin:6px 0">
+        <li>Le moteur (plein texte, fautes d'orthographe, phonétique arabe, sujets, questions)
+          interroge uniquement les textes ci-dessus. Le thésaurus de sujets relie des mots-clés
+          français à des passages précis, vérifiés un par un. La translittération affichée sous
+          l'arabe des hadiths est générée automatiquement à partir du texte vocalisé : c'est une
+          aide à la lecture, elle ne remplace pas l'arabe. Celle du Coran provient de Tanzil.</li>
+      </ul>
     </div>
 
     <h2>Avertissement</h2>
