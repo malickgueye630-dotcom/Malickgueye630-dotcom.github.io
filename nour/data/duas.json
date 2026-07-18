@@ -1,0 +1,658 @@
+{
+  "note": "Invocations tirées du Coran et de la Sunna authentique (recueil type Hisn al-Muslim). Chaque invocation indique sa source. Les traductions françaises sont des traductions du sens.",
+  "categories": [
+    {
+      "id": "reveil-sommeil",
+      "name": "Réveil & sommeil",
+      "icon": "🌙",
+      "duas": [
+        {
+          "id": "reveil-1",
+          "title": "Au réveil",
+          "ar": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+          "translit": "Al-hamdu lillâhi-lladhî ahyânâ ba'da mâ amâtanâ wa ilayhi-n-nushûr",
+          "fr": "Louange à Allah qui nous a rendu la vie après nous avoir fait mourir, et c'est vers Lui que se fera la résurrection.",
+          "source": "Sahih al-Bukhari 6312",
+          "grade": "Sahih",
+          "note": "À dire dès le réveil."
+        },
+        {
+          "id": "dormir-1",
+          "title": "Avant de dormir",
+          "ar": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+          "translit": "Bismika-llâhumma amûtu wa ahyâ",
+          "fr": "C'est en Ton nom, ô Allah, que je meurs et que je vis.",
+          "source": "Sahih al-Bukhari 6324",
+          "grade": "Sahih",
+          "note": "À dire en se couchant."
+        },
+        {
+          "id": "dormir-2",
+          "title": "En posant sa joue sur l'oreiller",
+          "ar": "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ",
+          "translit": "Bismika rabbî wada'tu janbî wa bika arfa'uhu, fa-in amsakta nafsî fa-rhamhâ, wa in arsaltahâ fa-hfazhâ bimâ tahfazu bihi 'ibâdaka-s-sâlihîn",
+          "fr": "C'est en Ton nom, mon Seigneur, que je pose mon flanc, et c'est par Toi que je le relève. Si Tu retiens mon âme, fais-lui miséricorde ; et si Tu la renvoies, protège-la comme Tu protèges Tes serviteurs vertueux.",
+          "source": "Sahih al-Bukhari 6320 ; Sahih Muslim 2714",
+          "grade": "Sahih"
+        },
+        {
+          "id": "dormir-3",
+          "title": "Protection avant de dormir (protection jusqu'au matin)",
+          "ar": "آيَةُ الْكُرْسِيِّ : اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...",
+          "translit": "Âyat al-Kursî (sourate Al-Baqarah, verset 255)",
+          "fr": "Réciter le verset du Trône (Ayat al-Kursi, Coran 2:255) : « Quiconque le récite en se couchant, un gardien d'Allah ne cesse de veiller sur lui et le diable ne l'approche pas jusqu'au matin. »",
+          "source": "Sahih al-Bukhari 2311",
+          "grade": "Sahih",
+          "note": "Réciter aussi les sourates Al-Ikhlas, Al-Falaq et An-Nas dans ses mains jointes, souffler dedans et passer les mains sur le corps (3 fois) — Sahih al-Bukhari 5017."
+        },
+        {
+          "id": "dormir-4",
+          "title": "Avant de dormir — demande de protection au Jour dernier",
+          "ar": "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+          "translit": "Allâhumma qinî 'adhâbaka yawma tab'athu 'ibâdak",
+          "fr": "Ô Allah, préserve-moi de Ton châtiment le jour où Tu ressusciteras Tes serviteurs.",
+          "source": "Jami' at-Tirmidhi 3398 ; Sunan Abi Dawud 5045",
+          "grade": "Sahih (authentifié par al-Albani)",
+          "repeat": 3
+        }
+      ]
+    },
+    {
+      "id": "matin-soir",
+      "name": "Adhkar du matin et du soir",
+      "icon": "🌅",
+      "duas": [
+        {
+          "id": "matin-1",
+          "title": "Le matin",
+          "ar": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+          "translit": "Asbahnâ wa asbaha-l-mulku lillâh, wa-l-hamdu lillâh, lâ ilâha illâ-llâhu wahdahu lâ sharîka lah, lahu-l-mulku wa lahu-l-hamdu wa huwa 'alâ kulli shay'in qadîr",
+          "fr": "Nous voici au matin, et le règne appartient à Allah. Louange à Allah. Il n'y a de divinité digne d'adoration qu'Allah, Seul, sans associé. À Lui la royauté, à Lui la louange, et Il est capable de toute chose.",
+          "source": "Sahih Muslim 2723",
+          "grade": "Sahih",
+          "note": "Le soir, on dit : « Amsaynâ wa amsâ-l-mulku lillâh… » (Nous voici au soir…)."
+        },
+        {
+          "id": "matin-2",
+          "title": "Matin et soir — le maître des demandes de pardon (Sayyid al-Istighfar)",
+          "ar": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+          "translit": "Allâhumma anta rabbî lâ ilâha illâ ant, khalaqtanî wa anâ 'abduk, wa anâ 'alâ 'ahdika wa wa'dika mâ-stata'tu, a'ûdhu bika min sharri mâ sana'tu, abû'u laka bi-ni'matika 'alayya, wa abû'u bi-dhanbî fa-ghfir lî, fa-innahu lâ yaghfiru-dh-dhunûba illâ ant",
+          "fr": "Ô Allah, Tu es mon Seigneur, il n'y a de divinité digne d'adoration que Toi. Tu m'as créé et je suis Ton serviteur. Je me tiens à Ton engagement et à Ta promesse autant que je le peux. Je cherche protection auprès de Toi contre le mal que j'ai commis. Je reconnais Ton bienfait envers moi et je reconnais mon péché : pardonne-moi, car nul ne pardonne les péchés en dehors de Toi.",
+          "source": "Sahih al-Bukhari 6306",
+          "grade": "Sahih",
+          "note": "Celui qui la dit avec certitude le soir et meurt dans la nuit entre au Paradis ; de même le matin."
+        },
+        {
+          "id": "matin-3",
+          "title": "Matin et soir — protection contre tout mal",
+          "ar": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+          "translit": "Bismi-llâhi-lladhî lâ yadurru ma'a-smihi shay'un fî-l-ardi wa lâ fî-s-samâ'i wa huwa-s-samî'u-l-'alîm",
+          "fr": "Au nom d'Allah, avec le nom duquel rien ne peut nuire, ni sur terre ni dans le ciel, et Il est l'Audient, l'Omniscient.",
+          "source": "Sunan Abi Dawud 5088 ; Jami' at-Tirmidhi 3388",
+          "grade": "Sahih (authentifié par al-Albani)",
+          "repeat": 3,
+          "note": "Rien ne nuira à celui qui la dit trois fois le matin et trois fois le soir."
+        },
+        {
+          "id": "matin-4",
+          "title": "Matin et soir — agrément",
+          "ar": "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا",
+          "translit": "Radîtu bi-llâhi rabban, wa bi-l-islâmi dînan, wa bi-Muhammadin salla-llâhu 'alayhi wa sallama nabiyyâ",
+          "fr": "J'agrée Allah comme Seigneur, l'Islam comme religion et Muhammad ﷺ comme Prophète.",
+          "source": "Sunan Abi Dawud 5072 ; Jami' at-Tirmidhi 3389",
+          "grade": "Hasan",
+          "repeat": 3
+        },
+        {
+          "id": "matin-5",
+          "title": "Matin et soir — santé et protection",
+          "ar": "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَٰهَ إِلَّا أَنْتَ",
+          "translit": "Allâhumma 'âfinî fî badanî, allâhumma 'âfinî fî sam'î, allâhumma 'âfinî fî basarî, lâ ilâha illâ ant",
+          "fr": "Ô Allah, accorde-moi la santé dans mon corps, dans mon ouïe et dans ma vue. Il n'y a de divinité digne d'adoration que Toi.",
+          "source": "Sunan Abi Dawud 5090",
+          "grade": "Hasan",
+          "repeat": 3
+        },
+        {
+          "id": "matin-6",
+          "title": "Cent fois dans la journée",
+          "ar": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+          "translit": "Subhâna-llâhi wa bi-hamdih",
+          "fr": "Gloire et pureté à Allah, et louange à Lui. — « Celui qui la dit cent fois dans la journée verra ses péchés effacés, fussent-ils comme l'écume de la mer. »",
+          "source": "Sahih al-Bukhari 6405 ; Sahih Muslim 2691",
+          "grade": "Sahih",
+          "repeat": 100
+        },
+        {
+          "id": "matin-7",
+          "title": "Les trois protectrices (matin et soir)",
+          "ar": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+          "translit": "Sourates Al-Ikhlas (112), Al-Falaq (113) et An-Nas (114)",
+          "fr": "Réciter les sourates Al-Ikhlas, Al-Falaq et An-Nas trois fois le matin et trois fois le soir : « elles te suffiront contre toute chose ».",
+          "source": "Sunan Abi Dawud 5082 ; Jami' at-Tirmidhi 3575",
+          "grade": "Hasan sahih",
+          "repeat": 3
+        }
+      ]
+    },
+    {
+      "id": "maison",
+      "name": "Maison : entrer & sortir",
+      "icon": "🏠",
+      "duas": [
+        {
+          "id": "sortir-maison",
+          "title": "En sortant de chez soi",
+          "ar": "بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+          "translit": "Bismi-llâh, tawakkaltu 'alâ-llâh, wa lâ hawla wa lâ quwwata illâ bi-llâh",
+          "fr": "Au nom d'Allah, je place ma confiance en Allah, et il n'y a de force ni de puissance que par Allah. — Il lui est dit alors : « Tu es guidé, préservé et protégé. »",
+          "source": "Sunan Abi Dawud 5095 ; Jami' at-Tirmidhi 3426",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "entrer-maison",
+          "title": "En entrant chez soi",
+          "ar": "بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
+          "translit": "Bismi-llâhi walajnâ, wa bismi-llâhi kharajnâ, wa 'alâ-llâhi rabbinâ tawakkalnâ",
+          "fr": "Au nom d'Allah nous entrons, au nom d'Allah nous sortons, et c'est en Allah notre Seigneur que nous plaçons notre confiance. Puis on salue les siens.",
+          "source": "Sunan Abi Dawud 5096",
+          "grade": "Rapporté par Abu Dawud",
+          "note": "Mentionner le nom d'Allah en entrant et avant de manger prive le diable de gîte et de nourriture (Sahih Muslim 2018)."
+        }
+      ]
+    },
+    {
+      "id": "toilettes",
+      "name": "Toilettes",
+      "icon": "🚪",
+      "duas": [
+        {
+          "id": "toilettes-entree",
+          "title": "Avant d'entrer aux toilettes",
+          "ar": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",
+          "translit": "Allâhumma innî a'ûdhu bika mina-l-khubuthi wa-l-khabâ'ith",
+          "fr": "Ô Allah, je cherche protection auprès de Toi contre les démons mâles et femelles.",
+          "source": "Sahih al-Bukhari 142 ; Sahih Muslim 375",
+          "grade": "Sahih"
+        },
+        {
+          "id": "toilettes-sortie",
+          "title": "En sortant des toilettes",
+          "ar": "غُفْرَانَكَ",
+          "translit": "Ghufrânak",
+          "fr": "Je Te demande pardon.",
+          "source": "Sunan Abi Dawud 30 ; Jami' at-Tirmidhi 7",
+          "grade": "Sahih (authentifié par al-Albani)"
+        }
+      ]
+    },
+    {
+      "id": "repas",
+      "name": "Manger & boire",
+      "icon": "🍽️",
+      "duas": [
+        {
+          "id": "avant-manger",
+          "title": "Avant de manger ou de boire",
+          "ar": "بِسْمِ اللَّهِ",
+          "translit": "Bismi-llâh",
+          "fr": "Au nom d'Allah. — Si l'on oublie au début, on dit : « Bismi-llâhi fî awwalihi wa âkhirihi » (Au nom d'Allah, au début et à la fin).",
+          "source": "Sunan Abi Dawud 3767 ; Jami' at-Tirmidhi 1858",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "apres-manger",
+          "title": "Après avoir mangé",
+          "ar": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+          "translit": "Al-hamdu lillâhi-lladhî at'amanî hâdhâ wa razaqanîhi min ghayri hawlin minnî wa lâ quwwah",
+          "fr": "Louange à Allah qui m'a nourri de ceci et me l'a accordé sans force ni puissance de ma part. — « Celui qui la dit voit ses péchés passés pardonnés. »",
+          "source": "Sunan Abi Dawud 4023 ; Jami' at-Tirmidhi 3458",
+          "grade": "Hasan",
+          "note": "Allah agrée le serviteur qui Le loue après avoir mangé ou bu (Sahih Muslim 2734)."
+        }
+      ]
+    },
+    {
+      "id": "mosquee-priere",
+      "name": "Mosquée & après la prière",
+      "icon": "🕌",
+      "duas": [
+        {
+          "id": "adhan",
+          "title": "En entendant l'appel à la prière",
+          "ar": "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+          "translit": "Allâhumma rabba hâdhihi-d-da'wati-t-tâmmah, wa-s-salâti-l-qâ'imah, âti Muhammadan-il-wasîlata wa-l-fadîlah, wa-b'ath-hu maqâman mahmûdan-illadhî wa'adtah",
+          "fr": "Ô Allah, Seigneur de cet appel parfait et de la prière qui va être accomplie, accorde à Muhammad al-Wasila (le plus haut degré du Paradis) et l'excellence, et élève-le au rang loué que Tu lui as promis.",
+          "source": "Sahih al-Bukhari 614",
+          "grade": "Sahih",
+          "note": "On répète d'abord après le muezzin, puis on prie sur le Prophète ﷺ, puis on dit cette invocation."
+        },
+        {
+          "id": "entrer-mosquee",
+          "title": "En entrant à la mosquée",
+          "ar": "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+          "translit": "Allâhumma-ftah lî abwâba rahmatik",
+          "fr": "Ô Allah, ouvre-moi les portes de Ta miséricorde.",
+          "source": "Sahih Muslim 713",
+          "grade": "Sahih"
+        },
+        {
+          "id": "sortir-mosquee",
+          "title": "En sortant de la mosquée",
+          "ar": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+          "translit": "Allâhumma innî as'aluka min fadlik",
+          "fr": "Ô Allah, je Te demande de Ta grâce.",
+          "source": "Sahih Muslim 713",
+          "grade": "Sahih"
+        },
+        {
+          "id": "apres-priere-1",
+          "title": "Après la prière obligatoire",
+          "ar": "أَسْتَغْفِرُ اللَّهَ (ثَلَاثًا) اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ",
+          "translit": "Astaghfiru-llâh (3 fois), Allâhumma anta-s-salâm wa minka-s-salâm, tabârakta yâ dhâ-l-jalâli wa-l-ikrâm",
+          "fr": "Je demande pardon à Allah (3 fois). Ô Allah, Tu es la Paix et de Toi vient la paix. Béni sois-Tu, ô Détenteur de la majesté et de la générosité.",
+          "source": "Sahih Muslim 591",
+          "grade": "Sahih"
+        },
+        {
+          "id": "apres-priere-2",
+          "title": "Tasbih après la prière",
+          "ar": "سُبْحَانَ اللَّهِ (٣٣) الْحَمْدُ لِلَّهِ (٣٣) اللَّهُ أَكْبَرُ (٣٣) لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+          "translit": "Subhâna-llâh (33), al-hamdu lillâh (33), Allâhu akbar (33), puis : lâ ilâha illâ-llâhu wahdahu lâ sharîka lah, lahu-l-mulku wa lahu-l-hamdu wa huwa 'alâ kulli shay'in qadîr",
+          "fr": "Gloire à Allah (33 fois), louange à Allah (33 fois), Allah est le plus Grand (33 fois), puis compléter la centaine par : « Il n'y a de divinité digne d'adoration qu'Allah, Seul, sans associé… » — Ses fautes sont pardonnées, fussent-elles comme l'écume de la mer.",
+          "source": "Sahih Muslim 597",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "voyage",
+      "name": "Voyage & transports",
+      "icon": "✈️",
+      "duas": [
+        {
+          "id": "monture",
+          "title": "En montant dans un véhicule",
+          "ar": "بِسْمِ اللَّهِ، الْحَمْدُ لِلَّهِ، سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+          "translit": "Bismi-llâh, al-hamdu lillâh, subhâna-lladhî sakhkhara lanâ hâdhâ wa mâ kunnâ lahu muqrinîn, wa innâ ilâ rabbinâ la-munqalibûn",
+          "fr": "Au nom d'Allah, louange à Allah. Gloire à Celui qui a mis ceci à notre service alors que nous n'étions pas capables de le dominer, et c'est vers notre Seigneur que nous retournerons. (Coran 43:13-14)",
+          "source": "Sunan Abi Dawud 2602 ; Jami' at-Tirmidhi 3446",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "voyage-1",
+          "title": "Invocation du voyage",
+          "ar": "اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ",
+          "translit": "Allâhumma innâ nas'aluka fî safarinâ hâdhâ-l-birra wa-t-taqwâ, wa mina-l-'amali mâ tardâ. Allâhumma hawwin 'alaynâ safaranâ hâdhâ wa-twi 'annâ bu'dah. Allâhumma anta-s-sâhibu fî-s-safar, wa-l-khalîfatu fî-l-ahl",
+          "fr": "Ô Allah, nous Te demandons dans notre voyage la bonté et la piété, et des œuvres que Tu agrées. Ô Allah, facilite-nous ce voyage et raccourcis-en la distance. Ô Allah, Tu es le Compagnon du voyage et le Protecteur de la famille laissée derrière.",
+          "source": "Sahih Muslim 1342",
+          "grade": "Sahih"
+        },
+        {
+          "id": "voyage-halte",
+          "title": "Lors d'une halte (protection du lieu)",
+          "ar": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+          "translit": "A'ûdhu bi-kalimâti-llâhi-t-tâmmâti min sharri mâ khalaq",
+          "fr": "Je cherche protection par les paroles parfaites d'Allah contre le mal de ce qu'Il a créé. — Rien ne nuira à celui qui la dit jusqu'à ce qu'il reparte.",
+          "source": "Sahih Muslim 2708",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "maladie",
+      "name": "Maladie & guérison",
+      "icon": "🤲",
+      "duas": [
+        {
+          "id": "malade-1",
+          "title": "Invocation pour le malade",
+          "ar": "اللَّهُمَّ رَبَّ النَّاسِ، أَذْهِبِ الْبَاسَ، اشْفِ وَأَنْتَ الشَّافِي، لَا شِفَاءَ إِلَّا شِفَاؤُكَ، شِفَاءً لَا يُغَادِرُ سَقَمًا",
+          "translit": "Allâhumma rabba-n-nâs, adh-hibi-l-ba's, ishfi wa anta-sh-shâfî, lâ shifâ'a illâ shifâ'uk, shifâ'an lâ yughâdiru saqamâ",
+          "fr": "Ô Allah, Seigneur des hommes, fais disparaître le mal et guéris, car c'est Toi le Guérisseur. Il n'y a de guérison que la Tienne : une guérison qui ne laisse aucune maladie.",
+          "source": "Sahih al-Bukhari 5743 ; Sahih Muslim 2191",
+          "grade": "Sahih"
+        },
+        {
+          "id": "malade-2",
+          "title": "Douleur dans le corps",
+          "ar": "بِسْمِ اللَّهِ (ثَلَاثًا) أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ (سَبْعَ مَرَّاتٍ)",
+          "translit": "Bismi-llâh (3 fois), puis : a'ûdhu bi-llâhi wa qudratihi min sharri mâ ajidu wa uhâdhir (7 fois)",
+          "fr": "Poser la main sur l'endroit douloureux et dire : « Au nom d'Allah » (3 fois), puis : « Je cherche protection auprès d'Allah et de Sa puissance contre le mal que je ressens et que je redoute » (7 fois).",
+          "source": "Sahih Muslim 2202",
+          "grade": "Sahih"
+        },
+        {
+          "id": "visite-malade",
+          "title": "En visitant un malade",
+          "ar": "لَا بَأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ — أَسْأَلُ اللَّهَ الْعَظِيمَ رَبَّ الْعَرْشِ الْعَظِيمِ أَنْ يَشْفِيَكَ",
+          "translit": "Lâ ba'sa tahûrun in shâ'a-llâh — As'alu-llâha-l-'azîm, rabba-l-'arshi-l-'azîm, an yashfiyak (7 fois)",
+          "fr": "« Ce n'est rien : purification, si Allah le veut. » Et : « Je demande à Allah l'Immense, Seigneur du Trône immense, de te guérir » (7 fois) — Allah le guérira, s'il n'est pas arrivé à son terme.",
+          "source": "Sahih al-Bukhari 3616 ; Sunan Abi Dawud 3106 ; Jami' at-Tirmidhi 2083",
+          "grade": "Sahih",
+          "repeat": 7
+        }
+      ]
+    },
+    {
+      "id": "epreuves",
+      "name": "Peur, tristesse & difficulté",
+      "icon": "💚",
+      "duas": [
+        {
+          "id": "angoisse-1",
+          "title": "Contre le souci et la tristesse",
+          "ar": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+          "translit": "Allâhumma innî a'ûdhu bika mina-l-hammi wa-l-hazan, wa-l-'ajzi wa-l-kasal, wa-l-bukhli wa-l-jubn, wa dala'i-d-dayni wa ghalabati-r-rijâl",
+          "fr": "Ô Allah, je cherche protection auprès de Toi contre le souci et la tristesse, l'incapacité et la paresse, l'avarice et la lâcheté, le poids de la dette et la domination des hommes.",
+          "source": "Sahih al-Bukhari 6369",
+          "grade": "Sahih"
+        },
+        {
+          "id": "angoisse-2",
+          "title": "Dans l'épreuve et l'angoisse (al-karb)",
+          "ar": "لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لَا إِلَٰهَ إِلَّا اللَّهُ رَبُّ السَّمَاوَاتِ وَرَبُّ الْأَرْضِ وَرَبُّ الْعَرْشِ الْكَرِيمِ",
+          "translit": "Lâ ilâha illâ-llâhu-l-'azîmu-l-halîm, lâ ilâha illâ-llâhu rabbu-l-'arshi-l-'azîm, lâ ilâha illâ-llâhu rabbu-s-samâwâti wa rabbu-l-ardi wa rabbu-l-'arshi-l-karîm",
+          "fr": "Il n'y a de divinité digne d'adoration qu'Allah, l'Immense, le Longanime. Il n'y a de divinité digne d'adoration qu'Allah, Seigneur du Trône immense. Il n'y a de divinité digne d'adoration qu'Allah, Seigneur des cieux, de la terre et du noble Trône.",
+          "source": "Sahih al-Bukhari 6346 ; Sahih Muslim 2730",
+          "grade": "Sahih"
+        },
+        {
+          "id": "angoisse-3",
+          "title": "Quand une chose accable",
+          "ar": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+          "translit": "Hasbunâ-llâhu wa ni'ma-l-wakîl",
+          "fr": "Allah nous suffit, et quel excellent Garant ! — Parole d'Ibrahim (paix sur lui) jeté au feu, et des croyants face à la menace (Coran 3:173).",
+          "source": "Coran 3:173 ; Sahih al-Bukhari 4563",
+          "grade": "Sahih"
+        },
+        {
+          "id": "difficulte-1",
+          "title": "Pour que la chose devienne facile",
+          "ar": "اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلًا",
+          "translit": "Allâhumma lâ sahla illâ mâ ja'altahu sahlâ, wa anta taj'alu-l-hazna idhâ shi'ta sahlâ",
+          "fr": "Ô Allah, il n'y a de facile que ce que Tu rends facile, et Tu rends la difficulté facile quand Tu le veux.",
+          "source": "Sahih Ibn Hibban 974",
+          "grade": "Sahih (authentifié par Ibn Hibban)"
+        },
+        {
+          "id": "detresse-dhun-nun",
+          "title": "L'invocation de Yunus (Dhu-n-Nun)",
+          "ar": "لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+          "translit": "Lâ ilâha illâ anta subhânaka innî kuntu mina-z-zâlimîn",
+          "fr": "Il n'y a de divinité digne d'adoration que Toi. Gloire à Toi ! J'ai été du nombre des injustes. (Coran 21:87) — « Aucun musulman ne l'invoque pour une chose sans qu'Allah ne l'exauce. »",
+          "source": "Coran 21:87 ; Jami' at-Tirmidhi 3505",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "colere",
+          "title": "En cas de colère",
+          "ar": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+          "translit": "A'ûdhu bi-llâhi mina-sh-shaytâni-r-rajîm",
+          "fr": "Je cherche protection auprès d'Allah contre Satan le lapidé.",
+          "source": "Sahih al-Bukhari 3282 ; Sahih Muslim 2610",
+          "grade": "Sahih"
+        },
+        {
+          "id": "dette",
+          "title": "Contre la dette",
+          "ar": "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ",
+          "translit": "Allâhumma-kfinî bi-halâlika 'an harâmik, wa aghninî bi-fadlika 'amman siwâk",
+          "fr": "Ô Allah, accorde-moi ce qui est licite pour me passer de l'illicite, et enrichis-moi par Ta grâce pour me passer de tout autre que Toi.",
+          "source": "Jami' at-Tirmidhi 3563",
+          "grade": "Hasan"
+        }
+      ]
+    },
+    {
+      "id": "pardon",
+      "name": "Pardon & repentir",
+      "icon": "🕊️",
+      "duas": [
+        {
+          "id": "pardon-1",
+          "title": "Demande de pardon global",
+          "ar": "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+          "translit": "Rabbi-ghfir lî wa tub 'alayya innaka anta-t-tawwâbu-r-rahîm",
+          "fr": "Seigneur, pardonne-moi et accepte mon repentir. Tu es certes l'Accueillant au repentir, le Miséricordieux. — Le Prophète ﷺ la disait cent fois dans une assise.",
+          "source": "Sunan Abi Dawud 1516 ; Jami' at-Tirmidhi 3434",
+          "grade": "Sahih (authentifié par al-Albani)",
+          "repeat": 100
+        },
+        {
+          "id": "pardon-2",
+          "title": "Invocation enseignée à Abu Bakr pour la prière",
+          "ar": "اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا، وَلَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ، فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ، وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ",
+          "translit": "Allâhumma innî zalamtu nafsî zulman kathîrâ, wa lâ yaghfiru-dh-dhunûba illâ ant, fa-ghfir lî maghfiratan min 'indik, wa-rhamnî innaka anta-l-ghafûru-r-rahîm",
+          "fr": "Ô Allah, je me suis fait beaucoup de tort à moi-même, et nul ne pardonne les péchés en dehors de Toi. Accorde-moi donc un pardon venant de Toi et fais-moi miséricorde. Tu es certes le Pardonneur, le Miséricordieux.",
+          "source": "Sahih al-Bukhari 834 ; Sahih Muslim 2705",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "famille",
+      "name": "Parents, enfants & famille",
+      "icon": "👨‍👩‍👧‍👦",
+      "duas": [
+        {
+          "id": "parents-1",
+          "title": "Pour ses parents",
+          "ar": "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+          "translit": "Rabbi-rhamhumâ kamâ rabbayânî saghîrâ",
+          "fr": "Seigneur, fais-leur miséricorde comme ils m'ont élevé tout petit.",
+          "source": "Coran 17:24",
+          "grade": "Verset du Coran"
+        },
+        {
+          "id": "famille-1",
+          "title": "Pour son conjoint et sa descendance",
+          "ar": "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+          "translit": "Rabbanâ hab lanâ min azwâjinâ wa dhurriyyâtinâ qurrata a'yunin wa-j'alnâ li-l-muttaqîna imâmâ",
+          "fr": "Seigneur, accorde-nous, en nos conjoints et nos descendants, la fraîcheur des yeux, et fais de nous un guide pour les pieux.",
+          "source": "Coran 25:74",
+          "grade": "Verset du Coran"
+        },
+        {
+          "id": "enfants-protection",
+          "title": "Protection des enfants",
+          "ar": "أُعِيذُكُمَا بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+          "translit": "U'îdhukumâ bi-kalimâti-llâhi-t-tâmmah, min kulli shaytânin wa hâmmah, wa min kulli 'aynin lâmmah",
+          "fr": "Je vous place tous deux sous la protection des paroles parfaites d'Allah, contre tout démon, toute bête nuisible et tout mauvais œil. — C'est ainsi que le Prophète ﷺ protégeait Hasan et Husayn.",
+          "source": "Sahih al-Bukhari 3371",
+          "grade": "Sahih"
+        },
+        {
+          "id": "mariage-felicitation",
+          "title": "Félicitations aux mariés",
+          "ar": "بَارَكَ اللَّهُ لَكَ، وَبَارَكَ عَلَيْكَ، وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ",
+          "translit": "Bâraka-llâhu lak, wa bâraka 'alayk, wa jama'a baynakumâ fî khayr",
+          "fr": "Qu'Allah te bénisse, qu'Il répande Sa bénédiction sur toi, et qu'Il vous unisse dans le bien.",
+          "source": "Sunan Abi Dawud 2130 ; Jami' at-Tirmidhi 1091",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "rapports-conjugaux",
+          "title": "Avant les rapports conjugaux",
+          "ar": "بِسْمِ اللَّهِ، اللَّهُمَّ جَنِّبْنَا الشَّيْطَانَ، وَجَنِّبِ الشَّيْطَانَ مَا رَزَقْتَنَا",
+          "translit": "Bismi-llâh, allâhumma jannibnâ-sh-shaytân, wa jannibi-sh-shaytâna mâ razaqtanâ",
+          "fr": "Au nom d'Allah. Ô Allah, éloigne de nous le diable, et éloigne le diable de ce que Tu nous accorderas (comme descendance).",
+          "source": "Sahih al-Bukhari 141 ; Sahih Muslim 1434",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "morts",
+      "name": "Pour les défunts",
+      "icon": "🌿",
+      "duas": [
+        {
+          "id": "defunt-1",
+          "title": "Pour le défunt (prière funéraire)",
+          "ar": "اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ، وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ، وَنَقِّهِ مِنَ الْخَطَايَا كَمَا نَقَّيْتَ الثَّوْبَ الْأَبْيَضَ مِنَ الدَّنَسِ",
+          "translit": "Allâhumma-ghfir lahu wa-rhamhu, wa 'âfihi wa-'fu 'anhu, wa akrim nuzulahu, wa wassi' mudkhalahu, wa-ghsilhu bi-l-mâ'i wa-th-thalji wa-l-barad, wa naqqihi mina-l-khatâyâ kamâ naqqayta-th-thawba-l-abyada mina-d-danas",
+          "fr": "Ô Allah, pardonne-lui et fais-lui miséricorde. Préserve-le et efface ses fautes. Honore son accueil et élargis son entrée. Lave-le avec l'eau, la neige et la grêle, et purifie-le de ses péchés comme on purifie le vêtement blanc de la souillure.",
+          "source": "Sahih Muslim 963",
+          "grade": "Sahih"
+        },
+        {
+          "id": "cimetiere",
+          "title": "En visitant le cimetière",
+          "ar": "السَّلَامُ عَلَيْكُمْ أَهْلَ الدِّيَارِ مِنَ الْمُؤْمِنِينَ وَالْمُسْلِمِينَ، وَإِنَّا إِنْ شَاءَ اللَّهُ بِكُمْ لَاحِقُونَ، أَسْأَلُ اللَّهَ لَنَا وَلَكُمُ الْعَافِيَةَ",
+          "translit": "As-salâmu 'alaykum ahla-d-diyâri mina-l-mu'minîna wa-l-muslimîn, wa innâ in shâ'a-llâhu bikum lâhiqûn, as'alu-llâha lanâ wa lakumu-l-'âfiyah",
+          "fr": "Que la paix soit sur vous, habitants de ces demeures, croyants et musulmans. Nous vous rejoindrons, si Allah le veut. Je demande à Allah, pour nous et pour vous, la préservation.",
+          "source": "Sahih Muslim 975",
+          "grade": "Sahih"
+        },
+        {
+          "id": "condoleances",
+          "title": "Condoléances",
+          "ar": "إِنَّ لِلَّهِ مَا أَخَذَ، وَلَهُ مَا أَعْطَى، وَكُلُّ شَيْءٍ عِنْدَهُ بِأَجَلٍ مُسَمًّى، فَلْتَصْبِرْ وَلْتَحْتَسِبْ",
+          "translit": "Inna lillâhi mâ akhadh, wa lahu mâ a'tâ, wa kullu shay'in 'indahu bi-ajalin musammâ, fa-l-tasbir wa-l-tahtasib",
+          "fr": "C'est à Allah qu'appartient ce qu'Il a repris, et à Lui appartient ce qu'Il a donné. Toute chose a auprès de Lui un terme fixé. Qu'elle patiente donc et espère la récompense.",
+          "source": "Sahih al-Bukhari 1284 ; Sahih Muslim 923",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "ramadan-hajj",
+      "name": "Ramadan, Laylat al-Qadr & Hajj",
+      "icon": "🌟",
+      "duas": [
+        {
+          "id": "iftar",
+          "title": "À la rupture du jeûne",
+          "ar": "ذَهَبَ الظَّمَأُ، وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ",
+          "translit": "Dhahaba-z-zama', wa-btallati-l-'urûq, wa thabata-l-ajru in shâ'a-llâh",
+          "fr": "La soif est partie, les veines sont abreuvées, et la récompense est acquise, si Allah le veut.",
+          "source": "Sunan Abi Dawud 2357",
+          "grade": "Hasan (authentifié par al-Albani)"
+        },
+        {
+          "id": "laylat-qadr",
+          "title": "Laylat al-Qadr",
+          "ar": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+          "translit": "Allâhumma innaka 'afuwwun tuhibbu-l-'afwa fa-'fu 'annî",
+          "fr": "Ô Allah, Tu es Celui qui pardonne et efface les fautes, Tu aimes le pardon : pardonne-moi. — Enseignée par le Prophète ﷺ à Aïcha pour la nuit du Destin.",
+          "source": "Jami' at-Tirmidhi 3513 ; Sunan Ibn Majah 3850",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "talbiya",
+          "title": "Talbiya du Hajj et de la 'Umrah",
+          "ar": "لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ",
+          "translit": "Labbayka-llâhumma labbayk, labbayka lâ sharîka laka labbayk, inna-l-hamda wa-n-ni'mata laka wa-l-mulk, lâ sharîka lak",
+          "fr": "Me voici à Toi, ô Allah, me voici. Me voici, Tu n'as pas d'associé, me voici. La louange, le bienfait et la royauté T'appartiennent. Tu n'as pas d'associé.",
+          "source": "Sahih al-Bukhari 1549 ; Sahih Muslim 1184",
+          "grade": "Sahih"
+        },
+        {
+          "id": "jour-arafa",
+          "title": "La meilleure invocation (jour de 'Arafa)",
+          "ar": "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+          "translit": "Lâ ilâha illâ-llâhu wahdahu lâ sharîka lah, lahu-l-mulku wa lahu-l-hamdu wa huwa 'alâ kulli shay'in qadîr",
+          "fr": "« La meilleure invocation est celle du jour de 'Arafa, et la meilleure parole que j'ai dite, moi et les prophètes avant moi : il n'y a de divinité digne d'adoration qu'Allah, Seul, sans associé ; à Lui la royauté, à Lui la louange, et Il est capable de toute chose. »",
+          "source": "Jami' at-Tirmidhi 3585",
+          "grade": "Hasan"
+        }
+      ]
+    },
+    {
+      "id": "guidance",
+      "name": "Guidance & décisions",
+      "icon": "🧭",
+      "duas": [
+        {
+          "id": "istikhara",
+          "title": "Prière de consultation (al-Istikhara)",
+          "ar": "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ، فَإِنَّكَ تَقْدِرُ وَلَا أَقْدِرُ، وَتَعْلَمُ وَلَا أَعْلَمُ، وَأَنْتَ عَلَّامُ الْغُيُوبِ...",
+          "translit": "Allâhumma innî astakhîruka bi-'ilmik, wa astaqdiruka bi-qudratik, wa as'aluka min fadlika-l-'azîm, fa-innaka taqdiru wa lâ aqdir, wa ta'lamu wa lâ a'lam, wa anta 'allâmu-l-ghuyûb…",
+          "fr": "Ô Allah, je Te consulte par Ta science, je Te demande la capacité par Ta puissance, et je Te demande de Ton immense grâce. Car Tu es capable et je ne le suis pas, Tu sais et je ne sais pas, et Tu es le Grand Connaisseur des mondes cachés… (après deux unités de prière surérogatoire, on mentionne son affaire).",
+          "source": "Sahih al-Bukhari 1162",
+          "grade": "Sahih"
+        },
+        {
+          "id": "guidance-1",
+          "title": "Demande de guidée",
+          "ar": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+          "translit": "Allâhumma innî as'aluka-l-hudâ wa-t-tuqâ wa-l-'afâfa wa-l-ghinâ",
+          "fr": "Ô Allah, je Te demande la guidée, la piété, la chasteté et le contentement.",
+          "source": "Sahih Muslim 2721",
+          "grade": "Sahih"
+        },
+        {
+          "id": "coeur-ferme",
+          "title": "Fermeté du cœur",
+          "ar": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+          "translit": "Yâ muqalliba-l-qulûb, thabbit qalbî 'alâ dînik",
+          "fr": "Ô Toi qui retournes les cœurs, affermis mon cœur sur Ta religion. — C'était l'invocation la plus fréquente du Prophète ﷺ.",
+          "source": "Jami' at-Tirmidhi 3522",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "bien-deux-mondes",
+          "title": "Le bien d'ici-bas et de l'au-delà",
+          "ar": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+          "translit": "Rabbanâ âtinâ fî-d-dunyâ hasanah, wa fî-l-âkhirati hasanah, wa qinâ 'adhâba-n-nâr",
+          "fr": "Seigneur, accorde-nous un bien dans ce monde et un bien dans l'au-delà, et protège-nous du châtiment du Feu. — C'était l'invocation la plus fréquente du Prophète ﷺ parmi les invocations du Coran.",
+          "source": "Coran 2:201 ; Sahih al-Bukhari 6389 ; Sahih Muslim 2690",
+          "grade": "Sahih"
+        }
+      ]
+    },
+    {
+      "id": "divers",
+      "name": "Vie quotidienne",
+      "icon": "☀️",
+      "duas": [
+        {
+          "id": "eternuement",
+          "title": "Éternuement",
+          "ar": "الْحَمْدُ لِلَّهِ — يَرْحَمُكَ اللَّهُ — يَهْدِيكُمُ اللَّهُ وَيُصْلِحُ بَالَكُمْ",
+          "translit": "Al-hamdu lillâh — Yarhamuka-llâh — Yahdîkumu-llâhu wa yuslihu bâlakum",
+          "fr": "Celui qui éternue dit : « Louange à Allah. » Son frère lui répond : « Qu'Allah te fasse miséricorde. » Il répond alors : « Qu'Allah vous guide et améliore votre état. »",
+          "source": "Sahih al-Bukhari 6224",
+          "grade": "Sahih"
+        },
+        {
+          "id": "vetement",
+          "title": "En s'habillant d'un vêtement neuf",
+          "ar": "اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ",
+          "translit": "Allâhumma laka-l-hamdu anta kasawtanîh, as'aluka min khayrihi wa khayri mâ suni'a lah, wa a'ûdhu bika min sharrihi wa sharri mâ suni'a lah",
+          "fr": "Ô Allah, à Toi la louange, c'est Toi qui m'en as vêtu. Je Te demande son bien et le bien pour lequel il a été confectionné, et je cherche protection auprès de Toi contre son mal et le mal pour lequel il a été confectionné.",
+          "source": "Sunan Abi Dawud 4020 ; Jami' at-Tirmidhi 1767",
+          "grade": "Sahih (authentifié par al-Albani)"
+        },
+        {
+          "id": "apres-wudu",
+          "title": "Après les ablutions",
+          "ar": "أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+          "translit": "Ash-hadu an lâ ilâha illâ-llâhu wahdahu lâ sharîka lah, wa ash-hadu anna Muhammadan 'abduhu wa rasûluh",
+          "fr": "J'atteste qu'il n'y a de divinité digne d'adoration qu'Allah, Seul, sans associé, et j'atteste que Muhammad est Son serviteur et Son messager. — Les huit portes du Paradis lui sont ouvertes.",
+          "source": "Sahih Muslim 234",
+          "grade": "Sahih"
+        },
+        {
+          "id": "pluie",
+          "title": "Quand il pleut",
+          "ar": "اللَّهُمَّ صَيِّبًا نَافِعًا",
+          "translit": "Allâhumma sayyiban nâfi'â",
+          "fr": "Ô Allah, fais que ce soit une pluie bénéfique.",
+          "source": "Sahih al-Bukhari 1032",
+          "grade": "Sahih"
+        },
+        {
+          "id": "salat-prophete",
+          "title": "Prière sur le Prophète ﷺ",
+          "ar": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+          "translit": "Allâhumma salli 'alâ Muhammadin wa 'alâ âli Muhammad, kamâ sallayta 'alâ Ibrâhîma wa 'alâ âli Ibrâhîm, innaka hamîdun majîd",
+          "fr": "Ô Allah, prie sur Muhammad et sur la famille de Muhammad, comme Tu as prié sur Ibrahim et sur la famille d'Ibrahim. Tu es certes Digne de louange, Glorieux. — « Celui qui prie sur moi une fois, Allah prie sur lui dix fois » (Sahih Muslim 408).",
+          "source": "Sahih al-Bukhari 3370",
+          "grade": "Sahih"
+        }
+      ]
+    }
+  ]
+}

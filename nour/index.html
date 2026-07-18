@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nour — Coran, Hadiths & Invocations</title>
+<meta name="description" content="Nour : le Coran (arabe, français, phonétique), les hadiths authentiques et les invocations de la Sunna — avec recherche intelligente, favoris et audio.">
+<meta name="theme-color" content="#0d3b34" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f1e7">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nour">
+<link rel="preload" href="fonts/amiri-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+  <main id="view" tabindex="-1"></main>
+  <nav id="tabbar" aria-label="Navigation principale">
+    <a href="#/home" data-tab="home"><span class="ic">🏠</span><span>Accueil</span></a>
+    <a href="#/quran" data-tab="quran"><span class="ic">📖</span><span>Coran</span></a>
+    <a href="#/search" data-tab="search" class="tab-search"><span class="ic">🔍</span><span>Recherche</span></a>
+    <a href="#/hadith" data-tab="hadith"><span class="ic">📚</span><span>Hadiths</span></a>
+    <a href="#/duas" data-tab="duas"><span class="ic">🤲</span><span>Invocations</span></a>
+  </nav>
+  <div id="player" hidden></div>
+  <div id="sheet-root"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

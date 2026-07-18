@@ -1,0 +1,801 @@
+{
+  "note": "Sélection de hadiths authentiques avec traduction française (traduction du sens), source, numéro et degré d'authenticité. Les numéros suivent la numérotation standard (sunnah.com).",
+  "themes": {
+    "intention": "Intention & sincérité",
+    "foi": "Foi & piliers",
+    "priere": "Prière",
+    "coran": "Coran & science",
+    "parents": "Parents",
+    "famille": "Mariage & famille",
+    "comportement": "Comportement & caractère",
+    "colere": "Colère & patience",
+    "jeune": "Jeûne & Ramadan",
+    "aumone": "Aumône & générosité",
+    "commerce": "Commerce & argent",
+    "fraternite": "Fraternité & voisinage",
+    "mort": "Mort & au-delà",
+    "paradis": "Paradis & Enfer",
+    "dhikr": "Invocation & rappel",
+    "misericorde": "Miséricorde"
+  },
+  "hadiths": [
+    {
+      "id": 1,
+      "ar": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+      "fr": "Les actes ne valent que par les intentions, et chacun n'a que ce qu'il a eu comme intention.",
+      "narrator": "'Umar ibn al-Khattab",
+      "collection": "bukhari",
+      "num": 1,
+      "source": "Sahih al-Bukhari 1 ; Sahih Muslim 1907",
+      "grade": "Sahih",
+      "themes": [
+        "intention",
+        "foi"
+      ],
+      "refId": 1
+    },
+    {
+      "id": 2,
+      "ar": "بُنِيَ الإِسْلاَمُ عَلَى خَمْسٍ: شَهَادَةِ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلاَةِ، وَإِيتَاءِ الزَّكَاةِ، وَالْحَجِّ، وَصَوْمِ رَمَضَانَ",
+      "fr": "L'Islam est bâti sur cinq piliers : l'attestation qu'il n'y a de divinité digne d'adoration qu'Allah et que Muhammad est le Messager d'Allah, l'accomplissement de la prière, l'acquittement de la zakat, le pèlerinage et le jeûne du Ramadan.",
+      "narrator": "Ibn 'Umar",
+      "collection": "bukhari",
+      "num": 8,
+      "source": "Sahih al-Bukhari 8 ; Sahih Muslim 16",
+      "grade": "Sahih",
+      "themes": [
+        "foi"
+      ],
+      "refId": 8
+    },
+    {
+      "id": 3,
+      "ar": "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلاَ يُؤْذِ جَارَهُ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ ضَيْفَهُ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+      "fr": "Que celui qui croit en Allah et au Jour dernier ne nuise pas à son voisin ; que celui qui croit en Allah et au Jour dernier honore son hôte ; et que celui qui croit en Allah et au Jour dernier dise du bien ou se taise.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 6018,
+      "source": "Sahih al-Bukhari 6018 ; Sahih Muslim 47",
+      "grade": "Sahih",
+      "themes": [
+        "comportement",
+        "fraternite"
+      ],
+      "refId": 5790
+    },
+    {
+      "id": 4,
+      "ar": "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+      "fr": "Aucun de vous ne croira vraiment tant qu'il n'aimera pas pour son frère ce qu'il aime pour lui-même.",
+      "narrator": "Anas ibn Malik",
+      "collection": "bukhari",
+      "num": 13,
+      "source": "Sahih al-Bukhari 13 ; Sahih Muslim 45",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite",
+        "foi",
+        "comportement"
+      ],
+      "refId": 13
+    },
+    {
+      "id": 5,
+      "ar": "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+      "fr": "Le musulman est celui dont les musulmans sont à l'abri de la langue et de la main.",
+      "narrator": "'Abdullah ibn 'Amr",
+      "collection": "bukhari",
+      "num": 10,
+      "source": "Sahih al-Bukhari 10 ; Sahih Muslim 40",
+      "grade": "Sahih",
+      "themes": [
+        "comportement",
+        "foi"
+      ],
+      "refId": 10
+    },
+    {
+      "id": 6,
+      "ar": "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
+      "fr": "L'homme fort n'est pas celui qui terrasse les autres ; l'homme fort est celui qui se maîtrise dans la colère.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 6114,
+      "source": "Sahih al-Bukhari 6114 ; Sahih Muslim 2609",
+      "grade": "Sahih",
+      "themes": [
+        "colere",
+        "comportement"
+      ],
+      "refId": 5882
+    },
+    {
+      "id": 7,
+      "ar": "قَالَ رَجُلٌ لِلنَّبِيِّ صلى الله عليه وسلم: أَوْصِنِي. قَالَ: لاَ تَغْضَبْ. فَرَدَّدَ مِرَارًا، قَالَ: لاَ تَغْضَبْ",
+      "fr": "Un homme dit au Prophète ﷺ : « Conseille-moi. » Il répondit : « Ne te mets pas en colère. » L'homme répéta sa demande plusieurs fois, et il répondit : « Ne te mets pas en colère. »",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 6116,
+      "source": "Sahih al-Bukhari 6116",
+      "grade": "Sahih",
+      "themes": [
+        "colere",
+        "comportement"
+      ],
+      "refId": 5884
+    },
+    {
+      "id": 8,
+      "ar": "جَاءَ رَجُلٌ إِلَى رَسُولِ اللَّهِ صلى الله عليه وسلم فَقَالَ: مَنْ أَحَقُّ النَّاسِ بِحُسْنِ صَحَابَتِي؟ قَالَ: أُمُّكَ. قَالَ: ثُمَّ مَنْ؟ قَالَ: أُمُّكَ. قَالَ: ثُمَّ مَنْ؟ قَالَ: أُمُّكَ. قَالَ: ثُمَّ مَنْ؟ قَالَ: أَبُوكَ",
+      "fr": "Un homme vint demander au Messager d'Allah ﷺ : « Qui mérite le plus ma bonne compagnie ? » Il répondit : « Ta mère. » — « Puis qui ? » — « Ta mère. » — « Puis qui ? » — « Ta mère. » — « Puis qui ? » — « Ton père. »",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 5971,
+      "source": "Sahih al-Bukhari 5971 ; Sahih Muslim 2548",
+      "grade": "Sahih",
+      "themes": [
+        "parents"
+      ],
+      "refId": 5743
+    },
+    {
+      "id": 9,
+      "ar": "رَغِمَ أَنْفُهُ ثُمَّ رَغِمَ أَنْفُهُ ثُمَّ رَغِمَ أَنْفُهُ مَنْ أَدْرَكَ أَبَوَيْهِ عِنْدَ الْكِبَرِ أَحَدَهُمَا أَوْ كِلَيْهِمَا فَلَمْ يَدْخُلِ الْجَنَّةَ",
+      "fr": "« Malheur à lui, malheur à lui, malheur à lui ! » — « Qui donc, ô Messager d'Allah ? » — « Celui qui trouve ses parents dans la vieillesse, l'un d'eux ou les deux, et qui n'entre pas au Paradis (en les servant). »",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 2551,
+      "source": "Sahih Muslim 2551",
+      "grade": "Sahih",
+      "themes": [
+        "parents",
+        "paradis"
+      ],
+      "refId": 6351
+    },
+    {
+      "id": 10,
+      "ar": "سَأَلْتُ النَّبِيَّ صلى الله عليه وسلم: أَىُّ الْعَمَلِ أَحَبُّ إِلَى اللَّهِ؟ قَالَ: الصَّلاَةُ عَلَى وَقْتِهَا. قَالَ: ثُمَّ أَىٌّ؟ قَالَ: ثُمَّ بِرُّ الْوَالِدَيْنِ. قَالَ: ثُمَّ أَىٌّ؟ قَالَ: الْجِهَادُ فِي سَبِيلِ اللَّهِ",
+      "fr": "J'ai demandé au Prophète ﷺ : « Quelle est l'œuvre la plus aimée d'Allah ? » Il répondit : « La prière accomplie à son heure. » — « Puis laquelle ? » — « La bonté envers les parents. » — « Puis laquelle ? » — « Le combat dans le sentier d'Allah. »",
+      "narrator": "Ibn Mas'ud",
+      "collection": "bukhari",
+      "num": 527,
+      "source": "Sahih al-Bukhari 527 ; Sahih Muslim 85",
+      "grade": "Sahih",
+      "themes": [
+        "priere",
+        "parents"
+      ],
+      "refId": 517
+    },
+    {
+      "id": 11,
+      "ar": "بَيْنَ الرَّجُلِ وَبَيْنَ الشِّرْكِ وَالْكُفْرِ تَرْكُ الصَّلاَةِ",
+      "fr": "Entre l'homme et l'association (le shirk) et la mécréance, il y a l'abandon de la prière.",
+      "narrator": "Jabir ibn 'Abdillah",
+      "collection": "muslim",
+      "num": 82,
+      "source": "Sahih Muslim 82",
+      "grade": "Sahih",
+      "themes": [
+        "priere",
+        "foi"
+      ],
+      "refId": 153
+    },
+    {
+      "id": 12,
+      "ar": "الطُّهُورُ شَطْرُ الإِيمَانِ، وَالْحَمْدُ لِلَّهِ تَمْلأُ الْمِيزَانَ",
+      "fr": "La pureté est la moitié de la foi, et « al-hamdu lillah » (louange à Allah) remplit la balance.",
+      "narrator": "Abu Malik al-Ash'ari",
+      "collection": "muslim",
+      "num": 223,
+      "source": "Sahih Muslim 223",
+      "grade": "Sahih",
+      "themes": [
+        "priere",
+        "dhikr"
+      ],
+      "refId": 440
+    },
+    {
+      "id": 13,
+      "ar": "مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+      "fr": "Quiconque jeûne le mois de Ramadan avec foi et en espérant la récompense d'Allah, ses péchés passés lui seront pardonnés.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 38,
+      "source": "Sahih al-Bukhari 38 ; Sahih Muslim 760",
+      "grade": "Sahih",
+      "themes": [
+        "jeune"
+      ],
+      "refId": 38
+    },
+    {
+      "id": 14,
+      "ar": "إِذَا جَاءَ رَمَضَانُ فُتِّحَتْ أَبْوَابُ الْجَنَّةِ وَغُلِّقَتْ أَبْوَابُ النَّارِ وَصُفِّدَتِ الشَّيَاطِينُ",
+      "fr": "Quand vient le Ramadan, les portes du Paradis sont ouvertes, les portes de l'Enfer sont fermées et les démons sont enchaînés.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 1079,
+      "source": "Sahih Muslim 1079 ; Sahih al-Bukhari 1899",
+      "grade": "Sahih",
+      "themes": [
+        "jeune",
+        "paradis"
+      ],
+      "refId": 2379
+    },
+    {
+      "id": 15,
+      "ar": "مَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+      "fr": "Quiconque veille la nuit du Destin (Laylat al-Qadr) avec foi et en espérant la récompense d'Allah, ses péchés passés lui seront pardonnés.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 1901,
+      "source": "Sahih al-Bukhari 1901",
+      "grade": "Sahih",
+      "themes": [
+        "jeune"
+      ],
+      "refId": 1833
+    },
+    {
+      "id": 16,
+      "ar": "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ، وَمَا زَادَ اللَّهُ عَبْدًا بِعَفْوٍ إِلاَّ عِزًّا",
+      "fr": "Une aumône n'a jamais diminué une richesse, et Allah n'augmente le serviteur qui pardonne qu'en honneur.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 2588,
+      "source": "Sahih Muslim 2588",
+      "grade": "Sahih",
+      "themes": [
+        "aumone",
+        "misericorde"
+      ],
+      "refId": 6430
+    },
+    {
+      "id": 17,
+      "ar": "اتَّقُوا النَّارَ وَلَوْ بِشِقِّ تَمْرَةٍ",
+      "fr": "Protégez-vous du Feu, ne serait-ce qu'avec la moitié d'une datte (donnée en aumône).",
+      "narrator": "'Adi ibn Hatim",
+      "collection": "bukhari",
+      "num": 1417,
+      "source": "Sahih al-Bukhari 1417 ; Sahih Muslim 1016",
+      "grade": "Sahih",
+      "themes": [
+        "aumone",
+        "paradis"
+      ],
+      "refId": 1369
+    },
+    {
+      "id": 18,
+      "ar": "كُلُّ مَعْرُوفٍ صَدَقَةٌ",
+      "fr": "Toute bonne action est une aumône.",
+      "narrator": "Jabir ibn 'Abdillah",
+      "collection": "bukhari",
+      "num": 6021,
+      "source": "Sahih al-Bukhari 6021",
+      "grade": "Sahih",
+      "themes": [
+        "aumone",
+        "comportement"
+      ],
+      "refId": 5793
+    },
+    {
+      "id": 19,
+      "ar": "الْبَيِّعَانِ بِالْخِيَارِ مَا لَمْ يَتَفَرَّقَا، فَإِنْ صَدَقَا وَبَيَّنَا بُورِكَ لَهُمَا فِي بَيْعِهِمَا، وَإِنْ كَتَمَا وَكَذَبَا مُحِقَتْ بَرَكَةُ بَيْعِهِمَا",
+      "fr": "Le vendeur et l'acheteur ont le choix tant qu'ils ne se sont pas séparés. S'ils sont sincères et transparents, leur transaction sera bénie ; s'ils dissimulent et mentent, la bénédiction de leur transaction sera effacée.",
+      "narrator": "Hakim ibn Hizam",
+      "collection": "bukhari",
+      "num": 2079,
+      "source": "Sahih al-Bukhari 2079 ; Sahih Muslim 1532",
+      "grade": "Sahih",
+      "themes": [
+        "commerce"
+      ],
+      "refId": 2035
+    },
+    {
+      "id": 20,
+      "ar": "مَنْ غَشَّ فَلَيْسَ مِنِّي",
+      "fr": "Celui qui trompe n'est pas des miens.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 102,
+      "source": "Sahih Muslim 102",
+      "grade": "Sahih",
+      "themes": [
+        "commerce",
+        "comportement"
+      ],
+      "refId": 190
+    },
+    {
+      "id": 21,
+      "ar": "التَّاجِرُ الصَّدُوقُ الأَمِينُ مَعَ النَّبِيِّينَ وَالصِّدِّيقِينَ وَالشُّهَدَاءِ",
+      "fr": "Le commerçant sincère et digne de confiance sera avec les prophètes, les véridiques et les martyrs.",
+      "narrator": "Abu Sa'id al-Khudri",
+      "collection": "tirmidhi",
+      "num": 1209,
+      "source": "Jami' at-Tirmidhi 1209",
+      "grade": "Hasan",
+      "themes": [
+        "commerce"
+      ],
+      "refId": 1215
+    },
+    {
+      "id": 22,
+      "ar": "إِذَا مَاتَ الإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلاَّ مِنْ ثَلاَثَةٍ: إِلاَّ مِنْ صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ",
+      "fr": "Quand l'être humain meurt, ses œuvres s'arrêtent, sauf trois : une aumône continue, une science dont on tire profit, ou un enfant pieux qui invoque pour lui.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 1631,
+      "source": "Sahih Muslim 1631",
+      "grade": "Sahih",
+      "themes": [
+        "mort",
+        "aumone",
+        "coran"
+      ],
+      "refId": 4094
+    },
+    {
+      "id": 23,
+      "ar": "أَكْثِرُوا ذِكْرَ هَاذِمِ اللَّذَّاتِ — يَعْنِي الْمَوْتَ",
+      "fr": "Rappelez-vous souvent le destructeur des plaisirs : la mort.",
+      "narrator": "Abu Hurayra",
+      "collection": "tirmidhi",
+      "num": 2307,
+      "source": "Jami' at-Tirmidhi 2307 ; Sunan an-Nasa'i 1824 ; Sunan Ibn Majah 4258",
+      "grade": "Hasan sahih",
+      "themes": [
+        "mort"
+      ],
+      "refId": 2376
+    },
+    {
+      "id": 24,
+      "ar": "حُفَّتِ الْجَنَّةُ بِالْمَكَارِهِ، وَحُفَّتِ النَّارُ بِالشَّهَوَاتِ",
+      "fr": "Le Paradis est entouré de choses pénibles, et l'Enfer est entouré de passions.",
+      "narrator": "Anas ibn Malik",
+      "collection": "muslim",
+      "num": 2822,
+      "source": "Sahih Muslim 2822",
+      "grade": "Sahih",
+      "themes": [
+        "paradis"
+      ],
+      "refId": 6953
+    },
+    {
+      "id": 25,
+      "ar": "قَالَ اللَّهُ: أَعْدَدْتُ لِعِبَادِي الصَّالِحِينَ مَا لاَ عَيْنٌ رَأَتْ، وَلاَ أُذُنٌ سَمِعَتْ، وَلاَ خَطَرَ عَلَى قَلْبِ بَشَرٍ",
+      "fr": "Allah a dit : « J'ai préparé pour Mes serviteurs vertueux ce que nul œil n'a vu, nulle oreille n'a entendu, et ce qui n'est jamais venu à l'esprit d'un être humain. »",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 3244,
+      "source": "Sahih al-Bukhari 3244 ; Sahih Muslim 2824",
+      "grade": "Sahih",
+      "themes": [
+        "paradis"
+      ],
+      "refId": 3111
+    },
+    {
+      "id": 26,
+      "ar": "الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ",
+      "fr": "La bonne parole est une aumône.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 2989,
+      "source": "Sahih al-Bukhari 2989 ; Sahih Muslim 1009",
+      "grade": "Sahih",
+      "themes": [
+        "comportement",
+        "aumone"
+      ],
+      "refId": 2867
+    },
+    {
+      "id": 27,
+      "ar": "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+      "fr": "Ton sourire au visage de ton frère est pour toi une aumône.",
+      "narrator": "Abu Dharr",
+      "collection": "tirmidhi",
+      "num": 1956,
+      "source": "Jami' at-Tirmidhi 1956",
+      "grade": "Hasan",
+      "themes": [
+        "comportement",
+        "fraternite",
+        "aumone"
+      ],
+      "refId": 2024
+    },
+    {
+      "id": 28,
+      "ar": "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+      "fr": "Le meilleur d'entre vous est celui qui apprend le Coran et l'enseigne.",
+      "narrator": "'Uthman ibn 'Affan",
+      "collection": "bukhari",
+      "num": 5027,
+      "source": "Sahih al-Bukhari 5027",
+      "grade": "Sahih",
+      "themes": [
+        "coran"
+      ],
+      "refId": 4820
+    },
+    {
+      "id": 29,
+      "ar": "اقْرَءُوا الْقُرْآنَ فَإِنَّهُ يَأْتِي يَوْمَ الْقِيَامَةِ شَفِيعًا لأَصْحَابِهِ",
+      "fr": "Lisez le Coran, car il viendra au Jour de la Résurrection comme intercesseur pour ses compagnons (ceux qui le lisaient).",
+      "narrator": "Abu Umama al-Bahili",
+      "collection": "muslim",
+      "num": 804,
+      "source": "Sahih Muslim 804",
+      "grade": "Sahih",
+      "themes": [
+        "coran"
+      ],
+      "refId": 1766
+    },
+    {
+      "id": 30,
+      "ar": "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
+      "fr": "Quiconque emprunte un chemin à la recherche d'une science, Allah lui facilite par cela un chemin vers le Paradis.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 2699,
+      "source": "Sahih Muslim 2699",
+      "grade": "Sahih",
+      "themes": [
+        "coran",
+        "paradis"
+      ],
+      "refId": 6687
+    },
+    {
+      "id": 31,
+      "ar": "الدِّينُ النَّصِيحَةُ",
+      "fr": "La religion, c'est le bon conseil (la sincérité).",
+      "narrator": "Tamim ad-Dari",
+      "collection": "muslim",
+      "num": 55,
+      "source": "Sahih Muslim 55",
+      "grade": "Sahih",
+      "themes": [
+        "foi",
+        "comportement"
+      ],
+      "refId": 103
+    },
+    {
+      "id": 32,
+      "ar": "الْمُؤْمِنُ لِلْمُؤْمِنِ كَالْبُنْيَانِ يَشُدُّ بَعْضُهُ بَعْضًا",
+      "fr": "Le croyant est pour le croyant comme un édifice dont les parties se soutiennent les unes les autres.",
+      "narrator": "Abu Musa al-Ash'ari",
+      "collection": "bukhari",
+      "num": 481,
+      "source": "Sahih al-Bukhari 481 ; Sahih Muslim 2585",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite"
+      ],
+      "refId": 2350
+    },
+    {
+      "id": 33,
+      "ar": "مَثَلُ الْمُؤْمِنِينَ فِي تَوَادِّهِمْ وَتَرَاحُمِهِمْ وَتَعَاطُفِهِمْ مَثَلُ الْجَسَدِ إِذَا اشْتَكَى مِنْهُ عُضْوٌ تَدَاعَى لَهُ سَائِرُ الْجَسَدِ بِالسَّهَرِ وَالْحُمَّى",
+      "fr": "Les croyants, dans leur affection, leur miséricorde et leur compassion mutuelles, sont comme un seul corps : quand un membre souffre, tout le corps partage avec lui l'insomnie et la fièvre.",
+      "narrator": "An-Nu'man ibn Bashir",
+      "collection": "muslim",
+      "num": 2586,
+      "source": "Sahih Muslim 2586 ; Sahih al-Bukhari 6011",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite",
+        "misericorde"
+      ],
+      "refId": 6424
+    },
+    {
+      "id": 34,
+      "ar": "لاَ يَدْخُلُ الْجَنَّةَ مَنْ كَانَ فِي قَلْبِهِ مِثْقَالُ ذَرَّةٍ مِنْ كِبْرٍ... إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ، الْكِبْرُ بَطَرُ الْحَقِّ وَغَمْطُ النَّاسِ",
+      "fr": "« N'entrera pas au Paradis celui qui a dans le cœur le poids d'un atome d'orgueil. » Un homme dit : « Et celui qui aime que son vêtement et ses chaussures soient beaux ? » Il répondit : « Allah est Beau et Il aime la beauté. L'orgueil, c'est rejeter la vérité et mépriser les gens. »",
+      "narrator": "Ibn Mas'ud",
+      "collection": "muslim",
+      "num": 91,
+      "source": "Sahih Muslim 91",
+      "grade": "Sahih",
+      "themes": [
+        "comportement",
+        "paradis"
+      ],
+      "refId": 171
+    },
+    {
+      "id": 35,
+      "ar": "خَيْرُكُمْ خَيْرُكُمْ لأَهْلِهِ وَأَنَا خَيْرُكُمْ لأَهْلِي",
+      "fr": "Le meilleur d'entre vous est le meilleur envers sa famille, et je suis le meilleur d'entre vous envers ma famille.",
+      "narrator": "Aïcha",
+      "collection": "tirmidhi",
+      "num": 3895,
+      "source": "Jami' at-Tirmidhi 3895 ; Sunan Ibn Majah 1977",
+      "grade": "Sahih",
+      "themes": [
+        "famille",
+        "comportement"
+      ],
+      "refId": 3992
+    },
+    {
+      "id": 36,
+      "ar": "اسْتَوْصُوا بِالنِّسَاءِ خَيْرًا",
+      "fr": "Traitez les femmes avec bonté — je vous le recommande.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 3331,
+      "source": "Sahih al-Bukhari 3331 ; Sahih Muslim 1468",
+      "grade": "Sahih",
+      "themes": [
+        "famille"
+      ],
+      "refId": 4978
+    },
+    {
+      "id": 37,
+      "ar": "تُنْكَحُ الْمَرْأَةُ لأَرْبَعٍ: لِمَالِهَا وَلِحَسَبِهَا وَجَمَالِهَا وَلِدِينِهَا، فَاظْفَرْ بِذَاتِ الدِّينِ تَرِبَتْ يَدَاكَ",
+      "fr": "On épouse une femme pour quatre raisons : sa fortune, sa lignée, sa beauté et sa religion. Choisis celle qui a la religion, tu seras gagnant.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 5090,
+      "source": "Sahih al-Bukhari 5090 ; Sahih Muslim 1466",
+      "grade": "Sahih",
+      "themes": [
+        "famille"
+      ],
+      "refId": 4886
+    },
+    {
+      "id": 38,
+      "ar": "يَا مَعْشَرَ الشَّبَابِ مَنِ اسْتَطَاعَ مِنْكُمُ الْبَاءَةَ فَلْيَتَزَوَّجْ، فَإِنَّهُ أَغَضُّ لِلْبَصَرِ وَأَحْصَنُ لِلْفَرْجِ، وَمَنْ لَمْ يَسْتَطِعْ فَعَلَيْهِ بِالصَّوْمِ",
+      "fr": "Ô jeunes gens ! Que celui d'entre vous qui en a les moyens se marie, car cela aide à baisser le regard et à préserver la chasteté. Et que celui qui ne le peut pas jeûne, car le jeûne est pour lui une protection.",
+      "narrator": "Ibn Mas'ud",
+      "collection": "bukhari",
+      "num": 5065,
+      "source": "Sahih al-Bukhari 5065 ; Sahih Muslim 1400",
+      "grade": "Sahih",
+      "themes": [
+        "famille",
+        "jeune"
+      ],
+      "refId": 4862
+    },
+    {
+      "id": 39,
+      "ar": "مَا مَلأَ آدَمِيٌّ وِعَاءً شَرًّا مِنْ بَطْنٍ، بِحَسْبِ ابْنِ آدَمَ أُكُلاَتٌ يُقِمْنَ صُلْبَهُ",
+      "fr": "L'être humain ne remplit pas de récipient pire que son ventre. Il suffit au fils d'Adam de quelques bouchées pour se maintenir.",
+      "narrator": "Al-Miqdam ibn Ma'dikarib",
+      "collection": "tirmidhi",
+      "num": 2380,
+      "source": "Jami' at-Tirmidhi 2380 ; Sunan Ibn Majah 3349",
+      "grade": "Hasan sahih",
+      "themes": [
+        "comportement"
+      ],
+      "refId": 2449
+    },
+    {
+      "id": 40,
+      "ar": "الْحَلاَلُ بَيِّنٌ وَالْحَرَامُ بَيِّنٌ، وَبَيْنَهُمَا مُشَبَّهَاتٌ لاَ يَعْلَمُهَا كَثِيرٌ مِنَ النَّاسِ",
+      "fr": "Le licite est clair et l'illicite est clair, et entre les deux il y a des choses ambiguës que beaucoup de gens ne connaissent pas. Celui qui se préserve des ambiguïtés préserve sa religion et son honneur.",
+      "narrator": "An-Nu'man ibn Bashir",
+      "collection": "bukhari",
+      "num": 52,
+      "source": "Sahih al-Bukhari 52 ; Sahih Muslim 1599",
+      "grade": "Sahih",
+      "themes": [
+        "commerce",
+        "foi"
+      ],
+      "refId": 52
+    },
+    {
+      "id": 41,
+      "ar": "مِنْ حُسْنِ إِسْلاَمِ الْمَرْءِ تَرْكُهُ مَا لاَ يَعْنِيهِ",
+      "fr": "Fait partie de la beauté de l'Islam d'une personne : délaisser ce qui ne la concerne pas.",
+      "narrator": "Abu Hurayra",
+      "collection": "tirmidhi",
+      "num": 2317,
+      "source": "Jami' at-Tirmidhi 2317",
+      "grade": "Hasan",
+      "themes": [
+        "comportement"
+      ],
+      "refId": 2386
+    },
+    {
+      "id": 42,
+      "ar": "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ، ارْحَمُوا أَهْلَ الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
+      "fr": "Les miséricordieux, le Tout Miséricordieux leur fera miséricorde. Faites miséricorde à ceux qui sont sur terre, Celui qui est au ciel vous fera miséricorde.",
+      "narrator": "'Abdullah ibn 'Amr",
+      "collection": "abudawud",
+      "num": 4941,
+      "source": "Sunan Abi Dawud 4941 ; Jami' at-Tirmidhi 1924",
+      "grade": "Sahih (authentifié par al-Albani)",
+      "themes": [
+        "misericorde",
+        "comportement"
+      ],
+      "refId": 4943
+    },
+    {
+      "id": 43,
+      "ar": "لَيْسَ مِنَّا مَنْ لَمْ يَرْحَمْ صَغِيرَنَا وَيَعْرِفْ شَرَفَ كَبِيرِنَا",
+      "fr": "N'est pas des nôtres celui qui n'est pas miséricordieux envers nos petits et ne reconnaît pas le droit de nos aînés.",
+      "narrator": "'Abdullah ibn 'Amr",
+      "collection": "tirmidhi",
+      "num": 1919,
+      "source": "Jami' at-Tirmidhi 1919",
+      "grade": "Sahih",
+      "themes": [
+        "misericorde",
+        "famille",
+        "comportement"
+      ],
+      "refId": 1988
+    },
+    {
+      "id": 44,
+      "ar": "الدُّعَاءُ هُوَ الْعِبَادَةُ",
+      "fr": "L'invocation, c'est l'adoration.",
+      "narrator": "An-Nu'man ibn Bashir",
+      "collection": "tirmidhi",
+      "num": 2969,
+      "source": "Jami' at-Tirmidhi 2969 ; Sunan Abi Dawud 1479",
+      "grade": "Sahih (authentifié par al-Albani)",
+      "themes": [
+        "dhikr"
+      ],
+      "refId": 3053
+    },
+    {
+      "id": 45,
+      "ar": "مَا مِنْ مُسْلِمٍ يُصِيبُهُ أَذًى، شَوْكَةٌ فَمَا فَوْقَهَا، إِلاَّ كَفَّرَ اللَّهُ بِهَا سَيِّئَاتِهِ كَمَا تَحُطُّ الشَّجَرَةُ وَرَقَهَا",
+      "fr": "Aucun mal n'atteint un musulman — fût-ce une épine qui le pique — sans qu'Allah n'efface par cela ses péchés, comme l'arbre laisse tomber ses feuilles.",
+      "narrator": "Ibn Mas'ud",
+      "collection": "bukhari",
+      "num": 5647,
+      "source": "Sahih al-Bukhari 5647 ; Sahih Muslim 2571",
+      "grade": "Sahih",
+      "themes": [
+        "misericorde",
+        "colere"
+      ],
+      "refId": 5434
+    },
+    {
+      "id": 46,
+      "ar": "عَجَبًا لأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ... إِنْ أَصَابَتْهُ سَرَّاءُ شَكَرَ فَكَانَ خَيْرًا لَهُ، وَإِنْ أَصَابَتْهُ ضَرَّاءُ صَبَرَ فَكَانَ خَيْرًا لَهُ",
+      "fr": "Étonnante est l'affaire du croyant : tout son sort est un bien, et cela n'appartient qu'au croyant. Si un bonheur l'atteint, il remercie, et c'est un bien pour lui ; si un malheur l'atteint, il patiente, et c'est un bien pour lui.",
+      "narrator": "Suhayb",
+      "collection": "muslim",
+      "num": 2999,
+      "source": "Sahih Muslim 2999",
+      "grade": "Sahih",
+      "themes": [
+        "colere",
+        "foi"
+      ],
+      "refId": 7314
+    },
+    {
+      "id": 47,
+      "ar": "مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُصِبْ مِنْهُ",
+      "fr": "Celui à qui Allah veut du bien, Il l'éprouve.",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 5645,
+      "source": "Sahih al-Bukhari 5645",
+      "grade": "Sahih",
+      "themes": [
+        "colere",
+        "misericorde"
+      ],
+      "refId": 5431
+    },
+    {
+      "id": 48,
+      "ar": "مَا زَالَ جِبْرِيلُ يُوصِينِي بِالْجَارِ حَتَّى ظَنَنْتُ أَنَّهُ سَيُوَرِّثُهُ",
+      "fr": "Jibril (l'ange Gabriel) n'a cessé de me recommander le voisin, au point que j'ai cru qu'il allait lui donner droit à l'héritage.",
+      "narrator": "Ibn 'Umar",
+      "collection": "bukhari",
+      "num": 6014,
+      "source": "Sahih al-Bukhari 6014 ; Sahih Muslim 2624",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite"
+      ],
+      "refId": 5787
+    },
+    {
+      "id": 49,
+      "ar": "لاَ تَحَاسَدُوا وَلاَ تَنَاجَشُوا وَلاَ تَبَاغَضُوا وَلاَ تَدَابَرُوا... وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا",
+      "fr": "Ne vous enviez pas, ne surenchérissez pas pour tromper, ne vous détestez pas, ne vous tournez pas le dos… et soyez, serviteurs d'Allah, des frères.",
+      "narrator": "Abu Hurayra",
+      "collection": "muslim",
+      "num": 2564,
+      "source": "Sahih Muslim 2564",
+      "grade": "Sahih",
+      "themes": [
+        "fraternite",
+        "comportement"
+      ],
+      "refId": 6380
+    },
+    {
+      "id": 50,
+      "ar": "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
+      "fr": "Crains Allah où que tu sois, fais suivre la mauvaise action d'une bonne action qui l'effacera, et comporte-toi avec les gens avec un bon caractère.",
+      "narrator": "Abu Dharr",
+      "collection": "tirmidhi",
+      "num": 1987,
+      "source": "Jami' at-Tirmidhi 1987",
+      "grade": "Hasan",
+      "themes": [
+        "comportement",
+        "foi"
+      ],
+      "refId": 2055
+    },
+    {
+      "id": 51,
+      "ar": "زُورُوا الْقُبُورَ فَإِنَّهَا تُذَكِّرُكُمُ الآخِرَةَ",
+      "fr": "Visitez les tombes, car elles vous rappellent l'au-delà.",
+      "narrator": "Abu Hurayra",
+      "collection": "ibnmajah",
+      "num": 1569,
+      "source": "Sunan Ibn Majah 1569 ; Sahih Muslim 976",
+      "grade": "Sahih",
+      "themes": [
+        "mort"
+      ],
+      "refId": 1303
+    },
+    {
+      "id": 52,
+      "ar": "أَحَبُّ الْكَلاَمِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلاَ إِلَهَ إِلاَّ اللَّهُ، وَاللَّهُ أَكْبَرُ",
+      "fr": "Les paroles les plus aimées d'Allah sont au nombre de quatre : Gloire à Allah, louange à Allah, il n'y a de divinité digne d'adoration qu'Allah, et Allah est le plus Grand.",
+      "narrator": "Samura ibn Jundub",
+      "collection": "muslim",
+      "num": 2137,
+      "source": "Sahih Muslim 2137",
+      "grade": "Sahih",
+      "themes": [
+        "dhikr"
+      ],
+      "refId": 5455
+    },
+    {
+      "id": 53,
+      "ar": "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+      "fr": "Deux paroles légères sur la langue, lourdes dans la balance, aimées du Tout Miséricordieux : « Gloire et louange à Allah » et « Gloire à Allah l'Immense ».",
+      "narrator": "Abu Hurayra",
+      "collection": "bukhari",
+      "num": 6682,
+      "source": "Sahih al-Bukhari 6682 ; Sahih Muslim 2694",
+      "grade": "Sahih",
+      "themes": [
+        "dhikr"
+      ],
+      "refId": 6167
+    }
+  ]
+}
