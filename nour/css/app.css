@@ -692,51 +692,71 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
   border-radius: 999px; padding: 6px 12px;
   font-size: .78rem; font-weight: 600;
 }
-.qneedle {
+/* repère fixe du haut : trait doré effilé */
+.qmark {
   position: relative; z-index: 2;
-  display: grid; place-items: center;
-  color: var(--gold);
-  transform: rotate(-90deg);
-  margin-bottom: -14px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));
+  width: 4px; height: 22px;
+  border-radius: 2px;
+  background: linear-gradient(var(--gold), transparent);
+  margin-bottom: -8px;
+  box-shadow: 0 0 8px rgba(212,175,106,.55);
 }
 .hub-face {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  width: 42%; height: 42%; border-radius: 50%;
+  width: 44%; height: 44%; border-radius: 50%;
   background: var(--hero-grad);
   display: grid; place-items: center; align-content: center; gap: 2px;
   color: #f3efe2;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,.32), 0 2px 8px rgba(0,0,0,.22);
 }
-.qdeg { font-size: 1.6rem; font-weight: 800; line-height: 1; }
-.qsub { font-size: .62rem; opacity: .85; text-align: center; padding: 0 6px; }
-.qibla-hero .compass { background: var(--card); border: none; }
-.qibla-hero .compass.aligned { box-shadow: 0 0 0 6px rgba(201,162,39,.45), 0 0 40px rgba(201,162,39,.5); }
+.qdeg { font-size: 1.7rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.qsub { font-size: .64rem; opacity: .85; text-align: center; padding: 0 6px; }
 
 /* ---------- boussole qibla ---------- */
-.compass-wrap { display: grid; place-items: center; margin: 18px 0; }
+.compass-wrap { display: grid; place-items: center; margin: 16px 0 6px; }
 .compass {
+  --qglow: 0; /* 0 → 1 : proximité de la Qibla, pilotée par le JS */
   position: relative; width: min(78vw, 300px); height: min(78vw, 300px);
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 42%, var(--card-2), var(--card));
-  border: 1.5px solid var(--line);
-  box-shadow: var(--shadow-lg);
+  background: radial-gradient(circle at 50% 40%, var(--card-2), var(--card));
+  border: none;
+  box-shadow: var(--shadow-lg),
+    0 0 calc(var(--qglow) * 46px) calc(var(--qglow) * 8px) rgba(57, 198, 163, calc(var(--qglow) * .38));
+  transition: box-shadow .45s ease;
 }
-.compass .rose { position: absolute; inset: 0; transition: transform .12s linear; will-change: transform; }
-.compass .pt { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); font-weight: 800; font-size: .95rem; color: var(--ink-2); }
-.compass .tick { position: absolute; left: 50%; top: 4px; width: 2px; height: 10px; background: var(--line); transform-origin: 50% calc(min(39vw, 150px) - 4px); }
-.compass .kaaba-ind {
-  position: absolute; left: 50%; top: 6px; transform: translateX(-50%);
-  color: var(--brand); line-height: 0;
+.compass .rose { position: absolute; inset: 0; will-change: transform; }
+/* alignement : mise en valeur douce, halo émeraude + doré */
+.compass.aligned {
+  box-shadow: var(--shadow-lg),
+    0 0 0 5px rgba(57, 198, 163, .35),
+    0 0 46px 10px rgba(57, 198, 163, .32),
+    0 0 26px 4px rgba(212, 175, 106, .45);
+  animation: qbreathe 2.6s ease-in-out infinite;
 }
-.compass .needle {
-  position: absolute; left: calc(50% - 2px); top: 14%; width: 4px; height: 36%;
-  background: linear-gradient(var(--danger), transparent); border-radius: 2px;
+@keyframes qbreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
 }
-.compass .hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  width: 14px; height: 14px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 4px var(--card); }
-.compass.aligned { animation: qpulse 1.2s ease infinite; border-color: var(--brand); }
-@keyframes qpulse { 0%,100% { box-shadow: var(--shadow-lg); } 50% { box-shadow: 0 0 0 10px rgba(14,102,86,.15); } }
+.qaligned-msg {
+  text-align: center;
+  margin: 12px 0 2px;
+  font-weight: 800; font-size: 1.02rem; letter-spacing: .04em;
+  color: var(--gold);
+  animation: fadein .5s ease;
+}
+/* statistiques : cap / qibla / écart / précision */
+.qstats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px;
+  margin: 12px 2px 0;
+}
+.qstat {
+  background: rgba(255,255,255,.1);
+  border-radius: 13px;
+  padding: 8px 4px;
+  text-align: center;
+}
+.qstat small { display: block; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; opacity: .72; }
+.qstat b { font-size: .98rem; font-variant-numeric: tabular-nums; }
 
 /* ---------- tasbih ---------- */
 .tasbih-count {
@@ -853,15 +873,6 @@ details.en-tr p { color: var(--ink-2); font-size: .86rem; }
 }
 .ai-hero b { font-size: 1.02rem; }
 .ai-hero p { margin: 4px 0 0; font-size: .8rem; opacity: .85; }
-
-/* ---------- Qibla : lisibilité du signal ---------- */
-.qsignal { display: inline-flex; align-items: center; gap: 5px; }
-.qsignal i {
-  width: 4px; border-radius: 2px; background: rgba(255,255,255,.32);
-  display: inline-block;
-}
-.qsignal i:nth-child(1) { height: 6px; } .qsignal i:nth-child(2) { height: 10px; } .qsignal i:nth-child(3) { height: 14px; }
-.qsignal.s1 i:nth-child(1), .qsignal.s2 i:nth-child(-n+2), .qsignal.s3 i { background: var(--gold); }
 
 /* appui générique : toute carte/ligne cliquable réagit au doigt */
 a.card:active, .hcard:active { transform: scale(.985); }
