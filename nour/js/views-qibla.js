@@ -1,9 +1,9 @@
-// Qibla : direction de la Kaaba avec vraie boussole (orientation de l'iPhone),
-// degrés, distance, calibration. Fonctionne aussi sans capteur (direction fixe).
+// Qibla : boussole plein écran, précise et animée. La rose (graduations,
+// cardinaux, marqueur Kaaba doré) tourne avec l'orientation de l'iPhone ;
+// l'aiguille fixe représente le haut du téléphone. Alignement → halo + vibration.
 import { $view, esc, toast, vibrate } from './app.js';
 import { icon } from './icons.js';
 import { prayerSettings, hasLocation, geolocate } from './prayer.js';
-import { fold } from './engine.js';
 
 const KAABA = { lat: 21.4225, lon: 39.8262 };
 const rad = d => d * Math.PI / 180;
@@ -22,12 +22,58 @@ function kaabaDistance(lat, lon) {
   return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
+// rose des vents SVG : graduations fines, chiffres tous les 30°, cardinaux
+function roseSVG(bearing) {
+  const C = 150, R = 150;
+  let ticks = '';
+  for (let a = 0; a < 360; a += 3) {
+    const major = a % 30 === 0, mid = a % 15 === 0;
+    const len = major ? 14 : mid ? 9 : 5;
+    const r1 = R - 6, r2 = r1 - len;
+    const x1 = C + r1 * Math.sin(rad(a)), y1 = C - r1 * Math.cos(rad(a));
+    const x2 = C + r2 * Math.sin(rad(a)), y2 = C - r2 * Math.cos(rad(a));
+    ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
+      stroke="${major ? 'var(--ink-2)' : 'var(--ink-3)'}" stroke-width="${major ? 2 : 1}" opacity="${major ? .9 : .45}"/>`;
+  }
+  let nums = '';
+  for (let a = 0; a < 360; a += 30) {
+    if (a % 90 === 0) continue;
+    const r = R - 32;
+    const x = C + r * Math.sin(rad(a)), y = C - r * Math.cos(rad(a));
+    nums += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central"
+      font-size="11" fill="var(--ink-3)" transform="rotate(${a} ${x.toFixed(1)} ${y.toFixed(1)})">${a}</text>`;
+  }
+  const card = [['N', 0, 'var(--danger)'], ['E', 90, 'var(--ink-2)'], ['S', 180, 'var(--ink-2)'], ['O', 270, 'var(--ink-2)']]
+    .map(([l, a, col]) => {
+      const r = R - 34;
+      const x = C + r * Math.sin(rad(a)), y = C - r * Math.cos(rad(a));
+      return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central"
+        font-size="19" font-weight="800" fill="${col}" transform="rotate(${a} ${x.toFixed(1)} ${y.toFixed(1)})">${l}</text>`;
+    }).join('');
+  // marqueur Kaaba : pastille dorée sur le cercle, à l'azimut de la qibla
+  const kx = C + (R - 6) * Math.sin(rad(bearing)), ky = C - (R - 6) * Math.cos(rad(bearing));
+  const lx = C + 26 * Math.sin(rad(bearing)), ly = C - 26 * Math.cos(rad(bearing));
+  const kaaba = `
+    <line x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${kx.toFixed(1)}" y2="${ky.toFixed(1)}"
+      stroke="var(--gold)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 7" opacity=".9"/>
+    <g transform="translate(${kx.toFixed(1)} ${ky.toFixed(1)})">
+      <circle r="17" fill="var(--gold)"/>
+      <circle r="17" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+      <g transform="translate(-9 -9) scale(.75)" stroke="#3c2f05" stroke-width="1.9" fill="none"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="m12 2.8 8 3.4v11.6l-8 3.4-8-3.4V6.2Z"/><path d="M4 6.2l8 3.4 8-3.4"/><path d="M12 9.6v11.6"/><path d="M4 9.5l8 3.3 8-3.3"/>
+      </g>
+    </g>`;
+  return `<svg viewBox="0 0 300 300" style="position:absolute;inset:0;width:100%;height:100%">
+    ${ticks}${nums}${card}${kaaba}</svg>`;
+}
+
 let orientationHandler = null;
 
 export async function viewQibla() {
   if (orientationHandler) {
-    removeEventListener('deviceorientation', orientationHandler);
-    removeEventListener('deviceorientationabsolute', orientationHandler);
+    removeEventListener('deviceorientation', orientationHandler, true);
+    removeEventListener('deviceorientationabsolute', orientationHandler, true);
     orientationHandler = null;
   }
   const p = prayerSettings();
@@ -54,66 +100,76 @@ export async function viewQibla() {
 
   const bearing = qiblaBearing(p.lat, p.lon);
   const dist = kaabaDistance(p.lat, p.lon);
-  const ticks = Array.from({ length: 24 }, (_, i) =>
-    `<div class="tick" style="transform:rotate(${i * 15}deg) ${i % 6 === 0 ? 'scaleY(1.6)' : ''}"></div>`).join('');
-  const pts = [['N', 0], ['E', 90], ['S', 180], ['O', 270]].map(([l, a]) =>
-    `<div class="pt" style="transform:translateX(-50%) rotate(0deg); top:auto; left:auto; inset:0; display:grid; place-items:start center; transform:rotate(${a}deg)"><span style="display:block;margin-top:22px;transform:rotate(${-a}deg)">${l}</span></div>`).join('');
 
   $view.innerHTML = `
-    <a class="backlink" href="#/home">${icon('chevL', 15)} Accueil</a>
-    <h1>${icon('kaaba', 24)} Qibla</h1>
-    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <span class="chip">${icon('location', 14)} ${esc(p.city || `${p.lat}, ${p.lon}`)}</span>
-      <span class="chip">${icon('compass', 14)} Qibla : <b>&nbsp;${Math.round(bearing)}°</b></span>
-      <span class="chip">${icon('kaaba', 14)} ${dist.toLocaleString('fr-FR')} km</span>
-    </div>
+    <div class="qibla-hero">
+      <div class="row" style="justify-content:space-between;width:100%">
+        <a class="backlink" href="#/home" style="color:#f3efe2">${icon('chevL', 15)} Accueil</a>
+        <b style="font-size:1.05rem">Qibla</b>
+        <span style="width:70px"></span>
+      </div>
+      <div class="row" style="justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0 4px">
+        <span class="qchip">${icon('location', 13)} ${esc(p.city || `${p.lat}, ${p.lon}`)}</span>
+        <span class="qchip">${icon('compass', 13)} ${Math.round(bearing)}°</span>
+        <span class="qchip">${icon('kaaba', 13)} ${dist.toLocaleString('fr-FR')} km</span>
+      </div>
 
-    <div class="compass-wrap">
-      <div class="compass" id="compass">
-        <div class="rose" id="rose">
-          ${ticks}${pts}
-          <div class="kaaba-ind" id="kaabaInd" style="inset:0;display:grid;place-items:start center;transform:rotate(${bearing}deg)">
-            <span style="display:block;margin-top:2px">${icon('kaaba', 26)}</span>
+      <div class="compass-wrap">
+        <div class="qneedle">${icon('chevR', 22)}</div>
+        <div class="compass" id="compass">
+          <div class="rose" id="rose">${roseSVG(bearing)}</div>
+          <div class="hub-face">
+            <div class="qdeg" id="qDeg">—°</div>
+            <div class="qsub" id="qSub">Activez la boussole</div>
           </div>
         </div>
-        <div class="needle"></div>
-        <div class="hub"></div>
       </div>
+
+      <div class="center" style="margin:6px 0 4px">
+        <button class="btn" id="btnCompass" style="background:var(--gold);color:#3c2f05;font-weight:800">${icon('compass', 16)} Activer la boussole</button>
+      </div>
+      <p class="center" id="qStatus" style="opacity:.85;font-size:.88rem;margin:8px 12px">
+        La Kaaba est indiquée en doré sur le cadran. Tournez-vous jusqu'à l'aligner avec le repère du haut.</p>
     </div>
-    <p class="center muted" id="qStatus">La flèche rouge indique le haut de votre téléphone.<br>Alignez-la avec la Kaaba.</p>
-    <div class="center" style="margin:10px 0">
-      <button class="btn" id="btnCompass">${icon('compass', 16)} Activer la boussole</button>
-    </div>
-    <div class="notice" id="qNote">📱 Sur iPhone, touchez « Activer la boussole » puis autorisez l'accès à l'orientation.
-      <b>Calibration :</b> si la direction semble fausse, dessinez un « 8 » avec votre téléphone pendant quelques
-      secondes, éloignez-vous des objets métalliques et aimants, puis réessayez. Sans capteur, utilisez la valeur
-      en degrés par rapport au nord (ex. avec une boussole classique).</div>
+    <div class="notice" style="margin-top:12px"><b>Calibration :</b> si la direction semble fausse, dessinez un « 8 »
+      avec votre téléphone pendant quelques secondes, éloignez-vous des objets métalliques, puis réessayez.
+      Sans capteur d'orientation, utilisez la valeur en degrés par rapport au nord (boussole classique) :
+      <b>${Math.round(bearing)}°</b>.</p>
   `;
 
   const rose = document.getElementById('rose');
   const compass = document.getElementById('compass');
+  const qDeg = document.getElementById('qDeg');
+  const qSub = document.getElementById('qSub');
   const status = document.getElementById('qStatus');
-  let lastAligned = false;
+  let lastAligned = false, gotEvent = false, smooth = null;
 
   const onOrient = ev => {
     let heading = null;
     if (typeof ev.webkitCompassHeading === 'number' && !isNaN(ev.webkitCompassHeading)) {
-      heading = ev.webkitCompassHeading; // iOS : degrés depuis le nord, horaire
-    } else if (ev.absolute && typeof ev.alpha === 'number') {
-      heading = (360 - ev.alpha) % 360;
+      heading = ev.webkitCompassHeading;
     } else if (typeof ev.alpha === 'number') {
-      heading = (360 - ev.alpha) % 360; // approximation si non absolu
+      heading = (360 - ev.alpha) % 360;
     }
     if (heading == null) return;
-    rose.style.transform = `rotate(${-heading}deg)`;
-    let diff = Math.abs(((bearing - heading) % 360 + 360) % 360);
-    if (diff > 180) diff = 360 - diff;
-    const aligned = diff < 5;
+    gotEvent = true;
+    // lissage angulaire léger pour une rotation naturelle
+    if (smooth == null) smooth = heading;
+    else {
+      let d = ((heading - smooth + 540) % 360) - 180;
+      smooth = (smooth + d * 0.25 + 360) % 360;
+    }
+    rose.style.transform = `rotate(${-smooth}deg)`;
+    let diff = ((bearing - smooth) % 360 + 360) % 360;
+    const off = diff > 180 ? 360 - diff : diff;
+    const aligned = off < 4;
     compass.classList.toggle('aligned', aligned);
+    qDeg.textContent = `${Math.round(smooth)}°`;
+    qSub.textContent = aligned ? 'Face à la Qibla' : diff < 180 ? `${Math.round(off)}° à droite` : `${Math.round(off)}° à gauche`;
     status.innerHTML = aligned
-      ? `<b style="color:var(--brand)">✓ Vous êtes orienté vers la Qibla</b>`
-      : `Tournez-vous de ${Math.round(diff)}° — la Kaaba est ${((bearing - heading + 360) % 360) < 180 ? 'vers votre droite' : 'vers votre gauche'}.`;
-    if (aligned && !lastAligned) vibrate(30);
+      ? `<b style="color:var(--gold)">✓ Vous êtes parfaitement orienté vers la Qibla</b>`
+      : `Tournez ${diff < 180 ? 'à droite' : 'à gauche'} de ${Math.round(off)}° pour faire face à la Kaaba.`;
+    if (aligned && !lastAligned) vibrate(35);
     lastAligned = aligned;
   };
 
@@ -129,9 +185,10 @@ export async function viewQibla() {
       e.target.style.display = 'none';
       toast('Boussole activée — tournez-vous lentement');
       setTimeout(() => {
-        if (!lastAligned && rose.style.transform === '') {
-          status.innerHTML = `Aucun capteur d'orientation détecté sur cet appareil.<br>
-            La Qibla est à <b>${Math.round(bearing)}°</b> par rapport au nord.`;
+        if (!gotEvent) {
+          qDeg.textContent = `${Math.round(bearing)}°`;
+          qSub.textContent = 'depuis le nord';
+          status.innerHTML = `Aucun capteur d'orientation détecté ici.<br>La Qibla est à <b>${Math.round(bearing)}°</b> par rapport au nord.`;
         }
       }, 3000);
     } catch {

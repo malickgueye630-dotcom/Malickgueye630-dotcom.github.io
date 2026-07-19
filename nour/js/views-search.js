@@ -29,15 +29,17 @@ function highlight(text, q, found = []) {
 }
 
 const badgeExact = `<span class="badge sahih" style="font-size:.62rem">Correspondance exacte</span>`;
-const badgeTopic = t => `<span class="badge" style="font-size:.62rem">Lié au sujet : ${esc(t)}</span>`;
+const badgeApprox = `<span class="badge badge-en" style="font-size:.62rem">Correspondance approximative</span>`;
+const badgeTopic = t => `<span class="badge" style="font-size:.62rem">Par le sens : ${esc(t)}</span>`;
 const badgePhon = `<span class="badge hasan" style="font-size:.62rem">Correspondance phonétique</span>`;
+const matchBadge = x => x.topic ? badgeTopic(x.topic) : x.phon ? badgePhon : x.approx ? badgeApprox : badgeExact;
 
 // ---------- cartes ----------
 const clamp = (t, n) => t && t.length > n ? t.slice(0, n).replace(/\s+\S*$/, '') + '…' : t;
 
 function verseCard(v, meta, q, enriched) {
   const cfg = state.settings;
-  const label = v.topic ? badgeTopic(v.topic) : v.phon ? badgePhon : badgeExact;
+  const label = matchBadge(v);
   const ref = v.range
     ? `${esc(meta.phonetic)} (${v.s}), versets ${v.range[1]}-${v.range[2]}`
     : `${esc(meta.phonetic)} (${v.s}), verset ${v.v}`;
@@ -55,7 +57,7 @@ function verseCard(v, meta, q, enriched) {
 
 function hadithCard(h, q) {
   const cfg = state.settings;
-  const label = h.topic ? badgeTopic(h.topic) : badgeExact;
+  const label = matchBadge(h);
   const grade = h.grade ? `<span class="badge ${h.grade.toLowerCase().startsWith('sahih') ? 'sahih' : 'hasan'}">${esc(h.grade)}</span>` : '';
   const link = h.collection && h.refId ? `#/hadith/${h.collection}/find/${h.refId}` : `#/hadith/theme/${h.themes?.[0] || ''}`;
   return `<a class="card card-plain hcard" style="display:block;text-decoration:none;color:inherit" href="${esc(link)}" data-hfr="${h.id}">
@@ -71,7 +73,7 @@ function hadithCard(h, q) {
 
 function duaCardMini(d, q) {
   const cfg = state.settings;
-  const label = d.topic ? badgeTopic(d.topic) : badgeExact;
+  const label = matchBadge(d);
   return `<a class="card card-plain hcard" style="display:block;text-decoration:none;color:inherit" href="#/duas/${esc(d.cat)}?d=${esc(d.id)}">
     <div class="dua-title">${d.icon || '🤲'} ${highlight(d.title, q, d.found || [])}${d.repeat ? `<span class="repeat-pill">× ${d.repeat}</span>` : ''}</div>
     ${cfg.showAr ? `<div class="ar" style="font-size:calc(var(--ar-size)*.72)">${esc(d.ar)}</div>` : ''}
@@ -207,10 +209,19 @@ export async function viewSearch(initial = '') {
         présentes dans la base de Nour. Pour un avis religieux, consultez un savant ou un imam.</div>`);
     }
 
-    // ---------- résultat le plus probable (hors mode question) ----------
+    // ---------- résultat le plus probable : le SENS d'abord ----------
     if (!answer && r.topics.length) {
-      parts.push(`<div class="result-cat">💡 Sujet détecté</div>`);
+      parts.push(`<div class="result-cat">💡 Résultat par le sens</div>`);
       parts.push(topicCard(r.topics[0].topic));
+      if (r.strongTopic) {
+        // le contenu vérifié du sujet passe avant les correspondances de mots
+        if (r.versesTopic.length) {
+          const getT = await enrich(r.versesTopic, 5);
+          parts.push(r.versesTopic.slice(0, 5).map(v => verseCard(v, meta(v.s), q, getT(v))).join(''));
+        }
+        parts.push(r.hadithsTopic.slice(0, 4).map(h => hadithCard(h, q)).join(''));
+        parts.push(r.duasTopic.slice(0, 3).map(d => duaCardMini(d, q)).join(''));
+      }
     }
 
     // ---------- sourates ----------
@@ -232,9 +243,12 @@ export async function viewSearch(initial = '') {
     }
 
     // ---------- sections par catégorie, ordonnées selon l'intention ----------
-    const versesAll = [...r.verses, ...r.versesTopic];
-    const hadithsAll = [...r.hadiths, ...r.hadithsTopic];
-    const duasAll = [...r.duas, ...r.duasTopic];
+    // si le sujet fort a déjà affiché son contenu, ces sections ne montrent
+    // que les correspondances textuelles restantes
+    const topicShown = !answer && r.topics.length && r.strongTopic;
+    const versesAll = topicShown ? r.verses : [...r.verses, ...r.versesTopic];
+    const hadithsAll = topicShown ? r.hadiths : [...r.hadiths, ...r.hadithsTopic];
+    const duasAll = topicShown ? r.duas : [...r.duas, ...r.duasTopic];
     const sections = {
       quran: async () => {
         if (!versesAll.length || r.phonetic.length) return '';

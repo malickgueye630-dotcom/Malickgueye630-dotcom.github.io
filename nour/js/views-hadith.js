@@ -226,9 +226,11 @@ export async function viewChapter(key, chId) {
   const mHash = location.hash.match(/\?h=(\d+)/);
   if (mHash) target = +mHash[1];
 
-  const [cat, items] = await Promise.all([data.hadithIndex(), data.hadithChapter(key, chId), chaptersFr()]);
+  const [cat, items, hfr] = await Promise.all([data.hadithIndex(), data.hadithChapter(key, chId), data.hadithsFr(), chaptersFr()]);
   const col = cat.find(c => c.key === key);
   const ch = col.chapters.find(c => c.id === chId);
+  // traductions françaises disponibles dans notre sélection vérifiée (par refId)
+  const frById = new Map(hfr.hadiths.filter(h => h.collection === key && h.refId).map(h => [h.refId, h]));
 
   const PAGE = 20;
   let shown = 0;
@@ -238,9 +240,9 @@ export async function viewChapter(key, chId) {
     <h1 style="font-size:1.15rem">${esc(chFr(ch.en))}</h1>
     <div class="row"><div class="arname" style="font-size:1.15rem">${esc(ch.ar)}</div></div>
     <p class="muted">${items.length} hadiths — n° ${ch.first} à ${ch.last}</p>
-    <div class="notice">Traduction française complète non disponible pour ce recueil dans une source libre :
-      l'arabe fait foi, la phonétique aide à la lecture, et la traduction anglaise (Sunnah.com)
-      est consultable ci-dessous dans chaque hadith.</div>
+    <div class="notice">Arabe + phonétique française pour chaque hadith. La traduction française est affichée
+      lorsqu'elle existe dans notre sélection vérifiée ; il n'existe pas encore de traduction française
+      complète et libre de ce recueil${state.settings.showEnFallback ? ' — la traduction anglaise (Sunnah.com) est repliée en secours' : ''}.</div>
     <div id="hList"></div>
     <button class="btn btn-ghost" id="more" style="width:100%">Afficher plus</button>
   `;
@@ -258,10 +260,15 @@ export async function viewChapter(key, chId) {
       </div>
       ${state.settings.showAr ? `<div class="ar">${esc(ar)}</div>` : ''}
       ${tlLine(ar)}
-      ${narrator || text ? `<details class="en-tr">
-        <summary>Afficher la traduction anglaise (source : Sunnah.com)</summary>
-        <p>${narrator ? `<b>${esc(narrator)}</b> ` : ''}${esc(text)}</p>
-      </details>` : `<p class="tiny">Traduction non disponible pour ce hadith.</p>`}
+      ${frById.has(id) ? `
+        <p class="fr">${esc(frById.get(id).fr)}</p>
+        <div class="src"><span class="badge ${gradeClass(frById.get(id).grade)}">Authenticité : ${esc(frById.get(id).grade)}</span>
+        <span class="s">${esc(frById.get(id).source)}</span></div>`
+      : `<p class="tiny">Traduction française fiable non disponible pour ce hadith — l'arabe fait foi.</p>
+        ${state.settings.showEnFallback && (narrator || text) ? `<details class="en-tr">
+          <summary>Afficher la traduction anglaise (source : Sunnah.com)</summary>
+          <p>${narrator ? `<b>${esc(narrator)}</b> ` : ''}${esc(text)}</p>
+        </details>` : ''}`}
     </div>`;
 
   function renderMore() {

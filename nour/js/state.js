@@ -16,6 +16,9 @@ const defaults = {
     showTl: true,             // phonétique française activée par défaut
     translitStyle: 'fr',      // fr (française) | dmg (académique, hadiths seulement)
     timeFmt: '24',            // 24 | 12
+    haptics: true,            // vibrations (tasbih, qibla)
+    showEnFallback: false,    // traduction anglaise de secours dans les recueils
+    customHue: 165,           // teinte de la couleur personnalisée
     reciter: 'ar.alafasy',
     audio: {
       autoNext: true,         // enchaîner les versets
@@ -123,6 +126,16 @@ export function applyTheme() {
   const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   document.documentElement.dataset.palette = state.settings.palette || 'emeraude';
+  // couleur personnalisée : dérive les couleurs de marque de la teinte choisie
+  const r = document.documentElement.style;
+  if (state.settings.palette === 'custom') {
+    const h = state.settings.customHue ?? 165;
+    r.setProperty('--brand', `hsl(${h} 62% ${dark ? 55 : 34}%)`);
+    r.setProperty('--brand-2', `hsl(${h} 55% 18%)`);
+    r.setProperty('--hero-grad', `linear-gradient(140deg, hsl(${h} 55% 15%) 0%, hsl(${h} 58% 30%) 55%, hsl(${(h + 22) % 360} 50% 42%) 100%)`);
+  } else {
+    r.removeProperty('--brand'); r.removeProperty('--brand-2'); r.removeProperty('--hero-grad');
+  }
 }
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
 

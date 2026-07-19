@@ -66,6 +66,38 @@
   --line: #372d20;
   --hero-grad: linear-gradient(140deg, #33230e 0%, #6b4a1d 55%, #a3702c 100%);
 }
+/* ---------- palette Violet ---------- */
+:root[data-palette="violet"] {
+  --bg: #f6f2f9;
+  --bg-soft: #eee7f4;
+  --card: #ffffff;
+  --card-2: #faf6fd;
+  --ink: #2a2033;
+  --ink-2: #6d5c7d;
+  --ink-3: #9a8aa8;
+  --brand: #6d3f9e;
+  --brand-2: #3d2260;
+  --gold: #c9a227;
+  --gold-soft: #f0e3bb;
+  --line: #e5daee;
+  --hero-grad: linear-gradient(140deg, #2c1748 0%, #6d3f9e 55%, #9d6ac4 100%);
+}
+:root[data-palette="violet"][data-theme="dark"] {
+  --bg: #120b1c;
+  --bg-soft: #1a1128;
+  --card: #201631;
+  --card-2: #271b3a;
+  --ink: #efe8f7;
+  --ink-2: #b3a3c6;
+  --ink-3: #7d6c92;
+  --brand: #b58ae0;
+  --brand-2: #3d2260;
+  --gold: #d9b64a;
+  --gold-soft: #33301c;
+  --line: #32244a;
+  --hero-grad: linear-gradient(140deg, #1d1033 0%, #45276e 55%, #6d3f9e 100%);
+}
+
 /* ---------- palette Nuit ---------- */
 :root[data-palette="nuit"] {
   --bg: #eef1f6;
@@ -134,7 +166,12 @@ body {
   outline: none;
   animation: fadein .22s ease;
 }
-@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes cardin { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+#view > .card, #view > .list-item, #view > .surah-head, #view > .hero { animation: cardin .3s cubic-bezier(.2,.8,.3,1) backwards; }
+#view > *:nth-child(2) { animation-delay: .03s; }
+#view > *:nth-child(3) { animation-delay: .06s; }
+#view > *:nth-child(4) { animation-delay: .09s; }
 
 .ar {
   font-family: 'Amiri', 'Scheherazade New', 'Geeza Pro', serif;
@@ -173,10 +210,11 @@ body { font-size: calc(16px * var(--ui-scale)); }
   font-size: .66rem;
   font-weight: 600;
   letter-spacing: .02em;
-  padding: 3px 0 1px;
-  border-radius: 12px;
-  transition: color .15s ease, transform .15s ease;
+  padding: 4px 0 2px;
+  border-radius: 14px;
+  transition: color .15s ease, transform .15s ease, background .2s ease;
 }
+#tabbar a.active { background: color-mix(in srgb, var(--brand) 10%, transparent); }
 #tabbar a .ic { line-height: 1; opacity: .72; transition: opacity .15s ease, transform .15s ease; }
 #tabbar a.active { color: var(--brand); }
 #tabbar a.active .ic { opacity: 1; transform: translateY(-1px); }
@@ -543,7 +581,18 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
   color: var(--brand); box-shadow: var(--shadow);
   transition: transform .12s ease;
 }
-.shortcut:active .bub { transform: scale(.92); }
+.shortcut:active .bub { transform: scale(.9) rotate(-3deg); }
+/* bulles colorées : chaque raccourci a sa teinte */
+.shortcut:nth-child(1) .bub { background: linear-gradient(135deg, #0e6656, #1d8a70); color: #fff; border: none; }
+.shortcut:nth-child(2) .bub { background: linear-gradient(135deg, #a3702c, #c99a53); color: #fff; border: none; }
+.shortcut:nth-child(3) .bub { background: linear-gradient(135deg, #23456e, #3c6ea3); color: #fff; border: none; }
+.shortcut:nth-child(4) .bub { background: linear-gradient(135deg, #6d3f9e, #9d6ac4); color: #fff; border: none; }
+.shortcut:nth-child(5) .bub { background: linear-gradient(135deg, #b3423a, #d97b5e); color: #fff; border: none; }
+.shortcut:nth-child(6) .bub { background: linear-gradient(135deg, #0d3b34, #0e6656); color: #fff; border: none; }
+.shortcut:nth-child(7) .bub { background: linear-gradient(135deg, #c9861f, #e7b94e); color: #fff; border: none; }
+.shortcut:nth-child(8) .bub { background: linear-gradient(135deg, #2c1748, #45276e); color: #fff; border: none; }
+.shortcut:nth-child(9) .bub { background: linear-gradient(135deg, #8a6d15, #c9a227); color: #fff; border: none; }
+.shortcut:nth-child(10) .bub { background: linear-gradient(135deg, #14664f, #35b391); color: #fff; border: none; }
 
 /* ---------- lecteur audio pro ---------- */
 #player .prow { display: flex; align-items: center; gap: 6px; }
@@ -556,6 +605,49 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
 .sheet-tabs { display: flex; background: var(--bg-soft); border-radius: 13px; padding: 3px; gap: 2px; margin-bottom: 12px; }
 .sheet-tabs button { flex: 1; border: none; background: transparent; color: var(--ink-2); font: inherit; font-size: .82rem; font-weight: 700; padding: 9px 0; border-radius: 11px; cursor: pointer; }
 .sheet-tabs button.on { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+/* ---------- boussole qibla (plein écran) ---------- */
+.qibla-hero {
+  background: var(--hero-grad);
+  color: #f3efe2;
+  border-radius: 26px;
+  padding: 16px 14px 18px;
+  margin: 4px -4px 0;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.qibla-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.07' stroke-width='1.2'%3E%3Cpath d='M48 8 58 38 88 48 58 58 48 88 38 58 8 48 38 38z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px; pointer-events: none;
+}
+.qchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.14);
+  border-radius: 999px; padding: 6px 12px;
+  font-size: .78rem; font-weight: 600;
+}
+.qneedle {
+  position: relative; z-index: 2;
+  display: grid; place-items: center;
+  color: var(--gold);
+  transform: rotate(-90deg);
+  margin-bottom: -14px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));
+}
+.hub-face {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 42%; height: 42%; border-radius: 50%;
+  background: var(--hero-grad);
+  display: grid; place-items: center; align-content: center; gap: 2px;
+  color: #f3efe2;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+}
+.qdeg { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.qsub { font-size: .62rem; opacity: .85; text-align: center; padding: 0 6px; }
+.qibla-hero .compass { background: var(--card); border: none; }
+.qibla-hero .compass.aligned { box-shadow: 0 0 0 6px rgba(201,162,39,.45), 0 0 40px rgba(201,162,39,.5); }
 
 /* ---------- boussole qibla ---------- */
 .compass-wrap { display: grid; place-items: center; margin: 18px 0; }

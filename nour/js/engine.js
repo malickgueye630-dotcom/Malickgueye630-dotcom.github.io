@@ -31,13 +31,15 @@ export function fold(s) {
 // racine légère : pluriels et terminaisons fréquentes
 export function stem(w) {
   let t = w;
-  for (const suf of ['issements', 'issement', 'atrices', 'atrice', 'euses', 'ements', 'ement', 'euse', 'eurs', 'eur', 'ives', 'ive', 'aux', 'ies', 'ie', 'es', 's', 'x']) {
+  for (const suf of ['issements', 'issement', 'atrices', 'atrice', 'euses', 'ements', 'ement', 'euse', 'eurs', 'eur', 'ives', 'ive', 'aux', 'ies', 'ent', 'er', 'ie', 'es', 'e', 's', 'x']) {
     if (t.length - suf.length >= 4 && t.endsWith(suf)) { t = t.slice(0, -suf.length); break; }
   }
   return t;
 }
 
-const STOP = new Set(['le','la','les','de','des','du','un','une','et','ou','a','au','aux','en','pour','sur','que','qui','quoi','quand','avec','sans','dans','par','est','sont','etre','avoir','fait','faire','dit','dire','disait','parle','parlait','parler','propos','sujet','chose','ce','cette','ces','se','sa','son','ses','mon','ma','mes','ton','ta','tes','notre','nos','votre','vos','leur','leurs','je','tu','il','elle','on','nous','vous','ils','elles','moi','toi','lui','y','ne','pas','plus','tres','tout','toute','tous','comme','meme','aussi','donc','alors','mais','si','oui','non','il','y','avant','apres','lorsque','lorsqu','quel','quelle','quels','quelles','doit','dois','peut','peux','faut','veut','veux','islam','musulman','musulmane','prophete','saws','existe','concernant','gens','personne','quelqu','quelquun']);
+// les verbes de parole (parle, dit…) restent des tokens : ils portent du sens
+// (« parle dans le dos » = médisance)
+const STOP = new Set(['le','la','les','de','des','du','un','une','et','ou','a','au','aux','en','pour','sur','que','qui','quoi','quand','avec','sans','dans','par','est','sont','etre','avoir','fait','faire','dit','dire','disait','sujet','chose','ce','cette','ces','se','sa','son','ses','mon','ma','mes','ton','ta','tes','notre','nos','votre','vos','leur','leurs','je','tu','il','elle','on','nous','vous','ils','elles','moi','toi','lui','y','ne','pas','plus','tres','tout','toute','tous','comme','meme','aussi','donc','alors','mais','si','oui','non','avant','apres','lorsque','lorsqu','quel','quelle','quels','quelles','doit','dois','peut','peux','faut','veut','veux','islam','musulman','musulmane','prophete','saws','existe','concernant','personne','quelqu','quelquun','autres','autre','autrui','gens']);
 
 const CONTENT_HINTS = {
   dua: /\b(dua|doua|douaa|du'a|invocation|invoquer|adhkar|azkar|dhikr|zikr|reciter|formule)\b/,
@@ -106,7 +108,7 @@ function editDistLe(a, b, max) {
 function scoreText(toks, foldedText, lex) {
   const words = foldedText.split(/[\s',:;.!?()«»-]+/);
   const stems = words.map(stem);
-  let score = 0, matched = 0;
+  let score = 0, matched = 0, exactHits = 0;
   const found = [];
   for (const tok of toks) {
     const st = stem(tok);
@@ -126,10 +128,11 @@ function scoreText(toks, foldedText, lex) {
         if (editDistLe(st, sw, max) <= max) { best = 1.2; bestWord = w; }
       }
     }
-    if (best > 0) { score += best; matched++; if (bestWord) found.push(bestWord); }
+    if (best > 0) { score += best; matched++; if (bestWord) found.push(bestWord); if (best === 3) exactHits++; }
   }
-  if (!matched) return { score: 0, found: [] };
-  return { score: score * (matched / toks.length), found };
+  if (!matched) return { score: 0, found: [], ratio: 0, exact: false };
+  const ratio = matched / toks.length;
+  return { score: score * ratio, found, ratio, exact: exactHits === toks.length };
 }
 
 // ---------------- sujets (sémantique) ----------------
@@ -209,14 +212,21 @@ export async function searchAll(q, opts = {}) {
   // --- sujets (sémantique)
   const topicMatches = matchTopics(q, useToks, base);
   result.topics = topicMatches.slice(0, 3);
+  // sujet fort : la requête décrit un concept → le sens prime sur les mots isolés
+  result.strongTopic = topicMatches.length > 0 && (topicMatches[0].score >= 2.5 || useToks.length >= 3);
 
   // --- recherche exacte/floue française : Coran
   if (useToks.length) {
     const vi = await loadQuranFr();
     const scored = [];
+    // avec un sujet fort, on exige que la quasi-totalité des mots correspondent
+    // (évite les faux positifs du type « dos » + « autres »)
+    const minRatio = result.strongTopic && useToks.length >= 2 ? 0.99 : 0;
     for (const [s, v, fr] of vi) {
       const st = scoreText(useToks, fold(fr), base.lex);
-      if (st.score > 1.1) scored.push({ s, v, fr, _s: st.score, found: st.found });
+      if (st.score > 1.1 && st.ratio >= minRatio) {
+        scored.push({ s, v, fr, _s: st.score, found: st.found, approx: !st.exact });
+      }
     }
     scored.sort((a, b) => b._s - a._s);
     result.verses = scored.slice(0, opts.verseLimit || 20);
@@ -248,10 +258,11 @@ export async function searchAll(q, opts = {}) {
 
   // --- hadiths (sélection FR)
   if (useToks.length) {
+    const minRatio = result.strongTopic && useToks.length >= 2 ? 0.7 : 0;
     for (const h of base.hfr.hadiths) {
       const themeNames = h.themes.map(t => base.hfr.themes[t] || t).join(' ');
       const st = scoreText(useToks, fold(`${h.fr} ${themeNames} ${h.narrator || ''}`), base.lex);
-      if (st.score > 1.1) result.hadiths.push({ ...h, _s: st.score, found: st.found, exact: true });
+      if (st.score > 1.1 && st.ratio >= minRatio) result.hadiths.push({ ...h, _s: st.score, found: st.found, exact: true, approx: !st.exact });
     }
     result.hadiths.sort((a, b) => b._s - a._s);
     result.hadiths = result.hadiths.slice(0, 12);
@@ -259,7 +270,7 @@ export async function searchAll(q, opts = {}) {
     // --- invocations
     for (const d of base.allDuas) {
       const st = scoreText(useToks, fold(`${d.title} ${d.fr} ${d.translit} ${d.catName} ${d.note || ''}`), base.lex);
-      if (st.score > 1.1) result.duas.push({ ...d, _s: st.score, found: st.found, exact: true });
+      if (st.score > 1.1 && st.ratio >= minRatio) result.duas.push({ ...d, _s: st.score, found: st.found, exact: true, approx: !st.exact });
     }
     result.duas.sort((a, b) => b._s - a._s);
     result.duas = result.duas.slice(0, 10);
@@ -315,18 +326,20 @@ export async function searchAll(q, opts = {}) {
 export function buildAnswer(result) {
   if (!result.question) return null;
   const t = result.topics[0];
-  // en mode question : si un sujet est détecté, sa base vérifiée passe en premier ;
-  // les correspondances textuelles ne sont gardées que si elles sont fortes
-  const strong = (arr, min) => arr.filter(x => x._s >= min);
-  const duas = t
-    ? [...result.duasTopic.slice(0, 3), ...strong(result.duas, 3).slice(0, 2)].slice(0, 3)
-    : strong(result.duas, 2.2).slice(0, 3);
-  const hadiths = t
-    ? [...result.hadithsTopic.slice(0, 3), ...strong(result.hadiths, 3).slice(0, 2)].slice(0, 3)
-    : strong(result.hadiths, 2.2).slice(0, 3);
-  const verses = t
-    ? [...result.versesTopic.slice(0, 3), ...strong(result.verses, 3).slice(0, 2)].slice(0, 3)
-    : strong(result.verses, 2.2).slice(0, 3);
+  // en mode question : la base vérifiée du sujet passe TOUJOURS en premier ;
+  // les correspondances de mots isolés n'entrent dans la réponse que si elles
+  // couvrent la quasi-totalité de la requête
+  const strong = (arr, min) => arr.filter(x => x._s >= min && !x.approx);
+  // contenu du sujet d'abord ; si le sujet n'en référence pas, on garde les
+  // correspondances textuelles fortes et complètes
+  const pick = (topicArr, exactArr, minWithTopic, minAlone) => t
+    ? (topicArr.length
+        ? [...topicArr.slice(0, 3), ...strong(exactArr, minWithTopic).slice(0, 1)].slice(0, 3)
+        : strong(exactArr, 2.5).slice(0, 3))
+    : strong(exactArr, minAlone).slice(0, 3);
+  const duas = pick(result.duasTopic, result.duas, 4, 2.2);
+  const hadiths = pick(result.hadithsTopic, result.hadiths, 4, 2.2);
+  const verses = pick(result.versesTopic, result.verses, 5, 2.2);
   if (!t && !duas.length && !hadiths.length && !verses.length) return null;
   return { topic: t ? t.topic : null, duas, hadiths, verses };
 }

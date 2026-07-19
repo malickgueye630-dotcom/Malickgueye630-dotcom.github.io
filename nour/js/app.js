@@ -47,6 +47,7 @@ export async function shareText(title, text) {
 }
 
 export function vibrate(ms = 12) {
+  if (!state.settings.haptics) return;
   try { navigator.vibrate?.(ms); } catch {}
 }
 
@@ -250,7 +251,10 @@ export function openSettings(tab = 'affichage') {
   const panels = {
     affichage: () => `
       ${row('Thème', 'Clair, sombre ou selon l’iPhone', seg('theme', [['auto', 'Auto'], ['light', 'Clair'], ['dark', 'Sombre']], s.theme))}
-      ${row('Couleurs', '', seg('palette', [['emeraude', 'Émeraude'], ['sable', 'Sable'], ['nuit', 'Nuit']], s.palette))}
+      ${row('Couleurs', 'Choisissez votre thème', seg('palette', [['emeraude', 'Émeraude'], ['sable', 'Sable'], ['nuit', 'Nuit'], ['violet', 'Violet'], ['custom', 'Perso']], s.palette))}
+      ${s.palette === 'custom' ? row('Ma couleur', 'Glissez pour choisir la teinte principale',
+        `<input type="range" id="hueSlider" min="0" max="359" value="${s.customHue ?? 165}" style="width:150px;accent-color:var(--brand)">`) : ''}
+      ${row('Vibrations', 'Tasbih, Qibla (si l’appareil le permet)', sw('haptics', s.haptics))}
       ${row('Taille de l’interface', '', seg('uiScale', [[0.92, 'A'], [1, 'A'], [1.1, 'A'], [1.2, 'A']], s.uiScale))}
       ${row('Format de l’heure', '', seg('timeFmt', [['24', '24 h'], ['12', '12 h']], s.timeFmt))}
       ${row('Police arabe', 'Amiri (coranique), intégrée hors-ligne', '<span class="tiny">Amiri</span>')}
@@ -265,6 +269,7 @@ export function openSettings(tab = 'affichage') {
       ${row('Espacement des lignes (arabe)', '', seg('lineSpace', [[1.8, '−'], [2.05, '⋯'], [2.4, '+']], s.lineSpace))}
       ${row('Script arabe', 'Othmani (QuranEnc) — seul script disponible', '<span class="tiny">Othmani</span>')}
       ${row('Couleurs du tajwid', 'Pas encore disponible : aucune source fiable et libre intégrée', '<span class="tiny">—</span>')}
+      ${row('Traduction anglaise de secours', 'Dans les recueils sans traduction française (Sunnah.com), repliée', sw('showEnFallback', s.showEnFallback))}
     `,
     audio: () => `
       ${row('Récitateur', '', `<select id="selReciter" style="font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--ink);max-width:170px">
@@ -308,6 +313,7 @@ export function openSettings(tab = 'affichage') {
           else s[key] = val;
           save(); applyTheme(); applySizes();
           segEl.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === e.target));
+          if (key === 'palette') { show(cur); return; }
           if (location.hash.includes('/quran/s/') && ['arSize','tlSize','frSize','lineSpace'].includes(key) === false && ['theme','palette','uiScale','timeFmt'].includes(key) === false) route();
         };
       });
@@ -320,6 +326,7 @@ export function openSettings(tab = 'affichage') {
         if (location.hash.includes('/quran/s/') || location.hash.includes('/hadith') || location.hash.includes('/duas')) route();
       });
       panel.querySelector('#selReciter')?.addEventListener('change', e => { s.reciter = e.target.value; save(); });
+      panel.querySelector('#hueSlider')?.addEventListener('input', e => { s.customHue = +e.target.value; save(); applyTheme(); });
       panel.querySelector('#btnOffline')?.addEventListener('click', async e => {
         const btn = e.target;
         btn.textContent = '0 %'; btn.disabled = true;
