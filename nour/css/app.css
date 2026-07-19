@@ -12,46 +12,58 @@
   font-display: swap;
 }
 
+/* ============================================================
+   Design system Nour — jetons (couleurs, rayons, ombres, police)
+   Palette Émeraude (défaut) : vert nuit #073B3A, émeraude #0F8B6D,
+   vert clair #39C6A3, crème #F7F2E8, blanc cassé #FFFDFC,
+   or doux #D4AF6A, texte #17211F.
+   ============================================================ */
 :root {
-  --bg: #f6f1e7;
-  --bg-soft: #efe8d9;
-  --card: #ffffff;
-  --card-2: #fbf8f1;
-  --ink: #1d2a27;
-  --ink-2: #5b6b66;
-  --ink-3: #8a968f;
-  --brand: #0e6656;
-  --brand-2: #0d3b34;
-  --gold: #c9a227;
-  --gold-soft: #f0e3bb;
-  --line: #e6ddca;
-  --danger: #b3423a;
-  --hero-grad: linear-gradient(140deg, #0d3b34 0%, #0e6656 55%, #1d8a70 100%);
-  --shadow: 0 1px 2px rgba(29, 42, 39, .06), 0 8px 24px rgba(29, 42, 39, .07);
-  --shadow-lg: 0 2px 6px rgba(29,42,39,.08), 0 18px 44px rgba(29,42,39,.16);
-  --radius: 18px;
+  --bg: #F7F2E8;
+  --bg-soft: #EFE7D8;
+  --card: #FFFDFC;
+  --card-2: #FBF7EF;
+  --ink: #17211F;
+  --ink-2: #55645F;
+  --ink-3: #86938D;
+  --brand: #0F8B6D;
+  --brand-2: #073B3A;
+  --brand-3: #39C6A3;
+  --gold: #D4AF6A;
+  --gold-soft: #F2E7CB;
+  --line: #E7DEC9;
+  --danger: #B3423A;
+  --hero-grad: linear-gradient(150deg, #073B3A 0%, #0F8B6D 62%, #2AAE8C 100%);
+  --shadow: 0 1px 2px rgba(23, 33, 31, .05), 0 6px 20px rgba(23, 33, 31, .06);
+  --shadow-lg: 0 2px 6px rgba(23,33,31,.07), 0 16px 40px rgba(23,33,31,.14);
+  --radius: 20px;
+  --r-sm: 12px;
+  --r-md: 16px;
   --ar-size: 1.9rem;
   --tl-size: .92rem;
   --fr-size: .98rem;
   --ar-line: 2.05;
   --ui-scale: 1;
-  --tabbar-h: calc(58px + env(safe-area-inset-bottom, 0px));
+  --ar-font: 'Amiri', 'Scheherazade New', 'Geeza Pro', serif;
+  --ease: cubic-bezier(.25, .8, .3, 1);
+  --tabbar-h: calc(60px + env(safe-area-inset-bottom, 0px));
 }
 /* ---------- palette Sable ---------- */
 :root[data-palette="sable"] {
-  --bg: #f7f2e9;
-  --bg-soft: #efe6d5;
-  --card: #fffdf8;
-  --card-2: #faf5ea;
-  --ink: #3a2f23;
-  --ink-2: #7a6a55;
-  --ink-3: #a08f77;
-  --brand: #a3702c;
-  --brand-2: #6b4a1d;
-  --gold: #c9a227;
-  --gold-soft: #f0e3bb;
-  --line: #e8dcc4;
-  --hero-grad: linear-gradient(140deg, #6b4a1d 0%, #a3702c 55%, #c99a53 100%);
+  --bg: #F7F2E9;
+  --bg-soft: #EFE6D5;
+  --card: #FFFDF8;
+  --card-2: #FAF5EA;
+  --ink: #3A2F23;
+  --ink-2: #7A6A55;
+  --ink-3: #A08F77;
+  --brand: #A3702C;
+  --brand-2: #6B4A1D;
+  --brand-3: #C99A53;
+  --gold: #D4AF6A;
+  --gold-soft: #F0E3BB;
+  --line: #E8DCC4;
+  --hero-grad: linear-gradient(150deg, #59390F 0%, #A3702C 58%, #C99A53 100%);
 }
 :root[data-palette="sable"][data-theme="dark"] {
   --bg: #191410;
@@ -66,88 +78,95 @@
   --line: #372d20;
   --hero-grad: linear-gradient(140deg, #33230e 0%, #6b4a1d 55%, #a3702c 100%);
 }
-/* ---------- palette Violet ---------- */
-:root[data-palette="violet"] {
-  --bg: #f6f2f9;
-  --bg-soft: #eee7f4;
-  --card: #ffffff;
-  --card-2: #faf6fd;
-  --ink: #2a2033;
-  --ink-2: #6d5c7d;
-  --ink-3: #9a8aa8;
-  --brand: #6d3f9e;
-  --brand-2: #3d2260;
-  --gold: #c9a227;
-  --gold-soft: #f0e3bb;
-  --line: #e5daee;
-  --hero-grad: linear-gradient(140deg, #2c1748 0%, #6d3f9e 55%, #9d6ac4 100%);
+/* ---------- palette Lavande ---------- */
+:root[data-palette="lavande"], :root[data-palette="violet"] {
+  --bg: #F6F2FA;
+  --bg-soft: #EDE6F5;
+  --card: #FFFDFF;
+  --card-2: #FAF6FE;
+  --ink: #251C31;
+  --ink-2: #695B7B;
+  --ink-3: #9789A8;
+  --brand: #6D4A9E;
+  --brand-2: #372060;
+  --brand-3: #A98BD4;
+  --gold: #D4AF6A;
+  --gold-soft: #F0E6D2;
+  --line: #E4DAF0;
+  --hero-grad: linear-gradient(150deg, #2C1A4E 0%, #6D4A9E 60%, #A98BD4 100%);
 }
-:root[data-palette="violet"][data-theme="dark"] {
-  --bg: #120b1c;
-  --bg-soft: #1a1128;
+:root[data-palette="lavande"][data-theme="dark"], :root[data-palette="violet"][data-theme="dark"] {
+  --bg: #120B1C;
+  --bg-soft: #1A1128;
   --card: #201631;
-  --card-2: #271b3a;
-  --ink: #efe8f7;
-  --ink-2: #b3a3c6;
-  --ink-3: #7d6c92;
-  --brand: #b58ae0;
-  --brand-2: #3d2260;
-  --gold: #d9b64a;
-  --gold-soft: #33301c;
-  --line: #32244a;
-  --hero-grad: linear-gradient(140deg, #1d1033 0%, #45276e 55%, #6d3f9e 100%);
+  --card-2: #271B3A;
+  --ink: #EFE8F7;
+  --ink-2: #B3A3C6;
+  --ink-3: #7D6C92;
+  --brand: #B58AE0;
+  --brand-2: #372060;
+  --brand-3: #C9ABEA;
+  --gold: #D9B64A;
+  --gold-soft: #33301C;
+  --line: #32244A;
+  --hero-grad: linear-gradient(150deg, #1D1033 0%, #45276E 60%, #6D4A9E 100%);
 }
 
-/* ---------- palette Nuit ---------- */
+/* ---------- palette Nuit (bleu nuit + vert profond + or) ---------- */
 :root[data-palette="nuit"] {
-  --bg: #eef1f6;
-  --bg-soft: #e2e7f0;
-  --card: #ffffff;
-  --card-2: #f6f8fc;
-  --ink: #1a2233;
-  --ink-2: #55617a;
-  --ink-3: #8893a1;
-  --brand: #23456e;
-  --brand-2: #132a4a;
-  --gold: #c9a227;
-  --gold-soft: #ece2c2;
-  --line: #d8dfeb;
-  --hero-grad: linear-gradient(140deg, #101f38 0%, #23456e 55%, #2f6b63 100%);
+  --bg: #EEF1F7;
+  --bg-soft: #E1E7F1;
+  --card: #FFFEFC;
+  --card-2: #F5F8FC;
+  --ink: #162033;
+  --ink-2: #52617C;
+  --ink-3: #8592A4;
+  --brand: #23456E;
+  --brand-2: #101F3E;
+  --brand-3: #2F6B63;
+  --gold: #D4AF6A;
+  --gold-soft: #ECE2C6;
+  --line: #D8DFEB;
+  --hero-grad: linear-gradient(150deg, #0D1B36 0%, #23456E 58%, #2F6B63 100%);
 }
 :root[data-palette="nuit"][data-theme="dark"] {
-  --bg: #0a0f1a;
+  --bg: #0A0F1A;
   --bg-soft: #101828;
-  --card: #131c2e;
+  --card: #131C2E;
   --card-2: #182338;
-  --ink: #e6ebf5;
-  --ink-2: #9daabf;
-  --ink-3: #6b7688;
-  --brand: #7fa8d9;
-  --brand-2: #132a4a;
-  --gold: #d9b64a;
-  --gold-soft: #33301c;
-  --line: #21304a;
-  --hero-grad: linear-gradient(140deg, #0b1730 0%, #1d3a61 55%, #245a52 100%);
+  --ink: #E6EBF5;
+  --ink-2: #9DAABF;
+  --ink-3: #6B7688;
+  --brand: #7FA8D9;
+  --brand-2: #101F3E;
+  --brand-3: #4FA394;
+  --gold: #D9B64A;
+  --gold-soft: #33301C;
+  --line: #21304A;
+  --hero-grad: linear-gradient(150deg, #0B1730 0%, #1D3A61 58%, #245A52 100%);
 }
+/* ---------- Émeraude sombre ---------- */
 :root[data-theme="dark"] {
-  --bg: #0c1513;
-  --bg-soft: #101c19;
-  --card: #14211e;
-  --card-2: #182823;
-  --ink: #e8efe9;
-  --ink-2: #9fb3aa;
-  --ink-3: #6d7f77;
-  --brand: #35b391;
-  --brand-2: #0d3b34;
-  --gold: #d9b64a;
-  --gold-soft: #33301c;
-  --line: #22332e;
-  --hero-grad: linear-gradient(140deg, #0a2622 0%, #0d4237 55%, #14664f 100%);
+  --bg: #0A1412;
+  --bg-soft: #0F1C19;
+  --card: #13211E;
+  --card-2: #172823;
+  --ink: #EAF1EC;
+  --ink-2: #9FB3AA;
+  --ink-3: #6D7F77;
+  --brand: #39C6A3;
+  --brand-2: #073B3A;
+  --brand-3: #6FDCC0;
+  --gold: #D9B64A;
+  --gold-soft: #33301C;
+  --line: #21322D;
+  --hero-grad: linear-gradient(150deg, #06211F 0%, #0B5546 58%, #128A6D 100%);
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
   --shadow-lg: 0 2px 6px rgba(0,0,0,.4), 0 18px 44px rgba(0,0,0,.5);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
@@ -159,44 +178,74 @@ body {
   overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
 }
+/* motif islamique discret en arrière-plan de toute l'application */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23808080' stroke-width='1'%3E%3Cpath d='M60 14 69 41 96 41 74 58 82 85 60 68 38 85 46 58 24 41 51 41z'/%3E%3Ccircle cx='60' cy='60' r='9'/%3E%3Cpath d='M0 0h6M0 0v6M120 120h-6M120 120v-6M120 0h-6M120 0v6M0 120h6M0 120v-6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  opacity: .05;
+  pointer-events: none;
+}
+:root[data-theme="dark"] body::before { opacity: .045; }
 #view {
   max-width: 680px;
   margin: 0 auto;
   padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px calc(var(--tabbar-h) + 90px);
   outline: none;
-  animation: fadein .22s ease;
 }
-@keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-@keyframes cardin { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
-#view > .card, #view > .list-item, #view > .surah-head, #view > .hero { animation: cardin .3s cubic-bezier(.2,.8,.3,1) backwards; }
+/* transition de page : léger glissement + fondu, relancé à chaque navigation */
+#view.pagein { animation: fadein .26s var(--ease); }
+@keyframes fadein { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes cardin { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+#view > .card, #view > .list-item, #view > .surah-head, #view > .hero,
+#view > .shortcuts, #view > .prayer-hero, #view > .setgroup { animation: cardin .32s var(--ease) backwards; }
 #view > *:nth-child(2) { animation-delay: .03s; }
 #view > *:nth-child(3) { animation-delay: .06s; }
 #view > *:nth-child(4) { animation-delay: .09s; }
+#view > *:nth-child(5) { animation-delay: .12s; }
+
+/* chargement élégant : blocs « squelette » chatoyants */
+.skel {
+  border-radius: var(--r-md);
+  background: linear-gradient(100deg, var(--bg-soft) 40%, var(--card) 50%, var(--bg-soft) 60%);
+  background-size: 220% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer { from { background-position: 130% 0; } to { background-position: -60% 0; } }
 
 .ar {
-  font-family: 'Amiri', 'Scheherazade New', 'Geeza Pro', serif;
+  font-family: var(--ar-font);
   direction: rtl;
   text-align: right;
   font-size: var(--ar-size);
   line-height: var(--ar-line);
   color: var(--ink);
 }
+/* tajwid simplifié : règles sûres uniquement */
+.tj-q { color: #C0392B; font-weight: 700; }   /* qalqala */
+.tj-g { color: #16813D; font-weight: 700; }   /* ghunna */
+.tj-m { color: #B07818; font-weight: 700; }   /* madd obligatoire */
+:root[data-theme="dark"] .tj-q { color: #F1867A; }
+:root[data-theme="dark"] .tj-g { color: #6FDC8E; }
+:root[data-theme="dark"] .tj-m { color: #EDC06B; }
 .tl { font-size: var(--tl-size); }
 .fr { font-size: var(--fr-size); }
 .svgi { vertical-align: -4px; flex: none; }
 body { font-size: calc(16px * var(--ui-scale)); }
 
-/* ---------- barre d'onglets ---------- */
+/* ---------- barre d'onglets iOS ---------- */
 #tabbar {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   display: flex;
   justify-content: space-around;
-  background: color-mix(in srgb, var(--card) 88%, transparent);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--card) 84%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
   border-top: 1px solid var(--line);
-  padding: 6px 4px calc(env(safe-area-inset-bottom, 0px) + 6px);
+  padding: 7px 6px calc(env(safe-area-inset-bottom, 0px) + 7px);
   z-index: 60;
 }
 #tabbar a {
@@ -207,17 +256,17 @@ body { font-size: calc(16px * var(--ui-scale)); }
   gap: 2px;
   text-decoration: none;
   color: var(--ink-3);
-  font-size: .66rem;
-  font-weight: 600;
+  font-size: .64rem;
+  font-weight: 650;
   letter-spacing: .02em;
   padding: 4px 0 2px;
-  border-radius: 14px;
-  transition: color .15s ease, transform .15s ease, background .2s ease;
+  border-radius: var(--r-md);
+  transition: color .18s var(--ease), transform .18s var(--ease), background .22s var(--ease);
 }
-#tabbar a.active { background: color-mix(in srgb, var(--brand) 10%, transparent); }
-#tabbar a .ic { line-height: 1; opacity: .72; transition: opacity .15s ease, transform .15s ease; }
-#tabbar a.active { color: var(--brand); }
-#tabbar a.active .ic { opacity: 1; transform: translateY(-1px); }
+#tabbar a:active { transform: scale(.92); }
+#tabbar a.active { background: color-mix(in srgb, var(--brand) 11%, transparent); color: var(--brand); }
+#tabbar a .ic { line-height: 1; opacity: .72; transition: opacity .18s ease, transform .18s var(--ease); }
+#tabbar a.active .ic { opacity: 1; transform: translateY(-1.5px) scale(1.06); }
 
 /* ---------- composants ---------- */
 .card {
@@ -400,7 +449,24 @@ h2 { font-size: 1.06rem; margin: 20px 2px 8px; letter-spacing: -.01em; }
   scroll-margin-top: 70px;
 }
 .verse:last-child { border-bottom: none; }
-.verse.playing { background: linear-gradient(90deg, transparent, rgba(201,162,39,.09)); border-radius: 12px; }
+/* verset en cours de récitation : liseré doré animé + fond doux */
+.verse.playing {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--gold) 10%, transparent));
+  border-radius: var(--r-sm);
+  box-shadow: inset 3px 0 0 var(--gold);
+  animation: recite 2.2s ease-in-out infinite;
+}
+@keyframes recite {
+  0%, 100% { box-shadow: inset 3px 0 0 var(--gold); }
+  50% { box-shadow: inset 3px 0 0 var(--gold), 0 0 18px color-mix(in srgb, var(--gold) 22%, transparent); }
+}
+/* thèmes de lecture du Coran */
+:root[data-reading="sepia"] #verses, :root[data-reading="sepia"] .basmala-line { background: #F4E8D0; border-radius: var(--r-md); }
+:root[data-reading="sepia"] #verses { padding: 4px 12px; color: #46351F; }
+:root[data-reading="sepia"] #verses .ar { color: #3A2B16; }
+:root[data-reading="vert"] #verses { background: color-mix(in srgb, var(--brand) 6%, var(--card)); border-radius: var(--r-md); padding: 4px 12px; }
+:root[data-theme="dark"][data-reading="sepia"] #verses, :root[data-theme="dark"][data-reading="sepia"] .basmala-line { background: #241C10; color: #E8D9BC; }
+:root[data-theme="dark"][data-reading="sepia"] #verses .ar { color: #F0E4C8; }
 .verse .vnum {
   display: inline-grid; place-items: center;
   min-width: 30px; height: 30px; padding: 0 4px;
@@ -572,27 +638,25 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
   .tilegrid, .catgrid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* ---------- raccourcis accueil ---------- */
-.shortcuts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 14px 0 4px; }
-.shortcut { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--ink-2); font-size: .64rem; font-weight: 600; text-align: center; }
+/* ---------- raccourcis accueil : 8 cartes, 2 rangées de 4 ---------- */
+.shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 8px; margin: 16px 0 6px; }
+.shortcut { display: flex; flex-direction: column; align-items: center; gap: 7px; text-decoration: none; color: var(--ink-2); font-size: .68rem; font-weight: 650; text-align: center; }
 .shortcut .bub {
-  width: 52px; height: 52px; display: grid; place-items: center;
-  background: var(--card); border: 1px solid var(--line); border-radius: 17px;
-  color: var(--brand); box-shadow: var(--shadow);
-  transition: transform .12s ease;
+  width: 58px; height: 58px; display: grid; place-items: center;
+  border-radius: 19px;
+  color: #fff; box-shadow: var(--shadow);
+  transition: transform .14s var(--ease), box-shadow .2s ease;
 }
-.shortcut:active .bub { transform: scale(.9) rotate(-3deg); }
+.shortcut:active .bub { transform: scale(.88) rotate(-3deg); box-shadow: none; }
 /* bulles colorées : chaque raccourci a sa teinte */
-.shortcut:nth-child(1) .bub { background: linear-gradient(135deg, #0e6656, #1d8a70); color: #fff; border: none; }
-.shortcut:nth-child(2) .bub { background: linear-gradient(135deg, #a3702c, #c99a53); color: #fff; border: none; }
-.shortcut:nth-child(3) .bub { background: linear-gradient(135deg, #23456e, #3c6ea3); color: #fff; border: none; }
-.shortcut:nth-child(4) .bub { background: linear-gradient(135deg, #6d3f9e, #9d6ac4); color: #fff; border: none; }
-.shortcut:nth-child(5) .bub { background: linear-gradient(135deg, #b3423a, #d97b5e); color: #fff; border: none; }
-.shortcut:nth-child(6) .bub { background: linear-gradient(135deg, #0d3b34, #0e6656); color: #fff; border: none; }
-.shortcut:nth-child(7) .bub { background: linear-gradient(135deg, #c9861f, #e7b94e); color: #fff; border: none; }
-.shortcut:nth-child(8) .bub { background: linear-gradient(135deg, #2c1748, #45276e); color: #fff; border: none; }
-.shortcut:nth-child(9) .bub { background: linear-gradient(135deg, #8a6d15, #c9a227); color: #fff; border: none; }
-.shortcut:nth-child(10) .bub { background: linear-gradient(135deg, #14664f, #35b391); color: #fff; border: none; }
+.shortcut:nth-child(1) .bub { background: linear-gradient(135deg, #073B3A, #0F8B6D); }
+.shortcut:nth-child(2) .bub { background: linear-gradient(135deg, #B07818, #D4AF6A); }
+.shortcut:nth-child(3) .bub { background: linear-gradient(135deg, #101F3E, #23456E); }
+.shortcut:nth-child(4) .bub { background: linear-gradient(135deg, #6E3F2B, #B3654A); }
+.shortcut:nth-child(5) .bub { background: linear-gradient(135deg, #0F8B6D, #39C6A3); }
+.shortcut:nth-child(6) .bub { background: linear-gradient(135deg, #372060, #6D4A9E); }
+.shortcut:nth-child(7) .bub { background: linear-gradient(135deg, #8A2F42, #C05C6B); }
+.shortcut:nth-child(8) .bub { background: linear-gradient(135deg, #145A52, #2AAE8C); }
 
 /* ---------- lecteur audio pro ---------- */
 #player .prow { display: flex; align-items: center; gap: 6px; }
@@ -700,3 +764,105 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
 .badge-en { background: var(--bg-soft); color: var(--ink-3); }
 details.en-tr summary { cursor: pointer; color: var(--ink-3); font-size: .78rem; font-weight: 600; margin-top: 6px; }
 details.en-tr p { color: var(--ink-2); font-size: .86rem; }
+
+/* ============================================================
+   Refonte v5 — nouveaux composants
+   ============================================================ */
+
+/* ---------- carte « prochaine prière » avec ciel selon l'heure ---------- */
+.prayer-hero {
+  display: block; position: relative; overflow: hidden;
+  border-radius: 22px; padding: 18px 18px 14px;
+  margin: 12px 0; text-decoration: none; color: #FFFDFC;
+  box-shadow: var(--shadow-lg);
+  background: var(--sky, var(--hero-grad));
+}
+.prayer-hero .sky-orb {
+  position: absolute; right: 22px; top: 16px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--orb, radial-gradient(circle at 35% 35%, #FFE9A8, #E8B84B));
+  box-shadow: 0 0 34px 10px var(--orb-glow, rgba(255, 219, 140, .45));
+  animation: orbfloat 6s ease-in-out infinite;
+}
+@keyframes orbfloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.prayer-hero .stars {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(1.4px 1.4px at 18% 26%, rgba(255,255,255,.9), transparent 60%),
+    radial-gradient(1px 1px at 44% 14%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1.2px 1.2px at 66% 34%, rgba(255,255,255,.8), transparent 60%),
+    radial-gradient(1px 1px at 84% 18%, rgba(255,255,255,.6), transparent 60%),
+    radial-gradient(1.1px 1.1px at 30% 46%, rgba(255,255,255,.55), transparent 60%);
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+@keyframes twinkle { 0%, 100% { opacity: .9; } 50% { opacity: .45; } }
+.prayer-hero .cd { font-variant-numeric: tabular-nums; }
+/* ciels : aube, jour, coucher, nuit */
+.prayer-hero[data-sky="dawn"]  { --sky: linear-gradient(160deg, #23335E 0%, #7A5A8C 55%, #D98E6A 100%); --orb: radial-gradient(circle at 35% 35%, #FFF3C8, #F2C063); --orb-glow: rgba(242,192,99,.4); }
+.prayer-hero[data-sky="day"]   { --sky: linear-gradient(160deg, #1B6FA8 0%, #3E97C9 55%, #7FC3E0 100%); --orb: radial-gradient(circle at 35% 35%, #FFF7D6, #F5D061); --orb-glow: rgba(255,235,160,.5); }
+.prayer-hero[data-sky="sunset"]{ --sky: linear-gradient(160deg, #3A2352 0%, #91425C 55%, #D97A4E 100%); --orb: radial-gradient(circle at 35% 35%, #FFD9A0, #E2874C); --orb-glow: rgba(226,135,76,.45); }
+.prayer-hero[data-sky="night"] { --sky: linear-gradient(160deg, #0A1230 0%, #1C2B57 60%, #24446B 100%); --orb: radial-gradient(circle at 62% 38%, #F5F1E4 58%, #C9C2AC 60%); --orb-glow: rgba(240,236,220,.25); }
+
+/* ---------- réglages : groupes iOS ---------- */
+.setgroup {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 4px 16px; margin: 12px 0;
+}
+.setgroup > h2 {
+  margin: 12px 0 2px; font-size: .78rem; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+  display: flex; align-items: center; gap: 7px;
+}
+
+/* ---------- page Plus ---------- */
+.more-item {
+  display: flex; align-items: center; gap: 13px;
+  padding: 13px 2px; text-decoration: none; color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  transition: opacity .15s ease;
+}
+.more-item:last-child { border-bottom: none; }
+.more-item:active { opacity: .55; }
+.more-item .mic {
+  flex: none; width: 36px; height: 36px; display: grid; place-items: center;
+  border-radius: 11px; color: #fff;
+}
+.more-item b { font-size: .95rem; }
+.more-item small { display: block; color: var(--ink-3); font-size: .74rem; font-weight: 400; }
+
+/* ---------- recherche « assistant » ---------- */
+.search-input.big {
+  border-radius: 20px; padding: 8px 10px 8px 16px;
+  border-width: 2px;
+  background: var(--card);
+}
+.search-input.big input { font-size: 1.04rem; padding: 12px 0; }
+.search-input.big:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 13%, transparent), var(--shadow);
+}
+.ai-hero {
+  background: var(--hero-grad); color: #FFFDFC;
+  border-radius: 22px; padding: 16px 18px; margin: 6px 0 12px;
+  box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+}
+.ai-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.08' stroke-width='1.2'%3E%3Cpath d='M48 8 58 38 88 48 58 58 48 88 38 58 8 48 38 38z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px; pointer-events: none;
+}
+.ai-hero b { font-size: 1.02rem; }
+.ai-hero p { margin: 4px 0 0; font-size: .8rem; opacity: .85; }
+
+/* ---------- Qibla : lisibilité du signal ---------- */
+.qsignal { display: inline-flex; align-items: center; gap: 5px; }
+.qsignal i {
+  width: 4px; border-radius: 2px; background: rgba(255,255,255,.32);
+  display: inline-block;
+}
+.qsignal i:nth-child(1) { height: 6px; } .qsignal i:nth-child(2) { height: 10px; } .qsignal i:nth-child(3) { height: 14px; }
+.qsignal.s1 i:nth-child(1), .qsignal.s2 i:nth-child(-n+2), .qsignal.s3 i { background: var(--gold); }
+
+/* appui générique : toute carte/ligne cliquable réagit au doigt */
+a.card:active, .hcard:active { transform: scale(.985); }
+.card, .list-item, .catcard, .tile { transition: transform .14s var(--ease), box-shadow .2s ease; }

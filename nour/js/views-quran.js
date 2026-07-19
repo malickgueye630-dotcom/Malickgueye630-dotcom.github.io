@@ -162,6 +162,31 @@ export async function viewQuranList() {
   };
 }
 
+// ---------------- tajwid simplifié ----------------
+// Colore UNIQUEMENT des règles déterministes et sûres, sans interprétation :
+//  - qalqala : ق ط ب ج د portant un soukoun explicite ;
+//  - ghunna : ن ou م portant une chadda ;
+//  - madd obligatoire : maddah (ٓ) ou alif madda (آ).
+// Le texte arabe lui-même n'est jamais modifié — seule la couleur change.
+const TJ_QALQALA = 'قطبجد';
+const TJ_MARKS = /[ً-ٰٟۖ-ۭ]/;
+function tajwidHtml(t) {
+  let out = '';
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    let j = i + 1, marks = '';
+    while (j < t.length && TJ_MARKS.test(t[j])) { marks += t[j]; j++; }
+    const seg = esc(c + marks);
+    let cls = '';
+    if (TJ_QALQALA.includes(c) && /[ْۡ]/.test(marks)) cls = 'tj-q';
+    else if ((c === 'ن' || c === 'م') && marks.includes('ّ')) cls = 'tj-g';
+    else if (marks.includes('ٓ') || c === 'آ') cls = 'tj-m';
+    out += cls ? `<span class="${cls}">${seg}</span>` : seg;
+    i = j - 1;
+  }
+  return out;
+}
+
 // ---------------- lecteur de sourate ----------------
 export async function viewSurah(n, gotoVerse) {
   if (n < 1 || n > 114) { location.hash = '#/quran'; return; }
@@ -185,7 +210,7 @@ export async function viewSurah(n, gotoVerse) {
     const favId = `${n}:${vn}`;
     const note = getNote(n, vn);
     return `<div class="verse" id="v${vn}" data-v="${vn}">
-      ${cfg.showAr ? `<div class="ar">${esc(v[0])} <span class="vnum">${vn}</span></div>` : `<div><span class="vnum">${vn}</span></div>`}
+      ${cfg.showAr ? `<div class="ar">${cfg.tajwid ? tajwidHtml(v[0]) : esc(v[0])} <span class="vnum">${vn}</span></div>` : `<div><span class="vnum">${vn}</span></div>`}
       ${cfg.showTl ? `<div class="tl" style="color:var(--ink-2);font-style:italic;margin:4px 0">${esc(v[2])}</div>` : ''}
       ${cfg.showFr ? `<div class="fr">${esc(v[1])}</div>` : ''}
       ${note ? `<div class="notice" style="margin:6px 0 2px">${icon('note', 14)} ${esc(note)}</div>` : ''}
@@ -216,6 +241,8 @@ export async function viewSurah(n, gotoVerse) {
     </div>
     ${showBasmala ? `<div class="basmala-line">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
       ${cfg.showTl ? `<div class="tl center" style="color:var(--ink-2);font-style:italic;margin:-2px 0 10px">Bismi Llâhi r-Rahmâni r-Rahîm</div>` : ''}` : ''}
+    ${cfg.tajwid && cfg.showAr ? `<p class="tiny center" style="margin:0 0 8px">Tajwid simplifié :
+      <span class="tj-q">qalqala</span> · <span class="tj-g">ghunna</span> · <span class="tj-m">madd</span></p>` : ''}
     <div id="verses">${s.verses.map(verseHtml).join('')}</div>
     <div class="row" style="margin:20px 0; gap:10px">
       ${n > 1 ? `<a class="btn btn-ghost" style="flex:1;text-align:center;text-decoration:none" href="#/quran/s/${n - 1}">${icon('chevL', 15)} ${esc(idx.surahs[n - 2].phonetic)}</a>` : ''}

@@ -108,9 +108,9 @@ async function enrich(list, n = 8) {
 export async function viewSearch(initial = '') {
   $view.innerHTML = `
     ${topbar('Recherche')}
-    <div class="search-input" style="position:relative">
+    <div class="search-input big" style="position:relative">
       <span>🔍</span>
-      <input id="qInput" type="search" placeholder="Mot, question, phonétique arabe…"
+      <input id="qInput" type="search" placeholder="Posez votre question…"
         autocomplete="off" autocapitalize="off" value="${esc(initial)}">
       <button class="btn-icon" id="qClear" aria-label="Effacer">✕</button>
     </div>
@@ -124,8 +124,14 @@ export async function viewSearch(initial = '') {
   const sugEl = document.getElementById('qSuggest');
 
   function renderIdle() {
-    const hist = state.searchHistory;
+    const hist = state.settings.searchHistoryOn ? state.searchHistory : [];
     results.innerHTML = `
+      <div class="ai-hero">
+        <b>🕌 Votre assistant de recherche</b>
+        <p>Posez une question naturelle, même avec des fautes — je comprends l'intention,
+        je cherche dans le Coran, les hadiths et les invocations, et je réponds en français
+        avec les sources. Jamais rien d'inventé.</p>
+      </div>
       ${hist.length ? `<h2>Recherches récentes</h2>
         <div class="chiprow">${hist.map(h => `<button class="chip" data-q="${esc(h)}">${esc(h)}</button>`).join('')}</div>` : ''}
       <h2>Essayez par exemple</h2>
@@ -144,6 +150,7 @@ export async function viewSearch(initial = '') {
   function hideSug() { sugEl.style.display = 'none'; sugEl.innerHTML = ''; }
 
   async function showSuggestions(q) {
+    if (!state.settings.searchSuggest) { hideSug(); return; }
     if (!q.trim() || q.trim().length < 2) { hideSug(); return; }
     const sugs = await suggest(q);
     if (!sugs.length || input.value !== q) { hideSug(); return; }
@@ -166,11 +173,17 @@ export async function viewSearch(initial = '') {
     if (!q.trim()) { renderIdle(); return; }
     hideSug();
     lastQuery = q;
-    results.innerHTML = `<div class="spinner"></div>`;
-    const r = await searchAll(q);
+    results.innerHTML = `
+      <div class="skel" style="height:64px;margin:10px 0"></div>
+      <div class="skel" style="height:120px;margin:10px 0"></div>
+      <div class="skel" style="height:120px;margin:10px 0"></div>`;
+    const r = await searchAll(q, {
+      smart: state.settings.searchSmart,
+      phonetic: state.settings.searchPhonetic,
+    });
     if (lastQuery !== q) return; // une requête plus récente est partie
     const answer = buildAnswer(r);
-    pushHistory(q.trim());
+    if (state.settings.searchHistoryOn) pushHistory(q.trim());
 
     const total = r.verses.length + r.hadiths.length + r.duas.length +
       r.versesTopic.length + r.hadithsTopic.length + r.duasTopic.length +

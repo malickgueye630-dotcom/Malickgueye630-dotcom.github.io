@@ -12,6 +12,8 @@ import { viewAbout } from './views-about.js';
 import { viewPrayer } from './views-prayer.js';
 import { viewQibla } from './views-qibla.js';
 import { viewTasbih } from './views-tasbih.js';
+import { viewMore } from './views-more.js';
+import { viewSettings } from './views-settings.js';
 import { startScheduler, notifGranted } from './notify.js';
 
 export const $view = document.getElementById('view');
@@ -192,6 +194,8 @@ const routes = [
   [/^#\/prayer$/, () => viewPrayer()],
   [/^#\/qibla$/, () => viewQibla()],
   [/^#\/tasbih$/, () => viewTasbih()],
+  [/^#\/more$/, () => viewMore()],
+  [/^#\/settings(?:\?.*)?$/, () => viewSettings((location.hash.match(/[?&]sec=([\w-]+)/) || [])[1] || null)],
   [/^#\/hadith\/([\w-]+)\/(\d+)(?:\?.*)?$/, (m) => viewChapter(m[1], +m[2])],
   [/^#\/hadith\/([\w-]+)$/, (m) => viewCollection(m[1])],
   [/^#\/duas$/, () => viewDuas()],
@@ -207,11 +211,15 @@ async function route() {
     const m = h.match(re);
     if (m) {
       updateTabs(h);
+      // relance la transition de page à chaque navigation
+      $view.classList.remove('pagein');
       try { await fn(m); }
       catch (err) {
         console.error(err);
         $view.innerHTML = `<div class="empty">${icon('close', 30)}<br>Impossible de charger ce contenu.<br><small>${esc(err.message)}</small><br><br><button class="btn" onclick="location.reload()">Réessayer</button></div>`;
       }
+      void $view.offsetWidth;
+      $view.classList.add('pagein');
       window.scrollTo({ top: 0 });
       return;
     }
@@ -223,8 +231,8 @@ const TABS = [
   ['home', 'Accueil', 'home'],
   ['quran', 'Coran', 'book'],
   ['search', 'Recherche', 'search'],
-  ['hadith', 'Hadiths', 'library'],
-  ['duas', 'Invocations', 'hands'],
+  ['prayer', 'Prières', 'mosque'],
+  ['more', 'Plus', 'grid'],
 ];
 function buildTabbar() {
   document.getElementById('tabbar').innerHTML = TABS.map(([tab, label, ic]) =>
@@ -233,128 +241,19 @@ function buildTabbar() {
 function updateTabs(hash) {
   const tab = hash.startsWith('#/quran') ? 'quran'
     : hash.startsWith('#/search') ? 'search'
-    : hash.startsWith('#/hadith') ? 'hadith'
-    : hash.startsWith('#/duas') ? 'duas'
+    : hash.startsWith('#/prayer') ? 'prayer'
+    : /^#\/(hadith|duas|more|tasbih|qibla|favorites|settings|about)/.test(hash) ? 'more'
     : 'home';
   document.querySelectorAll('#tabbar a').forEach(a =>
     a.classList.toggle('active', a.dataset.tab === tab));
 }
 
-// ---------- réglages complets (AFFICHAGE / TEXTE / AUDIO) ----------
-export function openSettings(tab = 'affichage') {
-  const s = state.settings;
-  const seg = (id, opts, cur) => `<div class="seg" data-seg="${id}">
-    ${opts.map(([v, lab]) => `<button data-v="${v}" class="${String(cur) === String(v) ? 'on' : ''}">${lab}</button>`).join('')}</div>`;
-  const row = (lab, sub, ctrl) => `<div class="setrow"><div class="lab">${lab}${sub ? `<small>${sub}</small>` : ''}</div>${ctrl}</div>`;
-  const sw = (k, checked) => `<label class="switch"><input type="checkbox" data-k="${k}" ${checked ? 'checked' : ''}><span class="tr"></span></label>`;
-
-  const panels = {
-    affichage: () => `
-      ${row('Thème', 'Clair, sombre ou selon l’iPhone', seg('theme', [['auto', 'Auto'], ['light', 'Clair'], ['dark', 'Sombre']], s.theme))}
-      ${row('Couleurs', 'Choisissez votre thème', seg('palette', [['emeraude', 'Émeraude'], ['sable', 'Sable'], ['nuit', 'Nuit'], ['violet', 'Violet'], ['custom', 'Perso']], s.palette))}
-      ${s.palette === 'custom' ? row('Ma couleur', 'Glissez pour choisir la teinte principale',
-        `<input type="range" id="hueSlider" min="0" max="359" value="${s.customHue ?? 165}" style="width:150px;accent-color:var(--brand)">`) : ''}
-      ${row('Vibrations', 'Tasbih, Qibla (si l’appareil le permet)', sw('haptics', s.haptics))}
-      ${row('Taille de l’interface', '', seg('uiScale', [[0.92, 'A'], [1, 'A'], [1.1, 'A'], [1.2, 'A']], s.uiScale))}
-      ${row('Format de l’heure', '', seg('timeFmt', [['24', '24 h'], ['12', '12 h']], s.timeFmt))}
-      ${row('Police arabe', 'Amiri (coranique), intégrée hors-ligne', '<span class="tiny">Amiri</span>')}
-    `,
-    texte: () => `
-      ${row('Texte arabe', '', sw('showAr', s.showAr))}
-      ${row('Phonétique française', 'Transcription lisible pour francophone', sw('showTl', s.showTl))}
-      ${row('Traduction française', 'Muhammad Hamidullah', sw('showFr', s.showFr))}
-      ${row('Taille du texte arabe', '', seg('arSize', [[1.5, 'A'], [1.9, 'A'], [2.4, 'A'], [3, 'A']], s.arSize))}
-      ${row('Taille de la phonétique', '', seg('tlSize', [[0.8, 'A'], [0.92, 'A'], [1.06, 'A'], [1.2, 'A']], s.tlSize))}
-      ${row('Taille de la traduction', '', seg('frSize', [[0.85, 'A'], [0.98, 'A'], [1.12, 'A'], [1.28, 'A']], s.frSize))}
-      ${row('Espacement des lignes (arabe)', '', seg('lineSpace', [[1.8, '−'], [2.05, '⋯'], [2.4, '+']], s.lineSpace))}
-      ${row('Script arabe', 'Othmani (QuranEnc) — seul script disponible', '<span class="tiny">Othmani</span>')}
-      ${row('Couleurs du tajwid', 'Pas encore disponible : aucune source fiable et libre intégrée', '<span class="tiny">—</span>')}
-      ${row('Traduction anglaise de secours', 'Dans les recueils sans traduction française (Sunnah.com), repliée', sw('showEnFallback', s.showEnFallback))}
-    `,
-    audio: () => `
-      ${row('Récitateur', '', `<select id="selReciter" style="font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--ink);max-width:170px">
-        ${data.RECITERS.map(r => `<option value="${r.id}" ${r.id === s.reciter ? 'selected' : ''}>${r.name}</option>`).join('')}</select>`)}
-      ${row('Vitesse de lecture', '', seg('speed', [[0.5, '0,5×'], [0.75, '0,75×'], [1, '1×'], [1.25, '1,25×'], [1.5, '1,5×']], s.audio.speed))}
-      ${row('Enchaîner les versets', 'Lecture automatique du suivant', sw('a.autoNext', s.audio.autoNext))}
-      ${row('Défilement automatique', 'Suivre la récitation à l’écran', sw('a.autoScroll', s.audio.autoScroll))}
-      ${row('Répétition de chaque verset', 'Pour l’apprentissage', seg('repeatVerse', [[1, '1×'], [2, '2×'], [3, '3×'], [5, '5×'], [10, '10×']], s.audio.repeatVerse))}
-      ${row('Répéter la sourate', '', sw('a.repeatSurah', s.audio.repeatSurah))}
-      ${row('Sourate suivante automatique', 'Sinon, arrêt à la fin de la sourate', sw('a.continueSurah', s.audio.continueSurah))}
-      ${row('Télécharger le Coran', 'Accès hors-ligne complet', '<button class="btn btn-ghost" id="btnOffline">Télécharger</button>')}
-    `,
-  };
-
-  sheet(`
-    <h3>Réglages</h3>
-    <div class="sheet-tabs" id="setTabs">
-      <button data-t="affichage">Affichage</button>
-      <button data-t="texte">Texte</button>
-      <button data-t="audio">Audio</button>
-    </div>
-    <div id="setPanel"></div>
-    <div class="setrow"><div class="lab">Prières, Qibla &amp; notifications</div><a class="backlink" href="#/prayer" onclick="document.getElementById('sheet-root').innerHTML=''">Ouvrir ${icon('chevR', 14)}</a></div>
-    <div class="setrow"><div class="lab">Sources &amp; à propos</div><a class="backlink" href="#/about" onclick="document.getElementById('sheet-root').innerHTML=''">Voir ${icon('chevR', 14)}</a></div>
-  `, (el) => {
-    const tabs = el.querySelector('#setTabs');
-    const panel = el.querySelector('#setPanel');
-    let cur = tab;
-
-    const bindPanel = () => {
-      // segments
-      panel.querySelectorAll('[data-seg]').forEach(segEl => {
-        segEl.onclick = e => {
-          const v = e.target.dataset?.v;
-          if (v === undefined) return;
-          const key = segEl.dataset.seg;
-          const num = parseFloat(v);
-          const val = isNaN(num) || String(num) !== v ? v : num;
-          if (key === 'speed') { s.audio.speed = val; player.audio.playbackRate = val; }
-          else if (key === 'repeatVerse') s.audio.repeatVerse = val;
-          else s[key] = val;
-          save(); applyTheme(); applySizes();
-          segEl.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === e.target));
-          if (key === 'palette') { show(cur); return; }
-          if (location.hash.includes('/quran/s/') && ['arSize','tlSize','frSize','lineSpace'].includes(key) === false && ['theme','palette','uiScale','timeFmt'].includes(key) === false) route();
-        };
-      });
-      // interrupteurs
-      panel.querySelectorAll('input[data-k]').forEach(inp => inp.onchange = () => {
-        const k = inp.dataset.k;
-        if (k.startsWith('a.')) s.audio[k.slice(2)] = inp.checked;
-        else s[k] = inp.checked;
-        save();
-        if (location.hash.includes('/quran/s/') || location.hash.includes('/hadith') || location.hash.includes('/duas')) route();
-      });
-      panel.querySelector('#selReciter')?.addEventListener('change', e => { s.reciter = e.target.value; save(); });
-      panel.querySelector('#hueSlider')?.addEventListener('input', e => { s.customHue = +e.target.value; save(); applyTheme(); });
-      panel.querySelector('#btnOffline')?.addEventListener('click', async e => {
-        const btn = e.target;
-        btn.textContent = '0 %'; btn.disabled = true;
-        try {
-          const urls = ['data/quran/search-fr.json', 'data/quran/search-ar.json', 'data/quran/phonetic.json'];
-          for (let i = 1; i <= 114; i++) urls.push(`data/quran/s/${i}.json`);
-          for (let i = 0; i < urls.length; i += 10) {
-            await Promise.all(urls.slice(i, i + 10).map(u => fetch(u)));
-            btn.textContent = Math.round(Math.min(urls.length, i + 10) / urls.length * 100) + ' %';
-          }
-          btn.textContent = 'Téléchargé ✓';
-          toast('Coran disponible hors-ligne');
-        } catch {
-          btn.textContent = 'Réessayer'; btn.disabled = false;
-          toast('Échec — vérifiez la connexion');
-        }
-      });
-    };
-
-    const show = t => {
-      cur = t;
-      tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
-      panel.innerHTML = panels[t]();
-      bindPanel();
-    };
-    tabs.onclick = e => { const t = e.target.dataset?.t; if (t) show(t); };
-    show(cur);
-  });
+// ---------- réglages : page dédiée (#/settings), organisée par catégories ----------
+// compatibilité : les anciens appels openSettings('texte'|'audio'|'affichage')
+// ouvrent la bonne section de la page.
+export function openSettings(tab = 'apparence') {
+  const sec = { affichage: 'apparence', texte: 'coran', audio: 'coran' }[tab] || tab;
+  location.hash = `#/settings?sec=${sec}`;
 }
 
 // ---------- entête commun ----------

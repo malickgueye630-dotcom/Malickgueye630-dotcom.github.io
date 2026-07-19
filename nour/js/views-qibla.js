@@ -3,6 +3,7 @@
 // l'aiguille fixe représente le haut du téléphone. Alignement → halo + vibration.
 import { $view, esc, toast, vibrate } from './app.js';
 import { icon } from './icons.js';
+import { state } from './state.js';
 import { prayerSettings, hasLocation, geolocate } from './prayer.js';
 
 const KAABA = { lat: 21.4225, lon: 39.8262 };
@@ -112,6 +113,7 @@ export async function viewQibla() {
         <span class="qchip">${icon('location', 13)} ${esc(p.city || `${p.lat}, ${p.lon}`)}</span>
         <span class="qchip">${icon('compass', 13)} ${Math.round(bearing)}°</span>
         <span class="qchip">${icon('kaaba', 13)} ${dist.toLocaleString('fr-FR')} km</span>
+        <span class="qchip" id="qSigChip" hidden>Signal <span class="qsignal" id="qSig"><i></i><i></i><i></i></span></span>
       </div>
 
       <div class="compass-wrap">
@@ -142,6 +144,9 @@ export async function viewQibla() {
   const qDeg = document.getElementById('qDeg');
   const qSub = document.getElementById('qSub');
   const status = document.getElementById('qStatus');
+  const sigChip = document.getElementById('qSigChip');
+  const sig = document.getElementById('qSig');
+  const sensibility = state.settings.qiblaSens || 4;
   let lastAligned = false, gotEvent = false, smooth = null;
 
   const onOrient = ev => {
@@ -153,6 +158,11 @@ export async function viewQibla() {
     }
     if (heading == null) return;
     gotEvent = true;
+    // qualité du signal : précision boussole iOS si disponible, sinon absolue/relative
+    sigChip.hidden = false;
+    const acc = typeof ev.webkitCompassAccuracy === 'number' && ev.webkitCompassAccuracy >= 0 ? ev.webkitCompassAccuracy : null;
+    const level = acc != null ? (acc <= 15 ? 3 : acc <= 35 ? 2 : 1) : (ev.absolute || ev.webkitCompassHeading != null ? 2 : 1);
+    sig.className = `qsignal s${level}`;
     // lissage angulaire léger pour une rotation naturelle
     if (smooth == null) smooth = heading;
     else {
@@ -162,12 +172,12 @@ export async function viewQibla() {
     rose.style.transform = `rotate(${-smooth}deg)`;
     let diff = ((bearing - smooth) % 360 + 360) % 360;
     const off = diff > 180 ? 360 - diff : diff;
-    const aligned = off < 4;
+    const aligned = off < sensibility;
     compass.classList.toggle('aligned', aligned);
     qDeg.textContent = `${Math.round(smooth)}°`;
     qSub.textContent = aligned ? 'Face à la Qibla' : diff < 180 ? `${Math.round(off)}° à droite` : `${Math.round(off)}° à gauche`;
     status.innerHTML = aligned
-      ? `<b style="color:var(--gold)">✓ Vous êtes parfaitement orienté vers la Qibla</b>`
+      ? `<b style="color:var(--gold)">✓ Vous êtes aligné avec la Qibla</b>`
       : `Tournez ${diff < 180 ? 'à droite' : 'à gauche'} de ${Math.round(off)}° pour faire face à la Kaaba.`;
     if (aligned && !lastAligned) vibrate(35);
     lastAligned = aligned;

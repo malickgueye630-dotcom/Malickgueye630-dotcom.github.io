@@ -2,10 +2,10 @@
 const KEY = 'nour:v1';
 
 const defaults = {
-  v: 2,
+  v: 3,
   settings: {
     theme: 'auto',            // auto | light | dark
-    palette: 'emeraude',      // emeraude | sable | nuit
+    palette: 'emeraude',      // emeraude | sable | nuit | lavande | custom
     arSize: 1.9,              // rem — texte arabe
     tlSize: 0.92,             // rem — phonétique
     frSize: 0.98,             // rem — traduction
@@ -19,6 +19,14 @@ const defaults = {
     haptics: true,            // vibrations (tasbih, qibla)
     showEnFallback: false,    // traduction anglaise de secours dans les recueils
     customHue: 165,           // teinte de la couleur personnalisée
+    arFont: 'amiri',          // amiri | system — police du texte arabe
+    tajwid: false,            // coloration tajwid simplifiée (qalqala, ghunna, madd)
+    readingTheme: 'normal',   // normal | sepia | vert — fond du lecteur Coran
+    qiblaSens: 4,             // seuil d'alignement Qibla en degrés (2 | 4 | 8)
+    searchHistoryOn: true,    // mémoriser les recherches récentes
+    searchSuggest: true,      // suggestions pendant la saisie
+    searchPhonetic: true,     // recherche phonétique arabe
+    searchSmart: true,        // compréhension intelligente (sujets, réponse directe)
     reciter: 'ar.alafasy',
     audio: {
       autoNext: true,         // enchaîner les versets
@@ -57,6 +65,11 @@ function load() {
     if (!d.v || d.v < 2) {
       merged.settings.showTl = true;
       merged.v = 2;
+    }
+    // migration v2 → v3 : la palette Violet devient Lavande
+    if (merged.v < 3) {
+      if (merged.settings.palette === 'violet') merged.settings.palette = 'lavande';
+      merged.v = 3;
     }
     return merged;
   } catch {
@@ -147,5 +160,7 @@ export function applySizes() {
   r.setProperty('--fr-size', s.frSize + 'rem');
   r.setProperty('--ar-line', s.lineSpace);
   r.setProperty('--ui-scale', s.uiScale);
+  r.setProperty('--ar-font', s.arFont === 'system' ? "'Geeza Pro', 'Scheherazade New', serif" : "'Amiri', 'Scheherazade New', 'Geeza Pro', serif");
+  document.documentElement.dataset.reading = s.readingTheme || 'normal';
 }
 export const applyArSize = applySizes; // compatibilité

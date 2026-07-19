@@ -245,10 +245,11 @@ export function isQuestion(q) {
 // ---------------- recherche principale ----------------
 export async function searchAll(q, opts = {}) {
   const base = await loadBase();
+  const smart = opts.smart !== false; // réglage « recherche intelligente »
   const rawToks = tokens(q);
   const hasArabic = /[ء-ۿ]/.test(q);
   // compréhension : correction des fautes de frappe contre le vocabulaire de la base
-  const { toks, corrections } = hasArabic
+  const { toks, corrections } = hasArabic || !smart
     ? { toks: rawToks, corrections: [] }
     : correctTokens(rawToks, base);
   // requête corrigée (pour la correspondance de phrases des sujets)
@@ -291,8 +292,8 @@ export async function searchAll(q, opts = {}) {
   result.surahs.sort((a, b) => b._s - a._s);
   result.surahs = result.surahs.slice(0, 4);
 
-  // --- sujets (sémantique) — sur la requête corrigée
-  const topicMatches = matchTopics(qFixed, useToks, base);
+  // --- sujets (sémantique) — sur la requête corrigée (désactivable dans les réglages)
+  const topicMatches = smart ? matchTopics(qFixed, useToks, base) : [];
   result.topics = topicMatches.slice(0, 3);
   // sujet fort : la requête décrit un concept → le sens prime sur les mots isolés
   result.strongTopic = topicMatches.length > 0 && (topicMatches[0].score >= 2.5 || useToks.length >= 3);
@@ -393,7 +394,7 @@ export async function searchAll(q, opts = {}) {
   const latinish = !hasArabic && /^[a-z0-9'\s]+$/i.test(fold(q));
   const fewResults = result.verses.length + result.hadiths.length + result.duas.length < 3;
   const looksTransliterated = !result.question && !result.topics.length && useToks.length <= 5;
-  if (latinish && (fewResults || looksTransliterated)) {
+  if (opts.phonetic !== false && latinish && (fewResults || looksTransliterated)) {
     try {
       const ph = await phoneticSearch(q, { limit: 8 });
       result.phonetic = ph.filter(p => !result.verses.some(v => v.s === p.s && v.v === p.v));
