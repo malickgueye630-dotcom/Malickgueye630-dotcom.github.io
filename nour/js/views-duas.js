@@ -1,6 +1,7 @@
 // Invocations (du'â) par situation, avec arabe, phonétique, français et source.
 import { $view, esc, toast, topbar, bindTopbar, copyText, shareText } from './app.js';
 import { state, toggleFav, isFav } from './state.js';
+import { icon, iconFilled } from './icons.js';
 import * as data from './data.js';
 import { fold } from './search.js';
 
@@ -17,9 +18,9 @@ export function duaCard(d) {
     <div class="row" style="justify-content:space-between;align-items:flex-start">
       <div class="dua-title">${esc(d.title)}${d.repeat ? `<span class="repeat-pill">× ${d.repeat}</span>` : ''}</div>
       <div class="row" style="gap:0">
-        <button class="btn-icon ${isFav('duas', d.id) ? 'on' : ''}" data-fav="${esc(d.id)}">${isFav('duas', d.id) ? '★' : '☆'}</button>
-        <button class="btn-icon" data-copy="${esc(d.id)}">📋</button>
-        <button class="btn-icon" data-share="${esc(d.id)}">📤</button>
+        <button class="btn-icon ${isFav('duas', d.id) ? 'on' : ''}" data-fav="${esc(d.id)}">${isFav('duas', d.id) ? iconFilled('star', 18) : icon('star', 18)}</button>
+        <button class="btn-icon" data-copy="${esc(d.id)}">${icon('copy', 17)}</button>
+        <button class="btn-icon" data-share="${esc(d.id)}">${icon('share', 17)}</button>
       </div>
     </div>
     <div class="ar">${esc(d.ar)}</div>
@@ -40,7 +41,7 @@ export function bindDuaCards(container, all) {
     const sh = e.target.closest('[data-share]');
     if (fav) {
       const on = toggleFav('duas', fav.dataset.fav);
-      fav.classList.toggle('on', on); fav.textContent = on ? '★' : '☆';
+      fav.classList.toggle('on', on); fav.innerHTML = on ? iconFilled('star', 18) : icon('star', 18);
       toast(on ? 'Ajouté aux favoris ★' : 'Retiré des favoris');
     } else if (cp || sh) {
       const d = all.find(x => x.id === (cp || sh).dataset[cp ? 'copy' : 'share']);

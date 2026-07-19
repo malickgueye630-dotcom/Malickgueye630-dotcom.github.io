@@ -31,7 +31,71 @@
   --shadow-lg: 0 2px 6px rgba(29,42,39,.08), 0 18px 44px rgba(29,42,39,.16);
   --radius: 18px;
   --ar-size: 1.9rem;
+  --tl-size: .92rem;
+  --fr-size: .98rem;
+  --ar-line: 2.05;
+  --ui-scale: 1;
   --tabbar-h: calc(58px + env(safe-area-inset-bottom, 0px));
+}
+/* ---------- palette Sable ---------- */
+:root[data-palette="sable"] {
+  --bg: #f7f2e9;
+  --bg-soft: #efe6d5;
+  --card: #fffdf8;
+  --card-2: #faf5ea;
+  --ink: #3a2f23;
+  --ink-2: #7a6a55;
+  --ink-3: #a08f77;
+  --brand: #a3702c;
+  --brand-2: #6b4a1d;
+  --gold: #c9a227;
+  --gold-soft: #f0e3bb;
+  --line: #e8dcc4;
+  --hero-grad: linear-gradient(140deg, #6b4a1d 0%, #a3702c 55%, #c99a53 100%);
+}
+:root[data-palette="sable"][data-theme="dark"] {
+  --bg: #191410;
+  --bg-soft: #211b14;
+  --card: #251e16;
+  --card-2: #2b2319;
+  --ink: #f0e8da;
+  --ink-2: #bba98d;
+  --ink-3: #857863;
+  --brand: #d9a95c;
+  --brand-2: #6b4a1d;
+  --line: #372d20;
+  --hero-grad: linear-gradient(140deg, #33230e 0%, #6b4a1d 55%, #a3702c 100%);
+}
+/* ---------- palette Nuit ---------- */
+:root[data-palette="nuit"] {
+  --bg: #eef1f6;
+  --bg-soft: #e2e7f0;
+  --card: #ffffff;
+  --card-2: #f6f8fc;
+  --ink: #1a2233;
+  --ink-2: #55617a;
+  --ink-3: #8893a1;
+  --brand: #23456e;
+  --brand-2: #132a4a;
+  --gold: #c9a227;
+  --gold-soft: #ece2c2;
+  --line: #d8dfeb;
+  --hero-grad: linear-gradient(140deg, #101f38 0%, #23456e 55%, #2f6b63 100%);
+}
+:root[data-palette="nuit"][data-theme="dark"] {
+  --bg: #0a0f1a;
+  --bg-soft: #101828;
+  --card: #131c2e;
+  --card-2: #182338;
+  --ink: #e6ebf5;
+  --ink-2: #9daabf;
+  --ink-3: #6b7688;
+  --brand: #7fa8d9;
+  --brand-2: #132a4a;
+  --gold: #d9b64a;
+  --gold-soft: #33301c;
+  --line: #21304a;
+  --hero-grad: linear-gradient(140deg, #0b1730 0%, #1d3a61 55%, #245a52 100%);
 }
 :root[data-theme="dark"] {
   --bg: #0c1513;
@@ -77,9 +141,13 @@ body {
   direction: rtl;
   text-align: right;
   font-size: var(--ar-size);
-  line-height: 2.05;
+  line-height: var(--ar-line);
   color: var(--ink);
 }
+.tl { font-size: var(--tl-size); }
+.fr { font-size: var(--fr-size); }
+.svgi { vertical-align: -4px; flex: none; }
+body { font-size: calc(16px * var(--ui-scale)); }
 
 /* ---------- barre d'onglets ---------- */
 #tabbar {
@@ -109,9 +177,9 @@ body {
   border-radius: 12px;
   transition: color .15s ease, transform .15s ease;
 }
-#tabbar a .ic { font-size: 1.28rem; line-height: 1.15; filter: grayscale(1) opacity(.72); transition: filter .15s ease, transform .15s ease; }
+#tabbar a .ic { line-height: 1; opacity: .72; transition: opacity .15s ease, transform .15s ease; }
 #tabbar a.active { color: var(--brand); }
-#tabbar a.active .ic { filter: none; transform: translateY(-1px); }
+#tabbar a.active .ic { opacity: 1; transform: translateY(-1px); }
 
 /* ---------- composants ---------- */
 .card {
@@ -465,3 +533,78 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
 @media (min-width: 700px) {
   .tilegrid, .catgrid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ---------- raccourcis accueil ---------- */
+.shortcuts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 14px 0 4px; }
+.shortcut { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--ink-2); font-size: .64rem; font-weight: 600; text-align: center; }
+.shortcut .bub {
+  width: 52px; height: 52px; display: grid; place-items: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 17px;
+  color: var(--brand); box-shadow: var(--shadow);
+  transition: transform .12s ease;
+}
+.shortcut:active .bub { transform: scale(.92); }
+
+/* ---------- lecteur audio pro ---------- */
+#player .prow { display: flex; align-items: center; gap: 6px; }
+#player .pbar { position: relative; height: 4px; background: rgba(255,255,255,.18); border-radius: 2px; margin: 7px 0 2px; overflow: hidden; }
+#player .pbar > div { position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--gold); border-radius: 2px; }
+#player .pbtn { background: rgba(255,255,255,.12); border: none; color: inherit; border-radius: 12px; padding: 8px 10px; cursor: pointer; line-height: 0; }
+#player .pspeed { font-size: .7rem; font-weight: 700; min-width: 40px; text-align: center; }
+
+/* ---------- onglets segments de réglages ---------- */
+.sheet-tabs { display: flex; background: var(--bg-soft); border-radius: 13px; padding: 3px; gap: 2px; margin-bottom: 12px; }
+.sheet-tabs button { flex: 1; border: none; background: transparent; color: var(--ink-2); font: inherit; font-size: .82rem; font-weight: 700; padding: 9px 0; border-radius: 11px; cursor: pointer; }
+.sheet-tabs button.on { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+/* ---------- boussole qibla ---------- */
+.compass-wrap { display: grid; place-items: center; margin: 18px 0; }
+.compass {
+  position: relative; width: min(78vw, 300px); height: min(78vw, 300px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, var(--card-2), var(--card));
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-lg);
+}
+.compass .rose { position: absolute; inset: 0; transition: transform .12s linear; will-change: transform; }
+.compass .pt { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); font-weight: 800; font-size: .95rem; color: var(--ink-2); }
+.compass .tick { position: absolute; left: 50%; top: 4px; width: 2px; height: 10px; background: var(--line); transform-origin: 50% calc(min(39vw, 150px) - 4px); }
+.compass .kaaba-ind {
+  position: absolute; left: 50%; top: 6px; transform: translateX(-50%);
+  color: var(--brand); line-height: 0;
+}
+.compass .needle {
+  position: absolute; left: calc(50% - 2px); top: 14%; width: 4px; height: 36%;
+  background: linear-gradient(var(--danger), transparent); border-radius: 2px;
+}
+.compass .hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 14px; height: 14px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 4px var(--card); }
+.compass.aligned { animation: qpulse 1.2s ease infinite; border-color: var(--brand); }
+@keyframes qpulse { 0%,100% { box-shadow: var(--shadow-lg); } 50% { box-shadow: 0 0 0 10px rgba(14,102,86,.15); } }
+
+/* ---------- tasbih ---------- */
+.tasbih-count {
+  display: grid; place-items: center;
+  width: min(64vw, 250px); height: min(64vw, 250px);
+  margin: 16px auto; border-radius: 50%;
+  background: var(--hero-grad); color: #f3efe2;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+  transition: transform .08s ease;
+  position: relative; overflow: hidden;
+}
+.tasbih-count:active { transform: scale(.965); }
+.tasbih-count .big { font-size: 3.4rem; font-weight: 800; line-height: 1; }
+.tasbih-count .tgt { opacity: .8; font-size: .95rem; }
+.tasbih-count svg.ring { position: absolute; inset: 0; transform: rotate(-90deg); }
+
+/* ---------- ligne de prière ---------- */
+.prayer-row { display: flex; align-items: center; gap: 10px; padding: 12px 2px; border-bottom: 1px solid var(--line); }
+.prayer-row:last-child { border-bottom: none; }
+.prayer-row.now { color: var(--brand); font-weight: 700; }
+.prayer-row.next-p { background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); border-radius: 10px; }
+.prayer-row .pn { flex: 1; display: flex; align-items: center; gap: 9px; }
+.prayer-row .pill { font-size: .62rem; font-weight: 800; letter-spacing: .06em; color: #fff; background: var(--brand); padding: 3px 8px; border-radius: 999px; }
+.badge-en { background: var(--bg-soft); color: var(--ink-3); }
+details.en-tr summary { cursor: pointer; color: var(--ink-3); font-size: .78rem; font-weight: 600; margin-top: 6px; }
+details.en-tr p { color: var(--ink-2); font-size: .86rem; }

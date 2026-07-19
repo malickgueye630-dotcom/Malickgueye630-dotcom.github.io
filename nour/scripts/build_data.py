@@ -20,6 +20,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from phonetics_fr import ar_to_fr  # phonétique française générée depuis l'arabe vocalisé
+
 SRC = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
 
@@ -46,6 +49,7 @@ def build_quran():
     juz = parse_ts_list(hafs, "JuzList")
     hizb_quarters = parse_ts_list(hafs, "HizbQuarterList")
     sajda = parse_ts_list(hafs, "SajdaList")
+    pages = parse_ts_list(hafs, "PageList")
 
     index = []
     search_fr = []
@@ -56,7 +60,8 @@ def build_quran():
         for v_fr, v_tr in zip(s_fr["verses"], s_tr["verses"]):
             assert v_fr["id"] == v_tr["id"]
             assert v_fr["text"] == v_tr["text"], f"texte arabe divergent {n}:{v_fr['id']}"
-            verses.append([v_fr["text"], v_fr["translation"], v_tr["transliteration"]])
+            # [arabe, traduction française, phonétique française]
+            verses.append([v_fr["text"], v_fr["translation"], ar_to_fr(v_fr["text"])])
             search_fr.append([n, v_fr["id"], v_fr["translation"]])
         write(OUT / f"quran/s/{n}.json", {
             "n": n,
@@ -83,6 +88,7 @@ def build_quran():
         "juz": juz,            # id global (1-indexé) du 1er verset de chaque juz
         "hizbQuarters": hizb_quarters,
         "sajda": sajda,
+        "pages": pages,        # 604 pages du mushaf (id global du 1er verset)
     })
     write(OUT / "quran/search-fr.json", search_fr)
 

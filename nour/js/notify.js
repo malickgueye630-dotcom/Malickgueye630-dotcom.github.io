@@ -12,11 +12,14 @@ export function notifySettings() {
   if (!state.settings.notify) {
     state.settings.notify = {
       enabled: { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false },
-      offset: 0, // 0 | -5 | -10 | -15 (minutes avant)
-      extras: { adhkarMatin: false, adhkarSoir: false, kahf: false },
+      offset: 0, // 0 | -5 | -10 | -15 | -30 (minutes avant)
+      extras: { adhkarMatin: false, adhkarSoir: false, kahf: false, jumua: false, duJour: false },
     };
   }
-  return state.settings.notify;
+  const n = state.settings.notify;
+  if (!('jumua' in n.extras)) n.extras.jumua = false;
+  if (!('duJour' in n.extras)) n.extras.duJour = false;
+  return n;
 }
 
 export const notifSupported = () => 'Notification' in window;
@@ -74,11 +77,30 @@ function checkOnce() {
     const id = `${key}-${now.toDateString()}`;
     if (hm === minute && !fired.has(id)) { fired.add(id); show(title, body); }
   }
-  if (n.extras.kahf && now.getDay() === 5) { // vendredi
-    const id = `kahf-${now.toDateString()}`;
-    if (hm === 10 * 60 && !fired.has(id)) {
+  if (now.getDay() === 5) { // vendredi
+    if (n.extras.kahf) {
+      const id = `kahf-${now.toDateString()}`;
+      if (hm === 10 * 60 && !fired.has(id)) {
+        fired.add(id);
+        show('C\'est vendredi', 'Lecture recommandée de la sourate Al-Kahf aujourd\'hui.');
+      }
+    }
+    if (n.extras.jumua && hasLocation()) {
+      const t = timesFor(now);
+      const target = new Date(t.dhuhr.getTime() - 45 * 60000);
+      const id = `jumua-${now.toDateString()}`;
+      const diff = target - now;
+      if (diff <= 0 && diff > -60000 && !fired.has(id)) {
+        fired.add(id);
+        show('Salat al-Jumu\'ah', 'La prière du vendredi approche — préparez-vous.');
+      }
+    }
+  }
+  if (n.extras.duJour) {
+    const id = `dujour-${now.toDateString()}`;
+    if (hm === 9 * 60 && !fired.has(id)) {
       fired.add(id);
-      show('📖 C\'est vendredi', 'Lecture recommandée de la sourate Al-Kahf aujourd\'hui.');
+      show('Nour — contenus du jour', 'Découvrez le verset, le hadith et l\'invocation du jour.');
     }
   }
 }

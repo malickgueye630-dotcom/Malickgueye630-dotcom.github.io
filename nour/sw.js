@@ -1,11 +1,12 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v2';
+const VERSION = 'nour-v3';
 const SHELL = [
   './',
   'index.html',
   'css/app.css',
   'js/app.js', 'js/state.js', 'js/data.js', 'js/search.js',
   'js/engine.js', 'js/phonetic.js', 'js/translit.js', 'js/prayer.js', 'js/notify.js',
+  'js/icons.js', 'js/views-qibla.js', 'js/views-tasbih.js',
   'js/vendor/adhan.esm.min.js',
   'js/views-home.js', 'js/views-quran.js', 'js/views-search.js', 'js/views-prayer.js',
   'js/views-hadith.js', 'js/views-duas.js', 'js/views-favorites.js', 'js/views-about.js',
@@ -13,7 +14,7 @@ const SHELL = [
   'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'data/quran/index.json', 'data/duas.json', 'data/hadiths_fr.json', 'data/hadith/index.json',
-  'data/topics.json', 'data/cities.json',
+  'data/topics.json', 'data/cities.json', 'data/hadith/chapters_fr.json',
 ];
 
 self.addEventListener('install', e => {

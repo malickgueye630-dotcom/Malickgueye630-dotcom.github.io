@@ -42,13 +42,21 @@ export function viewAbout() {
           la méthode de calcul et le madhhab choisis. Les horaires sont indicatifs : ils varient
           selon la méthode — choisissez celle de votre mosquée et ajustez si besoin.</li>
       </ul>
+      <p><b>🔤 Phonétique française</b></p>
+      <ul class="muted" style="padding-left:18px;margin:6px 0">
+        <li>La transcription phonétique du Coran et des hadiths est <b>générée par règles</b> depuis
+          le texte arabe entièrement vocalisé (harakat), avec des conventions pour francophones
+          (ou, â/î/oû, ch, kh, gh, article assimilé « r-r »). C'est une aide à la lecture,
+          vérifiée sur des sourates témoins ; elle ne remplace jamais le texte arabe, qui n'est
+          jamais modifié. La phonétique des invocations est rédigée à la main.</li>
+        <li>Les titres des livres (chapitres) des recueils de hadiths sont traduits en français
+          pour l'interface ; le titre arabe original est toujours affiché.</li>
+      </ul>
       <p><b>🔎 Recherche</b></p>
       <ul class="muted" style="padding-left:18px;margin:6px 0">
         <li>Le moteur (plein texte, fautes d'orthographe, phonétique arabe, sujets, questions)
           interroge uniquement les textes ci-dessus. Le thésaurus de sujets relie des mots-clés
-          français à des passages précis, vérifiés un par un. La translittération affichée sous
-          l'arabe des hadiths est générée automatiquement à partir du texte vocalisé : c'est une
-          aide à la lecture, elle ne remplace pas l'arabe. Celle du Coran provient de Tanzil.</li>
+          français à des passages précis, vérifiés un par un.</li>
       </ul>
     </div>
 
