@@ -7,10 +7,10 @@ import { arToLatin } from './translit.js';
 import * as data from './data.js';
 
 const SUGGESTIONS = [
-  'doua avant de dormir', 'laqad jaakoum', 'verset sur la patience', 'médisance',
-  'que dire avant d\'entrer aux toilettes', 'le voyage nocturne du Prophète ﷺ',
-  'les voyages de Dhul-Qarnayn', 'comment faire salat al-istikhara',
-  'hadith sur la trahison', 'que dit l\'islam sur la colère', 'adhkar du matin',
+  'quelle doua quand j\'ai peur ?', 'laqad jaakoum', 'verset sur quelqu\'un qui ment',
+  'quelqu\'un qui parle dans le dos des autres', 'que dit le prophète ﷺ sur la trahison ?',
+  'comment faire la prière de consultation ?', 'histoire de Dhul-Qarnayn',
+  'doua avant de dormir', 'que dit l\'islam sur la colère', 'adhkar du matin',
 ];
 
 let debounce, sugDebounce, lastQuery = '';
@@ -130,11 +130,13 @@ export async function viewSearch(initial = '') {
         <div class="chiprow">${hist.map(h => `<button class="chip" data-q="${esc(h)}">${esc(h)}</button>`).join('')}</div>` : ''}
       <h2>Essayez par exemple</h2>
       <div class="chiprow" style="flex-wrap:wrap">${SUGGESTIONS.map(sq => `<button class="chip" data-q="${esc(sq)}">${esc(sq)}</button>`).join('')}</div>
-      <div class="notice">Vous pouvez chercher un <b>mot</b> (« patience »), poser une <b>question</b>
-      (« que dit l'islam sur la médisance ? »), décrire un <b>souvenir</b> (« l'homme qui a voyagé jusqu'au
-      coucher du soleil ») ou écrire de l'<b>arabe en phonétique</b>, même approximative (« laqad jaakoum »).
-      La recherche n'utilise que le Coran, les hadiths et les invocations de l'application, avec leurs sources —
-      rien n'est inventé.</div>
+      <div class="notice">Posez n'importe quelle <b>question naturelle</b>, même avec des fautes de frappe :
+      le moteur comprend votre intention, corrige l'orthographe, reconnaît l'<b>arabe écrit en phonétique</b>
+      approximative (« lakhadjaakoul ») et cherche par le <b>sens</b> (« quelqu'un qui parle dans le dos des
+      autres » → médisance). Il cherche ensuite dans le Coran, les hadiths et les invocations de l'application,
+      sélectionne les meilleurs passages et assemble une <b>réponse directe sourcée</b>.
+      Rien n'est jamais inventé : chaque résultat affiche sa source, et s'il n'y a pas de source fiable,
+      l'application vous le dit.</div>
     `;
     results.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { input.value = b.dataset.q; hideSug(); run(b.dataset.q); });
   }
@@ -188,81 +190,68 @@ export async function viewSearch(initial = '') {
     const meta = s => idx.surahs[s - 1];
     const parts = [];
 
-    // ---------- RÉPONSE structurée (questions) ----------
+    // ---------- compréhension de la requête (corrections affichées) ----------
+    if (r.corrections?.length) {
+      parts.push(`<div class="notice" style="padding:9px 12px;margin-bottom:10px">🧠 Recherche comprise comme
+        « <b>${esc(r.understood)}</b> »
+        <span class="tiny" style="display:block;margin-top:2px">${r.corrections.map(([a, b]) => `${esc(a)} → ${esc(b)}`).join(' · ')}</span></div>`);
+    }
+
+    // éléments déjà montrés dans la réponse directe (pour ne pas les répéter)
+    const shownV = new Set(), shownH = new Set(), shownD = new Set();
+
+    // ---------- 1. RÉPONSE DIRECTE ----------
     if (answer) {
-      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse</div>`);
+      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse directe</div>`);
       if (answer.topic) parts.push(topicCard(answer.topic));
       const getV = await enrich([...answer.verses], 3);
       if (answer.duas.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">🤲 INVOCATION${answer.duas.length > 1 ? 'S' : ''}</div>`);
         parts.push(answer.duas.map(d => duaCardMini(d, q)).join(''));
+        answer.duas.forEach(d => shownD.add(d.id));
       }
       if (answer.hadiths.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📜 HADITHS AUTHENTIQUES</div>`);
         parts.push(answer.hadiths.map(h => hadithCard(h, q)).join(''));
+        answer.hadiths.forEach(h => shownH.add(h.id));
       }
       if (answer.verses.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📖 CORAN</div>`);
         parts.push(answer.verses.map(v => verseCard(v, meta(v.s), q, getV(v))).join(''));
+        answer.verses.forEach(v => shownV.add(`${v.s}:${v.v}`));
       }
       parts.push(`<div class="notice">📚 Réponse assemblée uniquement à partir des sources citées ci-dessus,
-        présentes dans la base de Nour. Pour un avis religieux, consultez un savant ou un imam.</div>`);
+        présentes dans la base vérifiée de Nour — rien n'est généré ni inventé.
+        Pour un avis religieux, consultez un savant ou un imam.</div>`);
     }
 
-    // ---------- résultat le plus probable : le SENS d'abord ----------
-    if (!answer && r.topics.length) {
-      parts.push(`<div class="result-cat">💡 Résultat par le sens</div>`);
-      parts.push(topicCard(r.topics[0].topic));
-      if (r.strongTopic) {
-        // le contenu vérifié du sujet passe avant les correspondances de mots
-        if (r.versesTopic.length) {
-          const getT = await enrich(r.versesTopic, 5);
-          parts.push(r.versesTopic.slice(0, 5).map(v => verseCard(v, meta(v.s), q, getT(v))).join(''));
-        }
-        parts.push(r.hadithsTopic.slice(0, 4).map(h => hadithCard(h, q)).join(''));
-        parts.push(r.duasTopic.slice(0, 3).map(d => duaCardMini(d, q)).join(''));
-      }
-    }
-
-    // ---------- sourates ----------
-    if (r.surahs.length) {
-      parts.push(`<div class="result-cat">📖 Sourates <span class="cnt">${r.surahs.length}</span></div>`);
-      parts.push(r.surahs.map(s => `
-        <a class="list-item" href="#/quran/s/${s.n}">
-          <div class="num">${s.n}</div>
-          <div class="t"><b>${esc(s.phonetic)}</b><small>${esc(s.fr)} · ${s.verses} versets</small></div>
-          <div class="arname">${esc(s.name)}</div>
-        </a>`).join(''));
-    }
-
-    // ---------- phonétique ----------
-    if (r.phonetic.length) {
-      parts.push(`<div class="result-cat">🗣️ Versets proches de votre phonétique <span class="cnt">${r.phonetic.length}</span></div>`);
-      const getP = await enrich(r.phonetic.map(p => ({ s: p.s, v: p.v })), 6);
-      parts.push(r.phonetic.map(p => verseCard({ ...p, phon: true }, meta(p.s), q, getP(p))).join(''));
-    }
-
-    // ---------- sections par catégorie, ordonnées selon l'intention ----------
-    // si le sujet fort a déjà affiché son contenu, ces sections ne montrent
-    // que les correspondances textuelles restantes
-    const topicShown = !answer && r.topics.length && r.strongTopic;
-    const versesAll = topicShown ? r.verses : [...r.verses, ...r.versesTopic];
-    const hadithsAll = topicShown ? r.hadiths : [...r.hadiths, ...r.hadithsTopic];
-    const duasAll = topicShown ? r.duas : [...r.duas, ...r.duasTopic];
+    // ---------- 2-4. Coran / Hadiths / Invocations ----------
+    const versesEx = r.verses.filter(v => !shownV.has(`${v.s}:${v.v}`));
+    const phonEx = r.phonetic.filter(p => !shownV.has(`${p.s}:${p.v}`));
+    const hadithsEx = r.hadiths.filter(h => !shownH.has(h.id));
+    const duasEx = r.duas.filter(d => !shownD.has(d.id));
     const sections = {
       quran: async () => {
-        if (!versesAll.length || r.phonetic.length) return '';
-        const getV2 = await enrich(versesAll, 8);
-        return `<div class="result-cat">📖 Coran <span class="cnt">${versesAll.length} résultat${versesAll.length > 1 ? 's' : ''}</span></div>`
-          + versesAll.slice(0, 12).map(v => verseCard(v, meta(v.s), q, getV2(v))).join('');
+        const total = versesEx.length + phonEx.length;
+        if (!total) return '';
+        let html = `<div class="result-cat">📖 Coran <span class="cnt">${total} résultat${total > 1 ? 's' : ''}</span></div>`;
+        if (phonEx.length) {
+          const getP = await enrich(phonEx.map(p => ({ s: p.s, v: p.v })), 6);
+          html += phonEx.map(p => verseCard({ ...p, phon: true }, meta(p.s), q, getP(p))).join('');
+        }
+        if (versesEx.length && !phonEx.length) {
+          const getV2 = await enrich(versesEx, 8);
+          html += versesEx.slice(0, 12).map(v => verseCard(v, meta(v.s), q, getV2(v))).join('');
+        }
+        return html;
       },
-      hadith: async () => hadithsAll.length
-        ? `<div class="result-cat">📜 Hadiths <span class="cnt">${hadithsAll.length} résultat${hadithsAll.length > 1 ? 's' : ''}</span></div>`
-          + hadithsAll.slice(0, 10).map(h => hadithCard(h, q)).join('')
+      hadith: async () => hadithsEx.length
+        ? `<div class="result-cat">📜 Hadiths <span class="cnt">${hadithsEx.length} résultat${hadithsEx.length > 1 ? 's' : ''}</span></div>`
+          + hadithsEx.slice(0, 10).map(h => hadithCard(h, q)).join('')
         : '',
-      dua: async () => duasAll.length
-        ? `<div class="result-cat">🤲 Invocations <span class="cnt">${duasAll.length}</span></div>`
-          + duasAll.slice(0, 8).map(d => duaCardMini(d, q)).join('')
+      dua: async () => duasEx.length
+        ? `<div class="result-cat">🤲 Invocations <span class="cnt">${duasEx.length}</span></div>`
+          + duasEx.slice(0, 8).map(d => duaCardMini(d, q)).join('')
         : '',
     };
     const order = r.hints.dua ? ['dua', 'quran', 'hadith']
@@ -271,10 +260,37 @@ export async function viewSearch(initial = '') {
       : ['quran', 'hadith', 'dua'];
     for (const key of order) parts.push(await sections[key]());
 
+    // ---------- 5. RÉSULTATS LIÉS ----------
+    // sujets détectés + contenus référencés pour ces sujets non encore affichés + sourates
+    const linkedV = r.versesTopic.filter(v => !shownV.has(`${v.s}:${v.v}`)).slice(0, 5);
+    const linkedH = r.hadithsTopic.filter(h => !shownH.has(h.id)).slice(0, 4);
+    const linkedD = r.duasTopic.filter(d => !shownD.has(d.id)).slice(0, 3);
+    const otherTopics = r.topics.filter(t => !answer || !answer.topic || t.topic.id !== answer.topic.id).slice(0, answer ? 2 : 1);
+    if (linkedV.length + linkedH.length + linkedD.length + r.surahs.length + (answer ? otherTopics.length : 0) > 0) {
+      parts.push(`<div class="result-cat">🔗 Résultats liés</div>`);
+      if (!answer && otherTopics.length) parts.push(otherTopics.map(t => topicCard(t.topic)).join(''));
+      if (r.surahs.length) {
+        parts.push(r.surahs.map(s => `
+          <a class="list-item" href="#/quran/s/${s.n}">
+            <div class="num">${s.n}</div>
+            <div class="t"><b>${esc(s.phonetic)}</b><small>${esc(s.fr)} · ${s.verses} versets</small></div>
+            <div class="arname">${esc(s.name)}</div>
+          </a>`).join(''));
+      }
+      if (linkedV.length) {
+        const getT = await enrich(linkedV, 5);
+        parts.push(linkedV.map(v => verseCard(v, meta(v.s), q, getT(v))).join(''));
+      }
+      if (linkedH.length) parts.push(linkedH.map(h => hadithCard(h, q)).join(''));
+      if (linkedD.length) parts.push(linkedD.map(d => duaCardMini(d, q)).join(''));
+      if (answer && otherTopics.length) parts.push(otherTopics.map(t => topicCard(t.topic)).join(''));
+    }
+
     if (!answer) {
       parts.push(`<div class="notice">Résultats issus exclusivement des textes de l'application, avec leurs sources.
-        « Correspondance exacte » = vos mots apparaissent dans le texte ;
-        « Lié au sujet » = passage référencé pour ce thème dans notre base vérifiée.</div>`);
+        « Correspondance exacte » = vos mots apparaissent dans le texte ·
+        « Correspondance phonétique » = proche de l'arabe que vous avez écrit en lettres latines ·
+        « Par le sens » = passage référencé pour ce thème dans notre base vérifiée.</div>`);
     }
     results.innerHTML = parts.join('');
     window.scrollTo({ top: 0 });

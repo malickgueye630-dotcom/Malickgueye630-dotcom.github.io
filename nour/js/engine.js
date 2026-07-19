@@ -89,6 +89,75 @@ async function loadQuranAr() {
   return QURAN_AR;
 }
 
+// ---------------- compréhension de la requête ----------------
+// Vocabulaire construit uniquement à partir de la base locale (sujets, lexique,
+// invocations, sourates, thèmes de hadiths). Chaque mot inconnu de la requête
+// est rapproché du mot du vocabulaire le plus proche (distance d'édition
+// bornée) : « médizance » → « médisance », « trahizon » → « trahison ».
+// Aucune génération : on ne fait que corriger vers des mots existants.
+function buildVocab(base) {
+  const vocab = new Map(); // racine → mot canonique
+  const add = w => {
+    for (const part of fold(w).split(/[\s':]+/)) {
+      if (part.length < 4 || STOP.has(part) || /\d/.test(part)) continue;
+      const st = stem(part);
+      if (!vocab.has(st)) vocab.set(st, part);
+    }
+  };
+  for (const t of base.topics.topics) { t.keys.forEach(add); add(t.label); add(t.desc || ''); }
+  for (const g of base.topics.lexicon) g.forEach(add);
+  for (const d of base.allDuas) { add(d.title); add(d.catName); }
+  for (const s of base.idx.surahs) { add(s.phonetic); add(s.fr); }
+  for (const k in base.hfr.themes) add(base.hfr.themes[k]);
+  return vocab;
+}
+
+// corrige les fautes de frappe token par token ; retourne aussi la liste des
+// corrections pour que l'interface puisse afficher « compris comme… »
+const STOP_WORDS = [...STOP].filter(w => w.length >= 4);
+// forme lisible de quelques mots-outils pour l'affichage « compris comme… »
+const STOP_PRETTY = { quelqu: "quelqu'un", quelquun: "quelqu'un", lorsqu: 'lorsque' };
+function correctTokens(toks, base) {
+  if (!base._vocab) base._vocab = buildVocab(base);
+  const vocab = base._vocab;
+  const corrections = [];
+  const out = toks.map(tok => {
+    const st = stem(tok);
+    if (vocab.has(st)) return tok;
+    // mot déjà reconnu par préfixe long → pas de correction nécessaire
+    for (const vs of vocab.keys()) {
+      if (vs.length >= 4 && (st.startsWith(vs) || vs.startsWith(st)) && Math.abs(vs.length - st.length) <= 2) return tok;
+    }
+    const max = tok.length >= 9 ? 2 : tok.length >= 4 ? 1 : 0;
+    if (!max) return tok;
+    // faute sur un mot-outil (« quelqun » → « quelqu'un ») → on l'écarte
+    for (const sw of STOP_WORDS) {
+      if (sw[0] === tok[0] && Math.abs(sw.length - tok.length) <= 1 && editDistLe(tok, sw, 1) <= 1) {
+        corrections.push([tok, STOP_PRETTY[sw] || sw]);
+        return null;
+      }
+    }
+    let best = null, bestD = max + 1;
+    for (const [vs, vw] of vocab) {
+      // les fautes de frappe touchent rarement la première lettre
+      if (vs[0] !== st[0] || Math.abs(vs.length - st.length) > max) continue;
+      const d = editDistLe(st, vs, max);
+      if (d < bestD) { bestD = d; best = vw; if (d === 1 && tok.length >= 7) break; }
+    }
+    // second passage sans contrainte de première lettre (« karnayn » → « qarnayn »)
+    if (!best && tok.length >= 6) {
+      for (const [vs, vw] of vocab) {
+        if (Math.abs(vs.length - st.length) > 1) continue;
+        const d = editDistLe(st, vs, 1);
+        if (d <= 1 && d < bestD) { bestD = d; best = vw; break; }
+      }
+    }
+    if (best && bestD <= max) { corrections.push([tok, best]); return best; }
+    return tok;
+  });
+  return { toks: out.filter(t => t !== null), corrections };
+}
+
 // ---------------- correspondance de tokens ----------------
 function editDistLe(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return max + 1;
@@ -152,6 +221,8 @@ function matchTopics(q, toks, base) {
     for (const kt of t._keyTokens) {
       if (stems.has(kt)) overlap += 1;
       else if (base.lex.has(kt) && groups.has(base.lex.get(kt))) overlap += 0.8;
+      // token tronqué (« do » → « dos ») : préfixe à une lettre près
+      else if ([...stems].some(s => s.length >= 2 && kt.startsWith(s) && kt.length - s.length <= 1)) overlap += 0.6;
     }
     if (toks.length && overlap) s = Math.max(s, overlap * 1.4 * (overlap / toks.length));
     if (s > 0.9) out.push({ topic: t, score: s });
@@ -174,12 +245,21 @@ export function isQuestion(q) {
 // ---------------- recherche principale ----------------
 export async function searchAll(q, opts = {}) {
   const base = await loadBase();
-  const toks = tokens(q);
+  const rawToks = tokens(q);
   const hasArabic = /[ء-ۿ]/.test(q);
+  // compréhension : correction des fautes de frappe contre le vocabulaire de la base
+  const { toks, corrections } = hasArabic
+    ? { toks: rawToks, corrections: [] }
+    : correctTokens(rawToks, base);
+  // requête corrigée (pour la correspondance de phrases des sujets)
+  let qFixed = fold(q);
+  for (const [from, to] of corrections) {
+    qFixed = qFixed.replace(new RegExp(`(^| )${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`, 'g'), `$1${to}$2`);
+  }
   const hints = {
-    dua: CONTENT_HINTS.dua.test(fold(q)),
-    quran: CONTENT_HINTS.quran.test(fold(q)),
-    hadith: CONTENT_HINTS.hadith.test(fold(q)),
+    dua: CONTENT_HINTS.dua.test(qFixed),
+    quran: CONTENT_HINTS.quran.test(qFixed),
+    hadith: CONTENT_HINTS.hadith.test(qFixed),
   };
   const contentToks = toks.filter(t =>
     !CONTENT_HINTS.dua.test(t) && !CONTENT_HINTS.quran.test(t) && !CONTENT_HINTS.hadith.test(t));
@@ -187,6 +267,8 @@ export async function searchAll(q, opts = {}) {
 
   const result = {
     query: q,
+    corrections,
+    understood: corrections.length ? qFixed : null,
     question: isQuestion(q),
     hints,
     surahs: [],
@@ -209,8 +291,8 @@ export async function searchAll(q, opts = {}) {
   result.surahs.sort((a, b) => b._s - a._s);
   result.surahs = result.surahs.slice(0, 4);
 
-  // --- sujets (sémantique)
-  const topicMatches = matchTopics(q, useToks, base);
+  // --- sujets (sémantique) — sur la requête corrigée
+  const topicMatches = matchTopics(qFixed, useToks, base);
   result.topics = topicMatches.slice(0, 3);
   // sujet fort : la requête décrit un concept → le sens prime sur les mots isolés
   result.strongTopic = topicMatches.length > 0 && (topicMatches[0].score >= 2.5 || useToks.length >= 3);
@@ -321,10 +403,12 @@ export async function searchAll(q, opts = {}) {
   return result;
 }
 
-// ---------------- réponse structurée (mode question) ----------------
-// Construite uniquement à partir du meilleur sujet + des meilleurs résultats.
+// ---------------- réponse directe (pipeline type RAG, sans génération) ----------------
+// question ou sujet clairement identifié → réponse structurée assemblée
+// UNIQUEMENT à partir du meilleur sujet vérifié + des meilleurs passages de la
+// base ; chaque élément garde sa source. Rien n'est jamais inventé.
 export function buildAnswer(result) {
-  if (!result.question) return null;
+  if (!result.question && !result.strongTopic) return null;
   const t = result.topics[0];
   // en mode question : la base vérifiée du sujet passe TOUJOURS en premier ;
   // les correspondances de mots isolés n'entrent dans la réponse que si elles
