@@ -265,6 +265,7 @@ export async function viewChapter(key, chId) {
         <div class="src"><span class="badge ${gradeClass(frById.get(id).grade)}">Authenticité : ${esc(frById.get(id).grade)}</span>
         <span class="s">${esc(frById.get(id).source)}</span></div>`
       : `<p class="tiny">Traduction française fiable non disponible pour ce hadith — l'arabe fait foi.</p>
+        ${text ? `<div class="mt-slot" data-mt="${id}"><button class="btn btn-ghost mt-btn" data-mtbtn="${id}" style="padding:8px 14px;font-size:.82rem">${icon('translate', 15)} Traduire automatiquement en français</button></div>` : ''}
         ${state.settings.showEnFallback && (narrator || text) ? `<details class="en-tr">
           <summary>Afficher la traduction anglaise (source : Sunnah.com)</summary>
           <p>${narrator ? `<b>${esc(narrator)}</b> ` : ''}${esc(text)}</p>
@@ -280,9 +281,10 @@ export async function viewChapter(key, chId) {
   renderMore();
   more.onclick = renderMore;
 
-  listEl.addEventListener('click', e => {
+  listEl.addEventListener('click', async e => {
     const fav = e.target.closest('[data-fav]');
     const cp = e.target.closest('[data-copy]');
+    const mtb = e.target.closest('[data-mtbtn]');
     if (fav) {
       const id = `${key}:${fav.dataset.fav}`;
       const on = toggleFav('hadiths', id);
@@ -292,6 +294,25 @@ export async function viewChapter(key, chId) {
     } else if (cp) {
       const it = items.find(x => x[0] === +cp.dataset.copy);
       copyText(`${it[1]}\n\n(${col.name}, n° ${it[0]} de la base)`);
+    } else if (mtb) {
+      const it = items.find(x => x[0] === +mtb.dataset.mtbtn);
+      const slot = listEl.querySelector(`.mt-slot[data-mt="${mtb.dataset.mtbtn}"]`);
+      if (!it || !slot) return;
+      const src = [it[2], it[3]].filter(Boolean).join(' — ');
+      slot.innerHTML = `<div class="tiny">${icon('translate', 13)} Traduction en cours…</div>`;
+      try {
+        const { translateEnFr } = await import('./mt.js');
+        const fr = await translateEnFr(it[3]);
+        slot.innerHTML = `
+          <div class="mt-result">
+            <div class="mt-label">${icon('translate', 13)} Traduction automatique depuis l'anglais</div>
+            <p class="fr" style="margin:4px 0 0">${esc(fr)}</p>
+            <p class="tiny" style="margin:6px 0 0">Traduction automatique non officielle — l'arabe fait foi. Source du texte anglais : Sunnah.com.</p>
+          </div>`;
+      } catch {
+        slot.innerHTML = `<div class="tiny">Traduction automatique indisponible (connexion ou service momentanément inaccessible).</div>
+          <button class="btn btn-ghost mt-btn" data-mtbtn="${it[0]}" style="padding:8px 14px;font-size:.82rem;margin-top:6px">${icon('refresh', 14)} Réessayer</button>`;
+      }
     }
   });
 

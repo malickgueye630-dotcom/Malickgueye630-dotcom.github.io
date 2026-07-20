@@ -58,6 +58,24 @@ export function viewAbout() {
           interroge uniquement les textes ci-dessus. Le thésaurus de sujets relie des mots-clés
           français à des passages précis, vérifiés un par un.</li>
       </ul>
+      <p><b>🎨 Interface & localisation</b></p>
+      <ul class="muted" style="padding-left:18px;margin:6px 0">
+        <li>Icônes : <i>Lucide</i> (licence ISC), complétées de quelques tracés originaux
+          (mosquée, Kaaba, tasbih).</li>
+        <li>Illustrations des lieux saints (en-tête de recherche) et des étapes « Apprendre » :
+          dessins vectoriels <b>originaux et stylisés</b> — ce ne sont pas des photographies.</li>
+        <li>Localité précise et mosquée la plus proche : services ouverts d'<i>OpenStreetMap</i>
+          (Nominatim, Overpass — données © contributeurs OSM, licence ODbL), utilisés seulement
+          lorsque vous activez la localisation.</li>
+      </ul>
+      <p><b>🌐 Traduction automatique de secours</b></p>
+      <ul class="muted" style="padding-left:18px;margin:6px 0">
+        <li>Pour les hadiths sans traduction française fiable, une traduction automatique
+          (anglais → français, via l'API <i>MyMemory</i>) peut être demandée. Elle est
+          <b>toujours étiquetée « Traduction automatique depuis l'anglais »</b>, n'est pas une
+          traduction religieuse officielle, et le texte arabe d'origine ainsi que la source
+          restent affichés.</li>
+      </ul>
     </div>
 
     <h2>Avertissement</h2>

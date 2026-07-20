@@ -12,6 +12,50 @@ const seg = (id, opts, cur) => `<div class="seg" data-seg="${id}" style="flex-wr
 const row = (lab, sub, ctrl) => `<div class="setrow"><div class="lab">${lab}${sub ? `<small>${sub}</small>` : ''}</div>${ctrl}</div>`;
 const sw = (k, checked) => `<label class="switch"><input type="checkbox" data-k="${k}" ${checked ? 'checked' : ''}><span class="tr"></span></label>`;
 
+// thèmes de couleurs prédéfinis (au-delà des 4 palettes de base)
+const PRESETS = [
+  ['Océan', { primary: '#1E7FA6', secondary: '#0C2E45', accent: '#E0B45C' }],
+  ['Rubis', { primary: '#B23A55', secondary: '#521424', accent: '#D9A441' }],
+  ['Forêt', { primary: '#2E7D4F', secondary: '#123024', accent: '#CBA14B' }],
+  ['Indigo', { primary: '#4B4F9E', secondary: '#20214A', accent: '#D6A55A' }],
+  ['Turquoise', { primary: '#0E9E8E', secondary: '#083B39', accent: '#E4B45E' }],
+  ['Rose sable', { primary: '#C86B7A', secondary: '#5A2E38', accent: '#D9A441' }],
+  ['Ambre nuit', { primary: '#C08A2E', secondary: '#2A2010', accent: '#E9C766' }],
+  ['Ardoise', { primary: '#4A5568', secondary: '#1E2530', accent: '#C99A53' }],
+];
+const CUR = (c, k, d) => (c && c[k]) || d;
+
+// panneau de personnalisation avancée des couleurs
+function customPanel(s) {
+  const c = s.colors || {};
+  const picker = (k, lab, def) => `<div class="colorpick">
+    <input type="color" data-color="${k}" value="${CUR(c, k, def)}">
+    <span>${lab}</span></div>`;
+  return `
+    <div class="setrow" style="display:block;border-bottom:none;padding-bottom:2px">
+      <div class="lab" style="margin-bottom:8px">Thèmes prédéfinis</div>
+      <div class="preset-row">
+        ${PRESETS.map((p, i) => `<button class="preset" data-preset="${i}" title="${esc(p[0])}"
+          style="background:linear-gradient(135deg, ${p[1].secondary}, ${p[1].primary})"><span style="background:${p[1].accent}"></span></button>`).join('')}
+      </div>
+    </div>
+    <div class="setrow" style="display:block">
+      <div class="lab" style="margin-bottom:8px">Couleurs personnalisées<small>Lisibilité ajustée automatiquement</small></div>
+      <div class="color-grid">
+        ${picker('primary', 'Principale', '#0F8B6D')}
+        ${picker('secondary', 'Secondaire', '#073B3A')}
+        ${picker('accent', 'Accent', '#D4AF6A')}
+        ${picker('bg', 'Fond', '#F7F2E8')}
+        ${picker('card', 'Cartes', '#FFFDFC')}
+        ${picker('button', 'Boutons', '#0F8B6D')}
+      </div>
+      <div class="row" style="gap:10px;margin-top:12px">
+        <button class="btn btn-ghost" id="btnHue" style="flex:1">Mode teinte simple</button>
+        <button class="btn btn-ghost" id="btnResetColors" style="flex:1">Réinitialiser</button>
+      </div>
+    </div>`;
+}
+
 export function viewSettings(section) {
   const s = state.settings;
   const p = prayerSettings();
@@ -22,10 +66,12 @@ export function viewSettings(section) {
 
     <div class="setgroup" id="sec-apparence">
       <h2>${icon('sun', 15)} Apparence</h2>
+      ${row('Votre prénom', 'Affiché dans la salutation d’accueil',
+        `<input type="text" id="userName" value="${esc(s.userName || '')}" maxlength="24" placeholder="Prénom"
+          style="font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--ink);max-width:130px">`)}
       ${row('Mode sombre', 'Clair, sombre ou selon l’iPhone', seg('theme', [['auto', 'Auto'], ['light', 'Clair'], ['dark', 'Sombre']], s.theme))}
       ${row('Thème de couleurs', '', seg('palette', [['emeraude', 'Émeraude'], ['sable', 'Sable'], ['nuit', 'Nuit'], ['lavande', 'Lavande'], ['custom', 'Perso']], s.palette))}
-      <div id="hueRow">${s.palette === 'custom' ? row('Ma couleur', 'Glissez pour choisir la teinte principale',
-        `<input type="range" id="hueSlider" min="0" max="359" value="${s.customHue ?? 165}" style="width:150px;accent-color:var(--brand)">`) : ''}</div>
+      <div id="hueRow">${s.palette === 'custom' ? customPanel(s) : ''}</div>
       ${row('Taille de l’interface', '', seg('uiScale', [[0.92, 'A'], [1, 'A'], [1.1, 'A'], [1.2, 'A']], s.uiScale))}
       ${row('Format de l’heure', '', seg('timeFmt', [['24', '24 h'], ['12', '12 h']], s.timeFmt))}
       ${row('Vibrations', 'Retour au toucher : Tasbih, Qibla…', sw('haptics', s.haptics))}
@@ -106,11 +152,8 @@ export function viewSettings(section) {
       save(); applyTheme(); applySizes();
       segEl.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === e.target));
       if (key === 'palette') {
-        document.getElementById('hueRow').innerHTML = val === 'custom'
-          ? row('Ma couleur', 'Glissez pour choisir la teinte principale',
-              `<input type="range" id="hueSlider" min="0" max="359" value="${s.customHue ?? 165}" style="width:150px;accent-color:var(--brand)">`)
-          : '';
-        bindHue();
+        document.getElementById('hueRow').innerHTML = val === 'custom' ? customPanel(s) : '';
+        bindColorPanel();
       }
     };
   });
@@ -122,10 +165,31 @@ export function viewSettings(section) {
     // les deux interrupteurs « vibrations » (Apparence / Qibla) restent synchronisés
     if (k === 'haptics') root.querySelectorAll('input[data-k="haptics"]').forEach(i => { i.checked = inp.checked; });
   });
-  const bindHue = () => document.getElementById('hueSlider')?.addEventListener('input', e => {
-    s.customHue = +e.target.value; save(); applyTheme();
-  });
-  bindHue();
+  const bindColorPanel = () => {
+    document.getElementById('hueSlider')?.addEventListener('input', e => {
+      s.customHue = +e.target.value; save(); applyTheme();
+    });
+    root.querySelectorAll('[data-color]').forEach(inp => inp.oninput = () => {
+      s.colors = { ...(s.colors || {}), [inp.dataset.color]: inp.value };
+      save(); applyTheme();
+    });
+    root.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => {
+      s.colors = { ...PRESETS[+btn.dataset.preset][1] };
+      save(); applyTheme(); viewSettings('apparence');
+    });
+    document.getElementById('btnResetColors')?.addEventListener('click', () => {
+      s.colors = null; save(); applyTheme(); viewSettings('apparence');
+    });
+    document.getElementById('btnHue')?.addEventListener('click', () => {
+      s.colors = null; save();
+      document.getElementById('hueRow').innerHTML = row('Ma couleur', 'Glissez pour choisir la teinte principale',
+        `<input type="range" id="hueSlider" min="0" max="359" value="${s.customHue ?? 165}" style="width:150px;accent-color:var(--brand)">`);
+      applyTheme(); bindColorPanel();
+    });
+  };
+  bindColorPanel();
+  const uname = document.getElementById('userName');
+  if (uname) uname.oninput = () => { s.userName = uname.value.trim().slice(0, 24); save(); };
   root.querySelector('#selReciter').onchange = e => { s.reciter = e.target.value; save(); };
   root.querySelector('#selMethod').onchange = e => { p.method = e.target.value; save(); toast('Méthode enregistrée'); };
   root.querySelector('#btnGeoSet').onclick = async e => {

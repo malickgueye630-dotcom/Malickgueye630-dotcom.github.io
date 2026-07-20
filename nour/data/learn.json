@@ -1,0 +1,41 @@
+{
+  "guides": [
+    {
+      "id": "wudu",
+      "title": "Les ablutions (wudû’)",
+      "subtitle": "La purification avant la prière",
+      "icon": "droplet",
+      "intro": "Le wudû’ est la purification rituelle accomplie avant la prière. Voici la méthode générale, telle que décrite dans la Sunna. De légères différences existent entre les écoles ; en cas de doute, demandez à un imam.",
+      "steps": [
+        { "fig": "heart", "title": "L’intention (niyya)", "fr": "Ayez l’intention, dans le cœur, de faire les ablutions pour Allah. Aucune formule prononcée à voix haute n’est requise.", "ar": "بِسْمِ اللَّهِ", "tl": "Bismi-Llâh", "trad": "Au nom d’Allah", "note": "On commence en disant « Bismi-Llâh »." },
+        { "fig": "hands", "title": "Laver les mains", "fr": "Lavez vos deux mains jusqu’aux poignets, trois fois, en commençant par la droite." },
+        { "fig": "mouth", "title": "Rincer la bouche", "fr": "Prenez de l’eau dans la main droite et rincez la bouche trois fois (al-madmada)." },
+        { "fig": "nose", "title": "Aspirer l’eau par le nez", "fr": "Aspirez un peu d’eau par le nez puis expulsez-la, trois fois (al-istinshâq)." },
+        { "fig": "face", "title": "Laver le visage", "fr": "Lavez tout le visage, du front au menton et d’une oreille à l’autre, trois fois." },
+        { "fig": "arm", "title": "Laver les bras", "fr": "Lavez le bras droit jusqu’au coude trois fois, puis le bras gauche de même." },
+        { "fig": "head", "title": "Essuyer la tête", "fr": "Passez les mains humides sur la tête une fois (al-mash‘), de l’avant vers l’arrière, puis essuyez les oreilles." },
+        { "fig": "foot", "title": "Laver les pieds", "fr": "Lavez le pied droit jusqu’à la cheville trois fois, puis le pied gauche, en passant entre les orteils." },
+        { "fig": "sparkle", "title": "L’invocation finale", "fr": "Après le wudû’, il est recommandé de dire :", "ar": "أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ", "tl": "Ash-hadou an lâ ilâha illâ-Llâhou wahdahou lâ charîka lah, wa ash-hadou anna Mouhammadan ‘abdouhou wa rasoûlouh", "trad": "J’atteste qu’il n’y a de divinité digne d’adoration qu’Allah, Seul, sans associé, et j’atteste que Muhammad est Son serviteur et Son messager.", "note": "Rapporté par Mouslim." }
+      ],
+      "source": "Méthode générale d’après le Coran (sourate 5, verset 6) et la Sunna (al-Bukhârî, Mouslim)."
+    },
+    {
+      "id": "salat",
+      "title": "La prière (salât)",
+      "subtitle": "Une unité (rak‘a) expliquée pas à pas",
+      "icon": "mosque",
+      "intro": "Voici le déroulement d’une prière, présenté de façon simplifiée pour débuter. La prière se compose d’unités (rak‘ât). Les détails varient selon les écoles : apprenez idéalement auprès d’un imam ou d’un enseignant qualifié.",
+      "steps": [
+        { "fig": "stand", "title": "L’intention et le takbîr", "fr": "Tenez-vous debout, tourné vers la Qibla. Formulez l’intention dans le cœur, levez les mains et dites :", "ar": "اللَّهُ أَكْبَرُ", "tl": "Allâhou akbar", "trad": "Allah est le plus grand." },
+        { "fig": "stand", "title": "La récitation debout (qiyâm)", "fr": "Récitez la sourate Al-Fâtiha, puis une autre sourate ou quelques versets.", "ar": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "tl": "Bismi-Llâhi r-Rahmâni r-Rahîm", "trad": "Au nom d’Allah, le Tout-Miséricordieux, le Très-Miséricordieux.", "note": "Al-Fâtiha est obligatoire dans chaque rak‘a." },
+        { "fig": "ruku", "title": "L’inclinaison (rukû‘)", "fr": "Inclinez-vous, dos droit, mains sur les genoux, et dites trois fois :", "ar": "سُبْحَانَ رَبِّيَ الْعَظِيمِ", "tl": "Soubhâna Rabbiya-l-‘Adhîm", "trad": "Gloire à mon Seigneur, le Très-Grand." },
+        { "fig": "stand", "title": "Le redressement (i‘tidâl)", "fr": "Relevez-vous en disant, puis une fois debout :", "ar": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ، رَبَّنَا وَلَكَ الْحَمْدُ", "tl": "Sami‘a-Llâhou liman hamidah, Rabbanâ wa laka-l-hamd", "trad": "Allah entend celui qui Le loue. Notre Seigneur, à Toi la louange." },
+        { "fig": "sujud", "title": "La prosternation (soujoûd)", "fr": "Prosternez-vous, le front, le nez, les paumes, les genoux et les orteils au sol, et dites trois fois :", "ar": "سُبْحَانَ رَبِّيَ الْأَعْلَىٰ", "tl": "Soubhâna Rabbiya-l-A‘lâ", "trad": "Gloire à mon Seigneur, le Très-Haut." },
+        { "fig": "sit", "title": "L’assise entre les deux prosternations", "fr": "Redressez-vous en position assise, puis dites :", "ar": "رَبِّ اغْفِرْ لِي", "tl": "Rabbi-ghfir lî", "trad": "Seigneur, pardonne-moi.", "note": "Puis prosternez-vous une seconde fois de la même manière." },
+        { "fig": "sit", "title": "Le tashahhoud", "fr": "Après deux rak‘ât, restez assis et récitez le tashahhoud :", "ar": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...", "tl": "At-tahiyyâtou li-Llâhi wa-s-salawâtou wa-t-tayyibât…", "trad": "Les salutations, les prières et les bonnes œuvres appartiennent à Allah…", "note": "On y ajoute la prière sur le Prophète ﷺ. Texte complet à apprendre auprès d’un enseignant." },
+        { "fig": "salam", "title": "Le salut final (taslîm)", "fr": "Terminez en tournant le visage à droite puis à gauche, en disant à chaque fois :", "ar": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ", "tl": "As-salâmou ‘alaykoum wa rahmatou-Llâh", "trad": "Que la paix et la miséricorde d’Allah soient sur vous." }
+      ],
+      "source": "Déroulement général d’après la Sunna (al-Bukhârî, Mouslim). Le nombre de rak‘ât et certains détails dépendent de la prière et de l’école juridique."
+    }
+  ]
+}

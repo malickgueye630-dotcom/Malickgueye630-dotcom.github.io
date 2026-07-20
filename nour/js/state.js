@@ -19,6 +19,8 @@ const defaults = {
     haptics: true,            // vibrations (tasbih, qibla)
     showEnFallback: false,    // traduction anglaise de secours dans les recueils
     customHue: 165,           // teinte de la couleur personnalisée
+    userName: 'Malick',       // prénom affiché dans la salutation
+    colors: null,             // personnalisation avancée {primary,accent,bgHue,...}
     arFont: 'amiri',          // amiri | system — police du texte arabe
     tajwid: false,            // coloration tajwid simplifiée (qalqala, ghunna, madd)
     readingTheme: 'normal',   // normal | sepia | vert — fond du lecteur Coran
@@ -134,20 +136,71 @@ export function pushHistory(q) {
   save();
 }
 
+// ---------- utilitaires couleur (personnalisation avancée) ----------
+const CUSTOM_VARS = ['--brand', '--brand-2', '--brand-3', '--gold', '--gold-soft',
+  '--bg', '--bg-soft', '--card', '--card-2', '--ink', '--ink-2', '--ink-3', '--line',
+  '--hero-grad', '--btn-bg', '--btn-ink'];
+const hex2rgb = h => {
+  h = h.replace('#', '');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+};
+const rgb2hex = ([r, g, b]) => '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+const mix = (a, b, t) => { const A = hex2rgb(a), B = hex2rgb(b); return rgb2hex([0, 1, 2].map(i => A[i] + (B[i] - A[i]) * t)); };
+// luminance relative perçue (0 sombre → 1 clair)
+const lum = h => { const [r, g, b] = hex2rgb(h).map(v => v / 255); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const readableInk = bg => lum(bg) > 0.55 ? '#17211F' : '#F3F1EA';
+
+// applique une personnalisation complète et TOUJOURS lisible à partir de
+// quelques couleurs choisies par l'utilisateur
+export function applyColors(dark) {
+  const c = state.settings.colors;
+  const r = document.documentElement.style;
+  if (!c) { CUSTOM_VARS.forEach(v => r.removeProperty(v)); return; }
+  const primary = c.primary || '#0F8B6D';
+  const secondary = c.secondary || mix(primary, '#000000', 0.5);
+  const accent = c.accent || '#D4AF6A';
+  const bg = c.bg || (dark ? '#0A1412' : '#F7F2E8');
+  const card = c.card || (dark ? '#13211E' : '#FFFDFC');
+  const btn = c.button || primary;
+  const ink = readableInk(bg);
+  const cardInk = readableInk(card);
+  r.setProperty('--brand', primary);
+  r.setProperty('--brand-2', secondary);
+  r.setProperty('--brand-3', mix(primary, '#ffffff', 0.28));
+  r.setProperty('--gold', accent);
+  r.setProperty('--gold-soft', mix(accent, card, 0.75));
+  r.setProperty('--bg', bg);
+  r.setProperty('--bg-soft', mix(bg, ink, 0.07));
+  r.setProperty('--card', card);
+  r.setProperty('--card-2', mix(card, cardInk, 0.045));
+  r.setProperty('--ink', cardInk);
+  r.setProperty('--ink-2', mix(cardInk, card, 0.32));
+  r.setProperty('--ink-3', mix(cardInk, card, 0.52));
+  r.setProperty('--line', mix(card, cardInk, 0.14));
+  r.setProperty('--hero-grad', `linear-gradient(150deg, ${secondary} 0%, ${primary} 60%, ${mix(primary, '#ffffff', 0.22)} 100%)`);
+  r.setProperty('--btn-bg', btn);
+  r.setProperty('--btn-ink', lum(btn) > 0.6 ? '#17211F' : '#FFFFFF');
+}
+
 export function applyTheme() {
   const t = state.settings.theme;
   const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   document.documentElement.dataset.palette = state.settings.palette || 'emeraude';
-  // couleur personnalisée : dérive les couleurs de marque de la teinte choisie
   const r = document.documentElement.style;
-  if (state.settings.palette === 'custom') {
+  // 1) personnalisation avancée (prioritaire)
+  if (state.settings.palette === 'custom' && state.settings.colors) {
+    applyColors(dark);
+  } else if (state.settings.palette === 'custom') {
+    // 2) mode « une seule teinte » (curseur)
+    CUSTOM_VARS.forEach(v => r.removeProperty(v));
     const h = state.settings.customHue ?? 165;
     r.setProperty('--brand', `hsl(${h} 62% ${dark ? 55 : 34}%)`);
     r.setProperty('--brand-2', `hsl(${h} 55% 18%)`);
     r.setProperty('--hero-grad', `linear-gradient(140deg, hsl(${h} 55% 15%) 0%, hsl(${h} 58% 30%) 55%, hsl(${(h + 22) % 360} 50% 42%) 100%)`);
   } else {
-    r.removeProperty('--brand'); r.removeProperty('--brand-2'); r.removeProperty('--hero-grad');
+    CUSTOM_VARS.forEach(v => r.removeProperty(v));
   }
 }
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);

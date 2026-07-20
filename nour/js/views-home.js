@@ -7,6 +7,7 @@ import { icon } from './icons.js';
 import { state } from './state.js';
 import * as data from './data.js';
 import { hasLocation, nextPrayer, timesFor, fmtCountdown, PRAYERS, prayerSettings } from './prayer.js';
+import { mountHeroScene, scenePeriod } from './scenes.js';
 
 const DAILY_VERSES = [
   [2, 152], [2, 186], [2, 255], [2, 286], [3, 139], [3, 159], [3, 173],
@@ -56,7 +57,7 @@ export async function viewHome() {
     ['kaaba', 'Qibla', '#/qibla'],
     ['hands', 'Douas', '#/duas'],
     ['library', 'Hadiths', '#/hadith'],
-    ['sunrise', 'Adhkar', '#/duas/matin-soir'],
+    ['learn', 'Apprendre', '#/learn'],
     ['beads', 'Tasbih', '#/tasbih'],
   ];
 
@@ -77,7 +78,7 @@ export async function viewHome() {
     <div class="hero">
       <div class="row" style="justify-content:space-between">
         <div>
-          <div class="salam">As-salâmou 'alaykoum</div>
+          <div class="salam">As-salâmou 'alaykoum${state.settings.userName ? ` <b style="font-weight:800;text-transform:none;letter-spacing:0">${esc(state.settings.userName)}</b>` : ''}</div>
           <div style="font-size:.74rem;opacity:.85;margin-top:3px">${esc(frDate())} · ${esc(hijriDate())}</div>
           ${p.city ? `<div style="font-size:.72rem;opacity:.72;margin-top:1px">${icon('location', 11)} ${esc(p.city)}</div>` : ''}
         </div>
@@ -181,7 +182,14 @@ export async function viewHome() {
     <p class="tiny center" style="margin-top:26px">
       Nour — Coran, hadiths &amp; invocations. <a href="#/about" style="color:var(--brand)">Sources &amp; crédits</a>
     </p>
+    <p class="signature">Conçu par Malick Gueye, alias Lecce</p>
   `;
+  // scène cinématographique derrière la recherche (adaptée à l'heure réelle)
+  try {
+    const hero = $view.querySelector('.hero');
+    const t = hasLocation() ? timesFor(new Date()) : null;
+    mountHeroScene(hero, scenePeriod(t));
+  } catch {}
   document.getElementById('homeSearch').onclick = () => { location.hash = '#/search'; };
   document.getElementById('btnSettingsHero').onclick = () => openSettings();
 

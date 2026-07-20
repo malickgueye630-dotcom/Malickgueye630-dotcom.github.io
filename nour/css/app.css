@@ -290,8 +290,8 @@ h2 { font-size: 1.06rem; margin: 20px 2px 8px; letter-spacing: -.01em; }
 
 .btn {
   appearance: none; border: none; cursor: pointer;
-  background: var(--brand);
-  color: #fff;
+  background: var(--btn-bg, var(--brand));
+  color: var(--btn-ink, #fff);
   font: inherit; font-weight: 650; font-size: .92rem;
   padding: 11px 18px;
   border-radius: 14px;
@@ -355,7 +355,54 @@ h2 { font-size: 1.06rem; margin: 20px 2px 8px; letter-spacing: -.01em; }
   background-size: 96px 96px;
   pointer-events: none;
 }
-.hero .salam { font-size: .8rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; opacity: .78; }
+/* ---------- scène cinématographique derrière la recherche ---------- */
+.hero-scene { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hero-scene .scene-frame {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 2.4s ease;
+  will-change: opacity;
+}
+.hero-scene .scene-frame.on { opacity: 1; }
+.scene-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* très lent mouvement de caméra : dérive + respiration */
+.hero-scene .scene-frame.on .scene-city { animation: cam-drift 34s ease-in-out infinite alternate; }
+.hero-scene .scene-frame.on .scene-svg { animation: cam-zoom 40s ease-in-out infinite alternate; }
+@keyframes cam-drift { from { transform: translateX(-6px); } to { transform: translateX(6px); } }
+@keyframes cam-zoom { from { transform: scale(1.04); } to { transform: scale(1.11); } }
+.scene-orb { animation: orb-rise 44s ease-in-out infinite alternate; }
+@keyframes orb-rise { from { transform: translateY(6px); } to { transform: translateY(-4px); } }
+.scene-stars { animation: twinkle 4s ease-in-out infinite; }
+/* particules discrètes qui montent doucement */
+.hero-scene::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 80%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.2px 1.2px at 62% 88%, rgba(255,255,255,.4), transparent 60%),
+    radial-gradient(1.3px 1.3px at 82% 74%, rgba(255,255,255,.45), transparent 60%),
+    radial-gradient(1px 1px at 38% 92%, rgba(255,255,255,.35), transparent 60%);
+  animation: particles 14s linear infinite;
+  opacity: .7;
+}
+@keyframes particles { from { transform: translateY(0); } to { transform: translateY(-26px); } }
+/* voile : garantit la lisibilité du texte clair et de la barre de recherche */
+.scene-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6,20,18,.52) 0%, rgba(6,20,18,.18) 34%, rgba(6,20,18,.30) 66%, rgba(6,20,18,.62) 100%);
+}
+.scene-caption {
+  position: absolute; left: 16px; bottom: 10px; z-index: 1;
+  font-size: .62rem; letter-spacing: .04em; color: rgba(255,255,255,.72);
+  display: inline-flex; align-items: center; gap: 5px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+.scene-caption::before { content: "◈"; opacity: .6; }
+.hero > .row, .hero > .basmala, .hero > .sub, .hero > .searchbox { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene .scene-city, .hero-scene .scene-svg, .scene-orb, .scene-stars, .hero-scene::after { animation: none; }
+}
+
+.hero .salam { font-size: .8rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; opacity: .82; text-shadow: 0 1px 4px rgba(0,0,0,.35); }
 .hero .basmala { font-family: 'Amiri', serif; font-size: 1.65rem; margin: 6px 0 2px; direction: rtl; text-align: center; line-height: 1.9; }
 .hero .sub { text-align: center; font-size: .82rem; opacity: .82; margin-bottom: 14px; }
 .searchbox {
@@ -782,6 +829,9 @@ mark { background: var(--gold-soft); color: inherit; border-radius: 4px; padding
 .prayer-row .pn { flex: 1; display: flex; align-items: center; gap: 9px; }
 .prayer-row .pill { font-size: .62rem; font-weight: 800; letter-spacing: .06em; color: #fff; background: var(--brand); padding: 3px 8px; border-radius: 999px; }
 .badge-en { background: var(--bg-soft); color: var(--ink-3); }
+.mt-slot { margin-top: 8px; }
+.mt-result { background: var(--card-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.mt-label { font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--brand); display: flex; align-items: center; gap: 5px; }
 details.en-tr summary { cursor: pointer; color: var(--ink-3); font-size: .78rem; font-weight: 600; margin-top: 6px; }
 details.en-tr p { color: var(--ink-2); font-size: .86rem; }
 
@@ -873,6 +923,55 @@ details.en-tr p { color: var(--ink-2); font-size: .86rem; }
 }
 .ai-hero b { font-size: 1.02rem; }
 .ai-hero p { margin: 4px 0 0; font-size: .8rem; opacity: .85; }
+
+/* ---------- Apprendre ---------- */
+.learn-card { display: flex; align-items: center; gap: 13px; text-decoration: none; color: inherit; }
+.learn-card .learn-ic {
+  flex: none; width: 48px; height: 48px; display: grid; place-items: center;
+  border-radius: 15px; color: #fff; background: var(--hero-grad);
+}
+.learn-card b { font-size: 1rem; }
+.learn-card small { display: block; color: var(--ink-3); font-size: .78rem; }
+.learn-step { padding: 14px 16px; }
+.learn-step-head { display: flex; align-items: center; gap: 11px; margin-bottom: 4px; }
+.learn-num {
+  flex: none; width: 26px; height: 26px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--brand); color: #fff; font-weight: 800; font-size: .82rem;
+}
+.learn-fig {
+  flex: none; width: 44px; height: 44px; color: var(--brand);
+  background: var(--bg-soft); border-radius: 12px; padding: 5px;
+}
+.learn-fig svg { width: 100%; height: 100%; }
+.learn-step-head b { font-size: .98rem; }
+
+/* ---------- personnalisation des couleurs ---------- */
+.preset-row { display: flex; gap: 9px; overflow-x: auto; padding: 2px 0 6px; scrollbar-width: none; }
+.preset-row::-webkit-scrollbar { display: none; }
+.preset {
+  flex: none; width: 42px; height: 42px; border-radius: 13px; border: 1px solid var(--line);
+  position: relative; cursor: pointer; box-shadow: var(--shadow);
+  transition: transform .12s var(--ease);
+}
+.preset:active { transform: scale(.9); }
+.preset span { position: absolute; right: 4px; bottom: 4px; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.85); }
+.color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
+.colorpick { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: .72rem; color: var(--ink-2); font-weight: 600; }
+.colorpick input[type="color"] {
+  width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 12px;
+  background: none; cursor: pointer; padding: 3px;
+}
+.colorpick input[type="color"]::-webkit-color-swatch { border: none; border-radius: 9px; }
+.colorpick input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+
+/* signature discrète en pied de page */
+.signature {
+  text-align: center; margin: 8px 0 4px;
+  font-size: .72rem; letter-spacing: .04em; color: var(--ink-3);
+  font-style: italic;
+}
+.signature::before { content: "﴾ "; opacity: .5; font-style: normal; }
+.signature::after { content: " ﴿"; opacity: .5; font-style: normal; }
 
 /* appui générique : toute carte/ligne cliquable réagit au doigt */
 a.card:active, .hcard:active { transform: scale(.985); }

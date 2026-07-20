@@ -1,5 +1,5 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v7';
+const VERSION = 'nour-v8';
 const SHELL = [
   './',
   'index.html',
@@ -7,6 +7,7 @@ const SHELL = [
   'js/app.js', 'js/state.js', 'js/data.js', 'js/search.js',
   'js/engine.js', 'js/phonetic.js', 'js/translit.js', 'js/prayer.js', 'js/notify.js',
   'js/icons.js', 'js/views-qibla.js', 'js/views-tasbih.js', 'js/views-more.js', 'js/views-settings.js',
+  'js/scenes.js', 'js/views-learn.js', 'js/geo.js', 'data/learn.json',
   'js/vendor/adhan.esm.min.js',
   'js/views-home.js', 'js/views-quran.js', 'js/views-search.js', 'js/views-prayer.js',
   'js/views-hadith.js', 'js/views-duas.js', 'js/views-favorites.js', 'js/views-about.js',

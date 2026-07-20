@@ -24,6 +24,8 @@ function currentPrayer(t, now) {
 export async function viewPrayer() {
   clearInterval(tick);
   const p = prayerSettings();
+  let mosque; // undefined = non cherchée, null = échec, objet = trouvée
+  let mosqueKey = null; // coordonnées pour lesquelles la recherche a été faite
 
   const render = () => {
     const now = new Date();
@@ -74,6 +76,14 @@ export async function viewPrayer() {
               ${bellOn ? iconFilled('bell', 18) : icon('bell', 18)}</button>` : '<span style="width:34px"></span>'}
           </div>`;
         }).join('')}
+      </div>
+
+      <div class="card" id="nearMosque" style="padding:12px 16px">
+        <div class="row"><span style="color:var(--brand)">${icon('mosque', 22)}</span>
+        <div class="grow"><b>Mosquée la plus proche</b><br>
+          <span class="tiny" id="nmText">${mosque === undefined ? 'Recherche en cours…' : mosque ? `${esc(mosque.name)} — ${mosque.dist < 1 ? Math.round(mosque.dist * 1000) + ' m' : mosque.dist.toFixed(1) + ' km'}` : 'Non trouvée à proximité (ou hors-ligne)'}</span></div>
+        ${mosque ? `<a class="btn-icon" href="https://www.openstreetmap.org/?mlat=${mosque.lat}&mlon=${mosque.lon}#map=17/${mosque.lat}/${mosque.lon}" target="_blank" rel="noopener" aria-label="Voir sur la carte">${icon('navigation', 18)}</a>` : ''}
+        </div>
       </div>`}
 
       <h2>Localisation &amp; calcul</h2>
@@ -184,8 +194,29 @@ export async function viewPrayer() {
     catch { toast('Géolocalisation refusée — choisissez une ville'); cityPicker(); }
   };
 
+  // recherche de la mosquée la plus proche (une seule fois par position)
+  async function findMosque() {
+    if (!hasLocation()) return;
+    const key = `${p.lat},${p.lon}`;
+    if (mosqueKey === key) return; // déjà cherchée pour cette position
+    mosqueKey = key;
+    try {
+      const { nearestMosque } = await import('./geo.js');
+      mosque = await nearestMosque(p.lat, p.lon);
+    } catch { mosque = null; }
+    const el = document.getElementById('nmText');
+    if (el && mosque) {
+      el.textContent = `${mosque.name} — ${mosque.dist < 1 ? Math.round(mosque.dist * 1000) + ' m' : mosque.dist.toFixed(1) + ' km'}`;
+      const link = document.querySelector('#nearMosque a');
+      // le lien apparaîtra au prochain rendu ; on met simplement le texte à jour ici
+    } else if (el) {
+      el.textContent = 'Non trouvée à proximité (ou hors-ligne)';
+    }
+  }
+
   function bind() {
     const $ = id => document.getElementById(id);
+    if (hasLocation() && mosque === undefined) findMosque();
     $('btnGeo')?.addEventListener('click', e => doGeo(e.target));
     $('btnGeo2')?.addEventListener('click', e => doGeo(e.target));
     $('btnCity')?.addEventListener('click', cityPicker);

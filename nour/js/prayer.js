@@ -104,9 +104,19 @@ export function geolocate() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) return reject(new Error('Géolocalisation non disponible'));
     navigator.geolocation.getCurrentPosition(
-      pos => { setLocation(pos.coords.latitude, pos.coords.longitude, 'Ma position'); resolve(pos); },
+      async pos => {
+        const { latitude, longitude } = pos.coords;
+        // position d'abord (fiable), puis nom précis de la localité si le réseau répond
+        setLocation(latitude, longitude, 'Ma position');
+        try {
+          const { reverseGeocode } = await import('./geo.js');
+          const city = await reverseGeocode(latitude, longitude);
+          if (city) setLocation(latitude, longitude, city);
+        } catch { /* hors-ligne / refus : on garde les coordonnées */ }
+        resolve(pos);
+      },
       err => reject(err),
-      { enableHighAccuracy: false, timeout: 12000, maximumAge: 600000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
     );
   });
 }

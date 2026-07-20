@@ -14,6 +14,7 @@ import { viewQibla } from './views-qibla.js';
 import { viewTasbih } from './views-tasbih.js';
 import { viewMore } from './views-more.js';
 import { viewSettings } from './views-settings.js';
+import { viewLearn, viewLearnGuide } from './views-learn.js';
 import { startScheduler, notifGranted } from './notify.js';
 
 export const $view = document.getElementById('view');
@@ -195,6 +196,8 @@ const routes = [
   [/^#\/qibla$/, () => viewQibla()],
   [/^#\/tasbih$/, () => viewTasbih()],
   [/^#\/more$/, () => viewMore()],
+  [/^#\/learn$/, () => viewLearn()],
+  [/^#\/learn\/([\w-]+)$/, (m) => viewLearnGuide(m[1])],
   [/^#\/settings(?:\?.*)?$/, () => viewSettings((location.hash.match(/[?&]sec=([\w-]+)/) || [])[1] || null)],
   [/^#\/hadith\/([\w-]+)\/(\d+)(?:\?.*)?$/, (m) => viewChapter(m[1], +m[2])],
   [/^#\/hadith\/([\w-]+)$/, (m) => viewCollection(m[1])],
@@ -242,7 +245,7 @@ function updateTabs(hash) {
   const tab = hash.startsWith('#/quran') ? 'quran'
     : hash.startsWith('#/search') ? 'search'
     : hash.startsWith('#/prayer') ? 'prayer'
-    : /^#\/(hadith|duas|more|tasbih|qibla|favorites|settings|about)/.test(hash) ? 'more'
+    : /^#\/(hadith|duas|more|tasbih|qibla|favorites|settings|about|learn)/.test(hash) ? 'more'
     : 'home';
   document.querySelectorAll('#tabbar a').forEach(a =>
     a.classList.toggle('active', a.dataset.tab === tab));

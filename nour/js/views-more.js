@@ -4,6 +4,10 @@ import { $view, esc, hijriDate, frDate } from './app.js';
 import { icon } from './icons.js';
 
 const GROUPS = [
+  ['Apprendre', [
+    ['droplet', '#0F8B6D,#39C6A3', 'Les ablutions', 'Le wudû’ pas à pas, en images', '#/learn/wudu'],
+    ['mosque', '#073B3A,#0F8B6D', 'La prière', 'Une rak‘a expliquée, en images', '#/learn/salat'],
+  ]],
   ['Bibliothèque', [
     ['library', '#101F3E,#23456E', 'Hadiths', 'Les 6 grands recueils, thèmes et filtres', '#/hadith'],
     ['hands', '#0F8B6D,#39C6A3', 'Douas', 'Invocations authentiques par situation', '#/duas'],
