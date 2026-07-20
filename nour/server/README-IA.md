@@ -16,7 +16,47 @@ moteur de recherche de l'app. Elle est **désactivée par défaut**.
 
 ---
 
-## Déploiement gratuit (Cloudflare Workers AI) — recommandé
+## Méthode A — Sans terminal, tout dans le navigateur (recommandée)
+
+La plus simple si vous n'êtes pas développeur. Aucune installation.
+
+### 1. Créez un compte Cloudflare (gratuit)
+https://dash.cloudflare.com/sign-up
+
+### 2. Créez un Worker
+Tableau de bord → menu **Compute (Workers)** → **Create** → **Start from Hello World**
+→ donnez-lui un nom (ex. `nour-ia`) → **Deploy**.
+
+### 3. Collez le code du proxy
+Ouvrez le Worker → **Edit code**. Effacez tout le contenu de l'éditeur et
+collez à la place l'intégralité du fichier `nour/server/cloudflare-worker.js`
+(bouton **Copier** en haut du fichier sur GitHub). Puis **Deploy**.
+
+### 4. Activez l'IA gratuite (liaison Workers AI)
+Dans le Worker → **Settings** → **Bindings** → **Add binding** →
+choisissez **Workers AI** → dans « Variable name » écrivez exactement `AI` →
+**Save and deploy**.
+
+> C'est cette liaison `AI` qui donne accès au modèle gratuit. Aucune clé.
+
+### 5. Récupérez l'adresse du Worker
+En haut du Worker, une URL du type :
+```
+https://nour-ia.VOTRE-SOUS-DOMAINE.workers.dev
+```
+Copiez-la : c'est elle que vous collerez dans l'app (voir « Branchez l'app »).
+
+### 6. (Recommandé) Limitez l'accès à votre site
+Worker → **Settings** → **Variables and Secrets** → **Add** →
+Type *Plaintext*, nom `NOUR_ORIGIN`, valeur
+`https://malickgueye630-dotcom.github.io` → **Deploy**.
+Ainsi seul votre site peut utiliser votre proxy.
+
+Passez ensuite directement à la section **« Branchez l'app »** plus bas.
+
+---
+
+## Méthode B — Avec le terminal (wrangler), pour développeurs
 
 ### 1. Créez un compte Cloudflare (gratuit)
 https://dash.cloudflare.com/sign-up
@@ -56,14 +96,17 @@ wrangler secret put NOUR_TOKEN
 ```
 Reportez la même phrase dans l'app (champ « Jeton »).
 
-### 6. Branchez l'app
+---
+
+## Branchez l'app (les deux méthodes finissent ici)
 Dans Nour → **Plus → Réglages → Recherche → Assistant IA en ligne** :
 1. Activez l'interrupteur.
 2. Collez l'URL du Worker dans « Adresse du proxy ».
 3. (si utilisé) collez le jeton.
-4. Touchez **Tester la connexion**.
+4. Touchez **Tester la connexion** → « Connexion réussie ✓ ».
 
-C'est terminé. 🎉
+C'est terminé. 🎉 Posez une question dans Recherche : une carte « ✨ Réponse IA »
+apparaît en haut, rédigée à partir des sources vérifiées.
 
 ---
 
