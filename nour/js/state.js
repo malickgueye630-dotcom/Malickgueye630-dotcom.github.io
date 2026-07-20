@@ -29,6 +29,11 @@ const defaults = {
     searchSuggest: true,      // suggestions pendant la saisie
     searchPhonetic: true,     // recherche phonétique arabe
     searchSmart: true,        // compréhension intelligente (sujets, réponse directe)
+    ai: {                     // assistant IA en ligne (optionnel, désactivé par défaut)
+      enabled: false,         // envoi de la question + passages à un proxy que VOUS déployez
+      endpoint: '',           // URL du Worker Cloudflare (voir nour/server/README-IA.md)
+      token: '',              // jeton partagé optionnel
+    },
     reciter: 'ar.alafasy',
     audio: {
       autoNext: true,         // enchaîner les versets
@@ -63,6 +68,7 @@ function load() {
       tasbih: { ...structuredClone(defaults.tasbih), ...(d.tasbih || {}) },
     };
     merged.settings.audio = { ...structuredClone(defaults.settings.audio), ...((d.settings || {}).audio || {}) };
+    merged.settings.ai = { ...structuredClone(defaults.settings.ai), ...((d.settings || {}).ai || {}) };
     // migration v1 → v2 : la phonétique devient active par défaut
     if (!d.v || d.v < 2) {
       merged.settings.showTl = true;

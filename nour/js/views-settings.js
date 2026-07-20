@@ -129,6 +129,31 @@ export function viewSettings(section) {
         '<button class="btn btn-ghost" id="btnClearHist">Effacer</button>')}
     </div>
 
+    <div class="setgroup" id="sec-ia">
+      <h2>${icon('search', 15)} Assistant IA en ligne</h2>
+      ${row('Activer l’assistant IA', 'Une synthèse rédigée par une IA <b>à partir des sources déjà trouvées</b>. Optionnel, désactivé par défaut.', sw('ai.enabled', s.ai.enabled))}
+      <div id="aiPanel" ${s.ai.enabled ? '' : 'hidden'}>
+        <div class="setrow" style="display:block">
+          <div class="lab" style="margin-bottom:8px">Adresse du proxy<small>URL du serveur que vous déployez (voir le dossier <code>nour/server/</code>). La clé reste sur votre serveur, jamais dans l’app.</small></div>
+          <input type="url" id="aiEndpoint" value="${esc(s.ai.endpoint || '')}" placeholder="https://nour-ia.exemple.workers.dev"
+            autocapitalize="off" autocorrect="off" spellcheck="false"
+            style="width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
+        </div>
+        <div class="setrow" style="display:block">
+          <div class="lab" style="margin-bottom:8px">Jeton (facultatif)<small>Si vous avez défini un <code>NOUR_TOKEN</code> anti-abus sur le serveur.</small></div>
+          <input type="text" id="aiToken" value="${esc(s.ai.token || '')}" placeholder="—"
+            autocapitalize="off" autocorrect="off" spellcheck="false"
+            style="width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
+        </div>
+        <div class="setrow"><div class="lab">Tester la connexion<small id="aiTestMsg">Vérifie que le proxy répond</small></div>
+          <button class="btn btn-ghost" id="btnAiTest">Tester</button></div>
+        <div class="setrow" style="display:block;border-bottom:none">
+          <small style="color:var(--muted);line-height:1.5">Quand l’assistant est activé, votre question et les passages trouvés
+          <b>quittent l’appareil</b> vers votre proxy. L’IA ne peut citer que ces passages : elle n’invente jamais un verset,
+          un hadith ni une règle. Le texte religieux affiché reste toujours celui de la base vérifiée.</small></div>
+      </div>
+    </div>
+
     <div class="setgroup">
       <h2>${icon('note', 15)} À propos</h2>
       <div class="setrow"><div class="lab">Sources, traductions &amp; licences</div>
@@ -159,7 +184,12 @@ export function viewSettings(section) {
   });
   root.querySelectorAll('input[data-k]').forEach(inp => inp.onchange = () => {
     const k = inp.dataset.k;
-    if (k.startsWith('a.')) s.audio[k.slice(2)] = inp.checked;
+    if (k === 'ai.enabled') {
+      s.ai.enabled = inp.checked;
+      const panel = document.getElementById('aiPanel');
+      if (panel) panel.hidden = !inp.checked;
+    }
+    else if (k.startsWith('a.')) s.audio[k.slice(2)] = inp.checked;
     else s[k] = inp.checked;
     save();
     // les deux interrupteurs « vibrations » (Apparence / Qibla) restent synchronisés
@@ -190,6 +220,27 @@ export function viewSettings(section) {
   bindColorPanel();
   const uname = document.getElementById('userName');
   if (uname) uname.oninput = () => { s.userName = uname.value.trim().slice(0, 24); save(); };
+  const aiEp = document.getElementById('aiEndpoint');
+  if (aiEp) aiEp.oninput = () => { s.ai.endpoint = aiEp.value.trim(); save(); };
+  const aiTk = document.getElementById('aiToken');
+  if (aiTk) aiTk.oninput = () => { s.ai.token = aiTk.value.trim(); save(); };
+  const aiTest = document.getElementById('btnAiTest');
+  if (aiTest) aiTest.onclick = async () => {
+    const msg = document.getElementById('aiTestMsg');
+    if (!s.ai.endpoint) { if (msg) msg.textContent = 'Renseignez d’abord l’adresse du proxy'; return; }
+    aiTest.disabled = true; aiTest.textContent = '…'; if (msg) msg.textContent = 'Connexion en cours…';
+    try {
+      const { aiPing } = await import('./ai.js');
+      await aiPing({ endpoint: s.ai.endpoint, token: s.ai.token });
+      if (msg) msg.textContent = 'Connexion réussie ✓';
+      aiTest.textContent = 'OK ✓';
+      toast('Assistant IA connecté');
+    } catch (err) {
+      if (msg) msg.textContent = 'Échec : ' + String(err.message || err).slice(0, 60);
+      aiTest.textContent = 'Réessayer';
+      toast('Connexion impossible');
+    } finally { aiTest.disabled = false; }
+  };
   root.querySelector('#selReciter').onchange = e => { s.reciter = e.target.value; save(); };
   root.querySelector('#selMethod').onchange = e => { p.method = e.target.value; save(); toast('Méthode enregistrée'); };
   root.querySelector('#btnGeoSet').onclick = async e => {

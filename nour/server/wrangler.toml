@@ -1,0 +1,18 @@
+# Configuration Cloudflare Worker pour le proxy IA de Nour.
+# Déploiement : voir README-IA.md
+name = "nour-ia"
+main = "cloudflare-worker.js"
+compatibility_date = "2024-11-01"
+
+# Liaison Workers AI (mode GRATUIT). Indispensable pour env.AI.run(...).
+[ai]
+binding = "AI"
+
+# Variables publiques (non secrètes). Décommentez et adaptez si besoin :
+# [vars]
+# NOUR_ORIGIN = "https://malickgueye630-dotcom.github.io"   # restreint le CORS à votre site
+# NOUR_MODEL  = "@cf/meta/llama-3.1-8b-instruct"            # autre modèle Workers AI
+
+# Secrets (NE PAS écrire ici — utilisez `wrangler secret put`) :
+#   NOUR_TOKEN         -> jeton partagé optionnel (anti-abus)
+#   ANTHROPIC_API_KEY  -> pour passer au mode payant Claude (qualité supérieure)

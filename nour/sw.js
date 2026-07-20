@@ -1,5 +1,5 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v9';
+const VERSION = 'nour-v10';
 const SHELL = [
   './',
   'index.html',
@@ -11,6 +11,7 @@ const SHELL = [
   'js/vendor/adhan.esm.min.js',
   'js/views-home.js', 'js/views-quran.js', 'js/views-search.js', 'js/views-prayer.js',
   'js/views-hadith.js', 'js/views-duas.js', 'js/views-favorites.js', 'js/views-about.js',
+  'js/ai.js',
   'fonts/amiri-arabic-400-normal.woff2', 'fonts/amiri-arabic-700-normal.woff2',
   'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

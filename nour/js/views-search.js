@@ -323,6 +323,72 @@ export async function viewSearch(initial = '') {
     }
     results.innerHTML = parts.join('');
     window.scrollTo({ top: 0 });
+
+    // ---------- Réponse IA en ligne (optionnelle, désactivée par défaut) ----------
+    // On envoie UNIQUEMENT la question + les passages déjà trouvés à un proxy que
+    // l'utilisateur déploie (voir nour/server/). L'IA rédige une synthèse ; les
+    // textes religieux affichés restent ceux de la base vérifiée, jamais l'IA.
+    const aiCfg = state.settings.ai;
+    if (aiCfg && aiCfg.enabled && aiCfg.endpoint) {
+      const card = document.createElement('div');
+      card.className = 'ai-answer';
+      card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
+        <div class="card"><div class="skel" style="height:16px;margin:2px 0 8px"></div>
+          <div class="skel" style="height:16px;width:80%;margin:0 0 8px"></div>
+          <div class="tiny" style="color:var(--muted)">L'assistant rédige une synthèse à partir des sources…</div></div>`;
+      results.insertBefore(card, results.firstChild);
+      window.scrollTo({ top: 0 });
+      (async () => {
+        try {
+          const passages = await collectPassages(answer, r, meta, q);
+          if (!passages.length) { card.remove(); return; }
+          const { aiAnswer } = await import('./ai.js');
+          const txt = await aiAnswer(q, passages, { endpoint: aiCfg.endpoint, token: aiCfg.token });
+          if (lastQuery !== q) { card.remove(); return; }
+          card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
+            <div class="card" style="border-left:4px solid var(--brand)">
+              <p style="margin:0 0 8px;white-space:pre-wrap;line-height:1.55">${esc(txt)}</p>
+              <div class="tiny" style="color:var(--muted);line-height:1.5">Synthèse générée par une IA à partir des sources vérifiées ci-dessous.
+              Les versets, hadiths et invocations affichés proviennent toujours de la base de Nour — rien n'est inventé.
+              Pour un avis religieux, consultez un savant.</div>
+            </div>`;
+        } catch (e) {
+          if (lastQuery !== q) { card.remove(); return; }
+          card.innerHTML = `<div class="notice" style="margin-bottom:10px">✨ Assistant IA indisponible pour l'instant
+            (${esc(String(e && e.message || e).slice(0, 50))}). La réponse locale sourcée ci-dessous reste complète.</div>`;
+        }
+      })();
+    }
+  }
+
+  // rassemble les meilleurs passages vérifiés à envoyer à l'IA (question + sources)
+  async function collectPassages(answer, r, meta, q) {
+    const P = [];
+    const src = answer || {
+      verses: (r.verses || []).slice(0, 3),
+      hadiths: (r.hadiths || []).slice(0, 3),
+      duas: (r.duas || []).slice(0, 2),
+      explanations: r.explanations,
+    };
+    (src.duas || []).slice(0, 3).forEach(d => P.push({
+      type: 'Invocation', ref: d.title, source: d.source || 'Invocation',
+      text: [d.fr, d.translit].filter(Boolean).join(' — '),
+    }));
+    (src.hadiths || []).slice(0, 3).forEach(h => P.push({
+      type: 'Hadith', ref: h.source, source: h.narrator || h.source, text: h.fr,
+    }));
+    const vs = (src.verses || []).slice(0, 3);
+    if (vs.length) {
+      const getV = await enrich(vs, 3);
+      vs.forEach(v => {
+        const e = getV(v);
+        P.push({ type: 'Coran', ref: `${meta(v.s).phonetic} (${v.s}):${v.v}`, source: 'Coran', text: e ? e[1] : v.fr });
+      });
+    }
+    (src.explanations || []).slice(0, 2).forEach(e => P.push({
+      type: 'Explication', ref: e.label, source: 'Nour', text: e.desc,
+    }));
+    return P.filter(p => p.text && p.text.trim());
   }
 
   input.oninput = () => {
