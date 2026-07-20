@@ -231,6 +231,91 @@ function matchTopics(q, toks, base) {
   return out;
 }
 
+// ---------------- recherche vectorielle sémantique (locale) ----------------
+// Chaque passage de la base (verset FR, hadith FR, invocation) est représenté
+// par un vecteur creux TF-IDF. Les dimensions incluent, en plus des racines de
+// mots, un identifiant de « groupe de synonymes » (du lexique) : ainsi des mots
+// différents mais de sens proche partagent une dimension → la similarité cosinus
+// capture le SENS, pas seulement les mots exacts. 100 % local, déterministe,
+// aucun modèle externe : c'est ce qui garantit qu'aucun contenu n'est inventé.
+function expandVec(text, base) {
+  const out = [];
+  for (const t of tokens(text)) {
+    const st = stem(t);
+    out.push(st);
+    const g = base.lex.get(st);
+    if (g !== undefined) out.push('g' + g); // dimension conceptuelle partagée
+  }
+  return out;
+}
+
+let VEC = null;
+async function buildVec(base) {
+  if (VEC) return VEC;
+  const vi = await loadQuranFr();
+  const docs = [];
+  for (const [s, v, fr] of vi) docs.push({ type: 'v', s, v, text: fr });
+  for (const h of base.hfr.hadiths) {
+    const themeNames = h.themes.map(t => base.hfr.themes[t] || t).join(' ');
+    docs.push({ type: 'h', id: h.id, text: `${h.fr} ${themeNames}` });
+  }
+  for (const d of base.allDuas) docs.push({ type: 'd', id: d.id, text: `${d.title} ${d.fr} ${d.catName} ${d.note || ''}` });
+
+  const df = new Map();
+  const tfs = docs.map(doc => {
+    const tf = new Map();
+    for (const t of expandVec(doc.text, base)) tf.set(t, (tf.get(t) || 0) + 1);
+    for (const t of tf.keys()) df.set(t, (df.get(t) || 0) + 1);
+    return tf;
+  });
+  const N = docs.length;
+  const idf = t => Math.log((N + 1) / ((df.get(t) || 0) + 1)) + 1;
+  const inv = new Map();       // terme → [[docIdx, poids]]
+  const norms = new Float64Array(N);
+  tfs.forEach((tf, i) => {
+    let sq = 0;
+    for (const [t, f] of tf) {
+      const w = (1 + Math.log(f)) * idf(t);
+      sq += w * w;
+      if (!inv.has(t)) inv.set(t, []);
+      inv.get(t).push([i, w]);
+    }
+    norms[i] = Math.sqrt(sq) || 1;
+  });
+  VEC = { docs, inv, idf, norms };
+  return VEC;
+}
+
+async function semanticSearch(qText, base) {
+  const { docs, inv, idf, norms } = await buildVec(base);
+  const qtf = new Map();
+  for (const t of expandVec(qText, base)) qtf.set(t, (qtf.get(t) || 0) + 1);
+  if (!qtf.size) return { v: [], h: [], d: [], top: 0 };
+  let qnorm = 0;
+  const qw = new Map();
+  for (const [t, f] of qtf) { const w = (1 + Math.log(f)) * idf(t); qw.set(t, w); qnorm += w * w; }
+  qnorm = Math.sqrt(qnorm) || 1;
+  const acc = new Map();
+  for (const [t, wq] of qw) {
+    const post = inv.get(t);
+    if (!post) continue;
+    for (const [i, wd] of post) acc.set(i, (acc.get(i) || 0) + wq * wd);
+  }
+  const hits = [];
+  for (const [i, dot] of acc) {
+    const sim = dot / (qnorm * norms[i]);
+    if (sim > 0.1) hits.push({ ...docs[i], sim });
+  }
+  hits.sort((a, b) => b.sim - a.sim);
+  const out = { v: [], h: [], d: [], top: hits.length ? hits[0].sim : 0 };
+  for (const x of hits) {
+    if (x.type === 'v' && out.v.length < 8) out.v.push(x);
+    else if (x.type === 'h' && out.h.length < 8) out.h.push(x);
+    else if (x.type === 'd' && out.d.length < 8) out.d.push(x);
+  }
+  return out;
+}
+
 // ---------------- détection de question ----------------
 const Q_PATTERNS = [
   /^(que|qu'|quoi|quel|quelle|quels|quelles|comment|pourquoi|est-ce|existe|y a-t-il|combien|où|ou dois)/,
@@ -386,9 +471,53 @@ export async function searchAll(q, opts = {}) {
       }
     }
   }
+  // --- recherche vectorielle sémantique : rattrape les formulations que le
+  // thésaurus ne couvre pas (« un homme injuste envers les gens », « je n'arrive
+  // pas à dormir »…). Les passages proches par le SENS complètent les sections
+  // « par le sens », clairement étiquetés.
+  result.semanticStrong = false;
+  if (smart && useToks.length && !hasArabic) {
+    try {
+      const sem = await semanticSearch(qFixed, base);
+      result.semanticTop = sem.top;
+      // seuils prudents : on préfère ne rien montrer plutôt qu'un faux positif
+      result.semanticStrong = sem.top >= 0.32;
+      for (const x of sem.v) {
+        const id = `${x.s}:${x.v}`;
+        if (x.sim >= 0.2 && !seenV.has(id)) {
+          seenV.add(id);
+          result.versesTopic.push({ s: x.s, v: x.v, topic: 'proche par le sens', sem: true, _s: 1 + x.sim, sim: x.sim });
+        }
+      }
+      for (const x of sem.h) {
+        if (x.sim >= 0.17 && !seenH.has(x.id) && base.hById.has(x.id)) {
+          seenH.add(x.id);
+          result.hadithsTopic.push({ ...base.hById.get(x.id), topic: 'proche par le sens', sem: true, _s: 1 + x.sim, sim: x.sim });
+        }
+      }
+      for (const x of sem.d) {
+        if (x.sim >= 0.17 && !seenD.has(x.id) && base.duaById.has(x.id)) {
+          seenD.add(x.id);
+          result.duasTopic.push({ ...base.duaById.get(x.id), topic: 'proche par le sens', sem: true, _s: 1 + x.sim, sim: x.sim });
+        }
+      }
+    } catch { /* index vectoriel indisponible (hors-ligne partiel) */ }
+  }
+
+  // reclassement (reranking) : le contenu de sujet vérifié d'abord, puis la
+  // proximité sémantique, en respectant l'ordre déjà établi
+  const rerank = (a, b) => (b._s || 0) - (a._s || 0);
+  result.versesTopic.sort(rerank);
+  result.hadithsTopic.sort(rerank);
+  result.duasTopic.sort(rerank);
   result.versesTopic = result.versesTopic.slice(0, 12);
   result.hadithsTopic = result.hadithsTopic.slice(0, 8);
   result.duasTopic = result.duasTopic.slice(0, 8);
+
+  // explications : descriptions vérifiées des sujets reconnus (orientation, pas un avis religieux)
+  result.explanations = result.topics
+    .filter(t => t.topic.desc)
+    .map(t => ({ label: t.topic.label, desc: t.topic.desc, id: t.topic.id }));
 
   // --- phonétique (si la requête ressemble à de l'arabe latinisé, ou si peu de résultats)
   const latinish = !hasArabic && /^[a-z0-9'\s]+$/i.test(fold(q));
@@ -409,15 +538,14 @@ export async function searchAll(q, opts = {}) {
 // UNIQUEMENT à partir du meilleur sujet vérifié + des meilleurs passages de la
 // base ; chaque élément garde sa source. Rien n'est jamais inventé.
 export function buildAnswer(result) {
-  if (!result.question && !result.strongTopic) return null;
+  // la réponse se déclenche pour une question, un sujet fort, OU une forte
+  // proximité sémantique (formulation nouvelle non couverte par le thésaurus)
+  if (!result.question && !result.strongTopic && !result.semanticStrong) return null;
   const t = result.topics[0];
-  // en mode question : la base vérifiée du sujet passe TOUJOURS en premier ;
-  // les correspondances de mots isolés n'entrent dans la réponse que si elles
-  // couvrent la quasi-totalité de la requête
+  const useTopic = !!t || result.semanticStrong; // les passages « par le sens » comptent
   const strong = (arr, min) => arr.filter(x => x._s >= min && !x.approx);
-  // contenu du sujet d'abord ; si le sujet n'en référence pas, on garde les
-  // correspondances textuelles fortes et complètes
-  const pick = (topicArr, exactArr, minWithTopic, minAlone) => t
+  // contenu du sujet / sémantique d'abord ; sinon correspondances textuelles fortes
+  const pick = (topicArr, exactArr, minWithTopic, minAlone) => useTopic
     ? (topicArr.length
         ? [...topicArr.slice(0, 3), ...strong(exactArr, minWithTopic).slice(0, 1)].slice(0, 3)
         : strong(exactArr, 2.5).slice(0, 3))
@@ -426,7 +554,7 @@ export function buildAnswer(result) {
   const hadiths = pick(result.hadithsTopic, result.hadiths, 4, 2.2);
   const verses = pick(result.versesTopic, result.verses, 5, 2.2);
   if (!t && !duas.length && !hadiths.length && !verses.length) return null;
-  return { topic: t ? t.topic : null, duas, hadiths, verses };
+  return { topic: t ? t.topic : null, duas, hadiths, verses, explanations: result.explanations || [] };
 }
 
 // ---------------- suggestions pendant la saisie ----------------

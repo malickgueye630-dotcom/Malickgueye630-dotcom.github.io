@@ -274,7 +274,11 @@
    "remercier",
    "remerciement",
    "reconnaissance",
-   "shukr"
+   "shukr",
+   "reconnaissant",
+   "reconnaissants",
+   "grace",
+   "louange"
   ],
   [
    "confiance",
@@ -335,6 +339,13 @@
    "calme",
    "serenite",
    "tranquille"
+  ],
+  [
+   "allah",
+   "dieu",
+   "seigneur",
+   "createur",
+   "rabb"
   ]
  ],
  "topics": [
@@ -1958,7 +1969,14 @@
     "reconnaissance",
     "shukr",
     "remercier allah",
-    "bienfaits"
+    "bienfaits",
+    "reconnaissant",
+    "etre reconnaissant",
+    "reconnaissant envers dieu",
+    "reconnaissant envers allah",
+    "rendre grace",
+    "dire merci a dieu",
+    "louer allah"
    ],
    "desc": "« Si vous êtes reconnaissants, Je vous accorderai davantage. »",
    "quran": [

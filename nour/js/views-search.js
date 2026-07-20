@@ -32,7 +32,8 @@ const badgeExact = `<span class="badge sahih" style="font-size:.62rem">Correspon
 const badgeApprox = `<span class="badge badge-en" style="font-size:.62rem">Correspondance approximative</span>`;
 const badgeTopic = t => `<span class="badge" style="font-size:.62rem">Par le sens : ${esc(t)}</span>`;
 const badgePhon = `<span class="badge hasan" style="font-size:.62rem">Correspondance phonétique</span>`;
-const matchBadge = x => x.topic ? badgeTopic(x.topic) : x.phon ? badgePhon : x.approx ? badgeApprox : badgeExact;
+const badgeSens = `<span class="badge" style="font-size:.62rem">Correspondance par le sens</span>`;
+const matchBadge = x => x.sem ? badgeSens : x.topic ? badgeTopic(x.topic) : x.phon ? badgePhon : x.approx ? badgeApprox : badgeExact;
 
 // ---------- cartes ----------
 const clamp = (t, n) => t && t.length > n ? t.slice(0, n).replace(/\s+\S*$/, '') + '…' : t;
@@ -128,9 +129,10 @@ export async function viewSearch(initial = '') {
     results.innerHTML = `
       <div class="ai-hero">
         <b>🕌 Votre assistant de recherche</b>
-        <p>Posez une question naturelle, même avec des fautes — je comprends l'intention,
-        je cherche dans le Coran, les hadiths et les invocations, et je réponds en français
-        avec les sources. Jamais rien d'inventé.</p>
+        <p>Posez une question naturelle, même mal orthographiée ou approximative. Le moteur
+        corrige les fautes, reconnaît la phonétique arabe et comprend le <b>sens</b> (recherche
+        vectorielle), puis cherche dans le Coran, les hadiths et les invocations et répond en
+        français <b>avec les sources</b>. Jamais rien d'inventé.</p>
       </div>
       ${hist.length ? `<h2>Recherches récentes</h2>
         <div class="chiprow">${hist.map(h => `<button class="chip" data-q="${esc(h)}">${esc(h)}</button>`).join('')}</div>` : ''}
@@ -213,25 +215,39 @@ export async function viewSearch(initial = '') {
     // éléments déjà montrés dans la réponse directe (pour ne pas les répéter)
     const shownV = new Set(), shownH = new Set(), shownD = new Set();
 
-    // ---------- 1. RÉPONSE DIRECTE ----------
+    // ---------- 1. RÉPONSE LA PLUS PROBABLE ----------
+    const srcSet = new Set(); // pour la récapitulation « Sources »
     if (answer) {
-      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse directe</div>`);
+      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse la plus probable</div>`);
       if (answer.topic) parts.push(topicCard(answer.topic));
       const getV = await enrich([...answer.verses], 3);
       if (answer.duas.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">🤲 INVOCATION${answer.duas.length > 1 ? 'S' : ''}</div>`);
         parts.push(answer.duas.map(d => duaCardMini(d, q)).join(''));
-        answer.duas.forEach(d => shownD.add(d.id));
+        answer.duas.forEach(d => { shownD.add(d.id); if (d.source) srcSet.add(d.source); });
       }
       if (answer.hadiths.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📜 HADITHS AUTHENTIQUES</div>`);
         parts.push(answer.hadiths.map(h => hadithCard(h, q)).join(''));
-        answer.hadiths.forEach(h => shownH.add(h.id));
+        answer.hadiths.forEach(h => { shownH.add(h.id); if (h.source) srcSet.add(h.source); });
       }
       if (answer.verses.length) {
         parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📖 CORAN</div>`);
         parts.push(answer.verses.map(v => verseCard(v, meta(v.s), q, getV(v))).join(''));
-        answer.verses.forEach(v => shownV.add(`${v.s}:${v.v}`));
+        answer.verses.forEach(v => { shownV.add(`${v.s}:${v.v}`); srcSet.add(`Coran, sourate ${meta(v.s).phonetic} (${v.s})`); });
+      }
+      // Explications : descriptions vérifiées des concepts reconnus
+      if (answer.explanations && answer.explanations.length) {
+        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">💡 EXPLICATIONS</div>`);
+        parts.push(answer.explanations.slice(0, 2).map(e =>
+          `<div class="card card-plain" style="border-left:4px solid var(--gold)"><b>${esc(e.label)}</b>
+           <p class="muted" style="margin:5px 0 0">${esc(e.desc)}</p></div>`).join(''));
+      }
+      // Sources : récapitulatif clair
+      if (srcSet.size) {
+        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📚 SOURCES</div>`);
+        parts.push(`<div class="card card-plain" style="padding:10px 14px"><ul style="margin:0;padding-left:18px" class="muted">
+          ${[...srcSet].slice(0, 6).map(s => `<li style="font-size:.82rem">${esc(s)}</li>`).join('')}</ul></div>`);
       }
       parts.push(`<div class="notice">📚 Réponse assemblée uniquement à partir des sources citées ci-dessus,
         présentes dans la base vérifiée de Nour — rien n'est généré ni inventé.
