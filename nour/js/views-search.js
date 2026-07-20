@@ -329,7 +329,7 @@ export async function viewSearch(initial = '') {
     // l'utilisateur déploie (voir nour/server/). L'IA rédige une synthèse ; les
     // textes religieux affichés restent ceux de la base vérifiée, jamais l'IA.
     const aiCfg = state.settings.ai;
-    if (aiCfg && aiCfg.enabled && aiCfg.endpoint) {
+    if (aiCfg && aiCfg.enabled && (aiCfg.mode === 'simple' || aiCfg.endpoint)) {
       const card = document.createElement('div');
       card.className = 'ai-answer';
       card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
@@ -343,7 +343,7 @@ export async function viewSearch(initial = '') {
           const passages = await collectPassages(answer, r, meta, q);
           if (!passages.length) { card.remove(); return; }
           const { aiAnswer } = await import('./ai.js');
-          const txt = await aiAnswer(q, passages, { endpoint: aiCfg.endpoint, token: aiCfg.token });
+          const txt = await aiAnswer(q, passages, { mode: aiCfg.mode, endpoint: aiCfg.endpoint, token: aiCfg.token });
           if (lastQuery !== q) { card.remove(); return; }
           card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
             <div class="card" style="border-left:4px solid var(--brand)">

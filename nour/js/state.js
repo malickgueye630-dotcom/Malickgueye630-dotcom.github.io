@@ -29,10 +29,11 @@ const defaults = {
     searchSuggest: true,      // suggestions pendant la saisie
     searchPhonetic: true,     // recherche phonétique arabe
     searchSmart: true,        // compréhension intelligente (sujets, réponse directe)
-    ai: {                     // assistant IA en ligne (optionnel, désactivé par défaut)
-      enabled: false,         // envoi de la question + passages à un proxy que VOUS déployez
-      endpoint: '',           // URL du Worker Cloudflare (voir nour/server/README-IA.md)
-      token: '',              // jeton partagé optionnel
+    ai: {                     // assistant IA en ligne
+      enabled: true,          // actif : une carte « Réponse IA » complète les résultats
+      mode: 'simple',         // 'simple' = service public gratuit sans clé ; 'proxy' = votre serveur
+      endpoint: '',           // (mode proxy) URL du Worker Cloudflare — voir nour/server/README-IA.md
+      token: '',              // (mode proxy) jeton partagé optionnel
     },
     reciter: 'ar.alafasy',
     audio: {

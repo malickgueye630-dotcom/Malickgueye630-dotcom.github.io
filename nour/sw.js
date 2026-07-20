@@ -1,5 +1,5 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v10';
+const VERSION = 'nour-v11';
 const SHELL = [
   './',
   'index.html',
