@@ -52,7 +52,7 @@ export async function viewHome() {
 
   const shortcuts = [
     ['book', 'Coran', '#/quran'],
-    ['search', 'Recherche IA', '#/search'],
+    ['sparkle', 'Assistant Nour', '#/search'],
     ['mosque', 'Prières', '#/prayer'],
     ['kaaba', 'Qibla', '#/qibla'],
     ['hands', 'Douas', '#/duas'],
@@ -89,8 +89,8 @@ export async function viewHome() {
       </div>
       <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
       <div class="sub">${greet}</div>
-      <div class="searchbox" id="homeSearch" role="button" tabindex="0" aria-label="Rechercher">
-        <span>${icon('search', 17)}</span><span class="ph">Question, verset, hadith, invocation…</span>
+      <div class="searchbox" id="homeSearch" role="button" tabindex="0" aria-label="Ouvrir l’assistant Nour">
+        <span>${icon('sparkle', 17)}</span><span class="ph">Posez une question à l’assistant Nour…</span>
       </div>
     </div>
 

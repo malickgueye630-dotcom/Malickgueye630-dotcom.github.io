@@ -21,6 +21,7 @@ globalThis.fetch = async input => {
 };
 
 const { searchAll, buildAnswer } = await import('../js/engine.js');
+const { retrieveSources, conversationHistory } = await import('../js/rag.js');
 
 test('la question sur la femme produit une réponse locale sourcée', async () => {
   const result = await searchAll('Quel est le rôle de la femme dans l’Islam ?', { smart: true, phonetic: true });
@@ -64,6 +65,39 @@ test('les références des sujets et les médias Apprendre existent', async () =
       await access(path.join(root, step.image));
     }
   }
+  const wudu = learn.guides.find(guide => guide.id === 'wudu');
+  assert.deepEqual(
+    wudu.steps.slice(6, 9).map(step => step.title),
+    ['Essuyer la tête', 'Essuyer les oreilles', 'Laver les pieds'],
+  );
+  assert.match(wudu.steps[7].proof, /Ibn Majah 439/);
+});
+
+test('le RAG prépare des paquets exacts et cliquables pour le LLM', async () => {
+  const retrieval = await retrieveSources('Pourquoi la prière est-elle obligatoire ?');
+  assert.ok(retrieval.sources.length > 0);
+  assert.ok(retrieval.sources.every(source => /^(Q:|H:|D:)/.test(source.id)));
+  assert.ok(retrieval.sources.every(source => source.url.startsWith('#/')));
+  assert.ok(retrieval.sources.some(source => source.type === 'quran'));
+  assert.ok(retrieval.sources.some(source => source.type === 'hadith'));
+});
+
+test('l’historique conversationnel transmet le contexte sans métadonnées internes', () => {
+  const history = conversationHistory([
+    { role: 'user', content: 'Explique-moi la médisance.' },
+    {
+      role: 'assistant',
+      response: {
+        answer_directe: 'Elle est interdite.',
+        explication: 'Les sources la comparent à un acte grave.',
+        nuances: ['Il faut distinguer les cas légitimes établis.'],
+      },
+    },
+    { role: 'system', content: 'ne doit pas être transmis' },
+    { role: 'user', content: 'Résume pour un enfant.' },
+  ]);
+  assert.deepEqual(history.map(item => item.role), ['user', 'assistant', 'user']);
+  assert.match(history[1].content, /interdite/);
 });
 
 test('le pipeline RAG ne tente aucun appel réseau externe', () => {

@@ -2,7 +2,7 @@
 const KEY = 'nour:v1';
 
 const defaults = {
-  v: 4,
+  v: 6,
   settings: {
     theme: 'auto',            // auto | light | dark
     palette: 'emeraude',      // emeraude | sable | nuit | lavande | custom
@@ -29,11 +29,10 @@ const defaults = {
     searchSuggest: true,      // suggestions pendant la saisie
     searchPhonetic: true,     // recherche phonétique arabe
     searchSmart: true,        // compréhension intelligente (sujets, réponse directe)
-    ai: {                     // conservé uniquement pour migrer les anciens réglages
-      enabled: false,         // la recherche religieuse est désormais strictement locale
-      mode: 'local',
+    ai: {
+      enabled: true,
+      mode: 'auto',           // distant si le Worker répond, sinon secours local honnête
       endpoint: '',
-      token: '',
     },
     reciter: 'ar.alafasy',
     audio: {
@@ -53,6 +52,8 @@ const defaults = {
   recents: [],                // [{ s, ts }]
   readLog: {},                // "YYYY-MM-DD" → nb versets lus
   searchHistory: [],
+  chatConversations: [],
+  activeConversationId: null,
   learnProgress: { wudu: [], salat: [] },
   tasbih: { current: 0, target: 33, dhikrId: 0, totals: {}, custom: [] },
 };
@@ -87,6 +88,33 @@ function load() {
       merged.settings.ai = { enabled: false, mode: 'local', endpoint: '', token: '' };
       merged.v = 4;
     }
+    // migration v4 → v5 : assistant conversationnel. Un ancien jeton éventuel
+    // est supprimé car aucun secret ne doit rester dans le navigateur.
+    if (merged.v < 5) {
+      merged.settings.ai = {
+        enabled: true,
+        mode: 'auto',
+        endpoint: String(merged.settings.ai?.endpoint || ''),
+      };
+      merged.chatConversations = Array.isArray(d.chatConversations) ? d.chatConversations : [];
+      merged.activeConversationId = d.activeConversationId || null;
+      merged.v = 5;
+    }
+    // migration v5 → v6 : insertion de l’étape « Essuyer les oreilles »
+    // après la tête. Les étapes déjà validées qui suivaient sont décalées
+    // d’un rang afin de conserver fidèlement la progression existante.
+    if (merged.v < 6) {
+      const completed = Array.isArray(merged.learnProgress?.wudu)
+        ? merged.learnProgress.wudu
+        : [];
+      merged.learnProgress.wudu = [...new Set(completed.map(index => {
+        const number = Number(index);
+        return Number.isFinite(number) && number >= 7 ? number + 1 : number;
+      }).filter(Number.isFinite))];
+      merged.v = 6;
+    }
+    delete merged.settings.ai.token;
+    if (!Array.isArray(merged.chatConversations)) merged.chatConversations = [];
     return merged;
   } catch {
     return structuredClone(defaults);
@@ -147,6 +175,73 @@ export function pushHistory(q) {
   const h = state.searchHistory.filter(x => x !== q);
   h.unshift(q);
   state.searchHistory = h.slice(0, 12);
+  save();
+}
+
+// ---------- conversations de l'assistant ----------
+const chatId = () => globalThis.crypto?.randomUUID?.()
+  || `chat-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
+export function createConversation(firstMessage = '') {
+  const now = Date.now();
+  const conversation = {
+    id: chatId(),
+    title: firstMessage ? firstMessage.trim().slice(0, 52) : 'Nouvelle conversation',
+    createdAt: now,
+    updatedAt: now,
+    messages: [],
+  };
+  state.chatConversations.unshift(conversation);
+  state.chatConversations = state.chatConversations.slice(0, 15);
+  state.activeConversationId = conversation.id;
+  save();
+  return conversation;
+}
+
+export function activeConversation() {
+  return state.chatConversations.find(item => item.id === state.activeConversationId) || null;
+}
+
+export function selectConversation(id) {
+  if (!state.chatConversations.some(item => item.id === id)) return null;
+  state.activeConversationId = id;
+  save();
+  return activeConversation();
+}
+
+export function appendConversationMessage(conversation, message) {
+  if (!conversation || !message) return;
+  conversation.messages.push({ ...message, id: message.id || chatId(), createdAt: message.createdAt || Date.now() });
+  conversation.messages = conversation.messages.slice(-40);
+  const firstUser = conversation.messages.find(item => item.role === 'user');
+  if (firstUser?.content) conversation.title = firstUser.content.trim().slice(0, 52);
+  conversation.updatedAt = Date.now();
+  state.chatConversations = [
+    conversation,
+    ...state.chatConversations.filter(item => item.id !== conversation.id),
+  ].slice(0, 15);
+  state.activeConversationId = conversation.id;
+  save();
+}
+
+export function replaceConversationMessage(conversation, id, replacement) {
+  const index = conversation?.messages?.findIndex(item => item.id === id) ?? -1;
+  if (index < 0) return;
+  conversation.messages[index] = {
+    ...conversation.messages[index],
+    ...replacement,
+    id,
+    createdAt: conversation.messages[index].createdAt,
+  };
+  conversation.updatedAt = Date.now();
+  save();
+}
+
+export function deleteConversation(id) {
+  state.chatConversations = state.chatConversations.filter(item => item.id !== id);
+  if (state.activeConversationId === id) {
+    state.activeConversationId = state.chatConversations[0]?.id || null;
+  }
   save();
 }
 

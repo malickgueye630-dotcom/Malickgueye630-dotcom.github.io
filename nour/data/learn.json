@@ -90,13 +90,25 @@
           "title": "Essuyer la tête",
           "image": "assets/learn/wudu-head.webp",
           "imageAlt": "Illustration pédagogique des mains humides passant sur la tête",
-          "fr": "Avec les mains humides, essuyez la tête une fois (al-mash‘), puis les oreilles selon la méthode enseignée.",
+          "fr": "Avec les mains humides, essuyez la tête une fois (al-mash‘).",
           "detail": "Il s’agit d’un essuyage avec des mains humides, pas d’un nouveau lavage abondant. La surface minimale détaillée varie selon les écoles.",
           "errors": [
             "Essuyer seulement les cheveux qui dépassent sans toucher la zone de la tête.",
             "Transformer l’essuyage en lavage complet."
           ],
           "proof": "« Passez les mains mouillées sur vos têtes » : Coran 5:6 ; description : Sahih al-Bukhari 164."
+        },
+        {
+          "title": "Essuyer les oreilles",
+          "image": "assets/learn/wudu-ears.webp",
+          "imageAlt": "Illustration pédagogique montrant les index essuyant doucement l’intérieur des oreilles et les pouces passant derrière",
+          "fr": "Avec l’humidité restant sur les mains, passez doucement les index dans les replis intérieurs des oreilles et les pouces derrière les oreilles.",
+          "detail": "Essuyez sans forcer et sans introduire profondément les doigts. La manière rapportée décrit l’intérieur avec les index et l’arrière avec les pouces.",
+          "errors": [
+            "Enfoncer les doigts dans le conduit auditif ou se faire mal.",
+            "Utiliser beaucoup d’eau comme s’il fallait laver entièrement les oreilles."
+          ],
+          "proof": "Description du geste : Sunan Ibn Majah 439 (sahih selon Darussalam) ; essuyage intérieur et extérieur : Sunan Abi Dawud 123 (sahih selon al-Albani)."
         },
         {
           "title": "Laver les pieds",
@@ -127,7 +139,7 @@
           "proof": "Invocation après le wudû’ : Sahih Muslim 234."
         }
       ],
-      "source": "Méthode générale : Coran 5:6 ; Sahih al-Bukhari 164-165 ; Sahih Muslim 226, 234 et 241."
+      "source": "Méthode générale : Coran 5:6 ; Sahih al-Bukhari 164-165 ; Sahih Muslim 226, 234 et 241 ; Sunan Ibn Majah 439 ; Sunan Abi Dawud 123."
     },
     {
       "id": "salat",

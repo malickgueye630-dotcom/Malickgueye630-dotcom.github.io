@@ -1,0 +1,5 @@
+nour/server/node_modules/
+nour/server/.wrangler/
+nour/server/.dev.vars
+nour/server/.dev.vars.*
+!nour/server/.dev.vars.example
