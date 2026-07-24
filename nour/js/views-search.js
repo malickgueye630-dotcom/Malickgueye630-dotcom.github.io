@@ -7,6 +7,7 @@ import { arToLatin } from './translit.js';
 import * as data from './data.js';
 
 const SUGGESTIONS = [
+  'Quel est le rôle de la femme dans l’Islam ?',
   'quelle doua quand j\'ai peur ?', 'laqad jaakoum', 'verset sur quelqu\'un qui ment',
   'quelqu\'un qui parle dans le dos des autres', 'que dit le prophète ﷺ sur la trahison ?',
   'comment faire la prière de consultation ?', 'histoire de Dhul-Qarnayn',
@@ -128,23 +129,22 @@ export async function viewSearch(initial = '') {
     const hist = state.settings.searchHistoryOn ? state.searchHistory : [];
     results.innerHTML = `
       <div class="ai-hero">
-        <b>🕌 Votre assistant de recherche</b>
+        <b>🕌 Recherche locale sourcée</b>
         <p>Posez une question naturelle, même mal orthographiée ou approximative. Le moteur
-        corrige les fautes, reconnaît la phonétique arabe et comprend le <b>sens</b> (recherche
-        vectorielle), puis cherche dans le Coran, les hadiths et les invocations et répond en
-        français <b>avec les sources</b>. Jamais rien d'inventé.</p>
+        corrige les fautes, reconnaît la phonétique arabe et classe les passages par recherche
+        plein texte, thésaurus et index vectoriel conceptuel. Tout reste sur l'appareil.</p>
       </div>
       ${hist.length ? `<h2>Recherches récentes</h2>
         <div class="chiprow">${hist.map(h => `<button class="chip" data-q="${esc(h)}">${esc(h)}</button>`).join('')}</div>` : ''}
       <h2>Essayez par exemple</h2>
       <div class="chiprow" style="flex-wrap:wrap">${SUGGESTIONS.map(sq => `<button class="chip" data-q="${esc(sq)}">${esc(sq)}</button>`).join('')}</div>
       <div class="notice">Posez n'importe quelle <b>question naturelle</b>, même avec des fautes de frappe :
-      le moteur comprend votre intention, corrige l'orthographe, reconnaît l'<b>arabe écrit en phonétique</b>
+      le moteur analyse votre intention, corrige l'orthographe, reconnaît l'<b>arabe écrit en phonétique</b>
       approximative (« lakhadjaakoul ») et cherche par le <b>sens</b> (« quelqu'un qui parle dans le dos des
       autres » → médisance). Il cherche ensuite dans le Coran, les hadiths et les invocations de l'application,
       sélectionne les meilleurs passages et assemble une <b>réponse directe sourcée</b>.
-      Rien n'est jamais inventé : chaque résultat affiche sa source, et s'il n'y a pas de source fiable,
-      l'application vous le dit.</div>
+      L'index vectoriel est lexical et conceptuel (TF-IDF + BM25), pas un modèle neuronal génératif.
+      Rien n'est envoyé à un service externe et, faute de source locale suffisante, Nour refuse de conclure.</div>
     `;
     results.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { input.value = b.dataset.q; hideSug(); run(b.dataset.q); });
   }
@@ -215,43 +215,57 @@ export async function viewSearch(initial = '') {
     // éléments déjà montrés dans la réponse directe (pour ne pas les répéter)
     const shownV = new Set(), shownH = new Set(), shownD = new Set();
 
-    // ---------- 1. RÉPONSE LA PLUS PROBABLE ----------
+    // ---------- 1. RÉPONSE LOCALE STRUCTURÉE ----------
     const srcSet = new Set(); // pour la récapitulation « Sources »
     if (answer) {
-      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse la plus probable</div>`);
-      if (answer.topic) parts.push(topicCard(answer.topic));
-      const getV = await enrich([...answer.verses], 3);
-      if (answer.duas.length) {
-        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">🤲 INVOCATION${answer.duas.length > 1 ? 'S' : ''}</div>`);
-        parts.push(answer.duas.map(d => duaCardMini(d, q)).join(''));
-        answer.duas.forEach(d => { shownD.add(d.id); if (d.source) srcSet.add(d.source); });
+      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse locale sourcée</div>`);
+      parts.push(`<div class="tiny answer-label">RÉPONSE SYNTHÉTIQUE</div>
+        <div class="card rag-summary">
+          <p>${esc(answer.summary)}</p>
+          <div class="tiny">Classement hybride local : plein texte, synonymes, sujets vérifiés, TF-IDF conceptuel et BM25.</div>
+        </div>`);
+      const getV = await enrich([...answer.verses], 6);
+
+      parts.push(`<div class="tiny answer-label">📖 VERSETS PERTINENTS</div>`);
+      if (answer.verses.length) {
+        parts.push(answer.verses.map(v => verseCard(v, meta(v.s), q, getV(v))).join(''));
+        answer.verses.forEach(v => {
+          shownV.add(`${v.s}:${v.v}`);
+          const range = v.range ? `${v.range[1]}-${v.range[2]}` : v.v;
+          srcSet.add(`Coran — ${meta(v.s).phonetic} (${v.s}), verset${String(range).includes('-') ? 's' : ''} ${range}`);
+        });
+      } else {
+        parts.push(`<div class="notice">Aucun verset n'a franchi le seuil de fiabilité pour cette question.</div>`);
       }
+
+      parts.push(`<div class="tiny answer-label">📜 HADITHS AUTHENTIQUES</div>`);
       if (answer.hadiths.length) {
-        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📜 HADITHS AUTHENTIQUES</div>`);
         parts.push(answer.hadiths.map(h => hadithCard(h, q)).join(''));
         answer.hadiths.forEach(h => { shownH.add(h.id); if (h.source) srcSet.add(h.source); });
+      } else {
+        parts.push(`<div class="notice">Aucun hadith français authentifié n'a franchi le seuil de fiabilité.</div>`);
       }
-      if (answer.verses.length) {
-        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📖 CORAN</div>`);
-        parts.push(answer.verses.map(v => verseCard(v, meta(v.s), q, getV(v))).join(''));
-        answer.verses.forEach(v => { shownV.add(`${v.s}:${v.v}`); srcSet.add(`Coran, sourate ${meta(v.s).phonetic} (${v.s})`); });
+
+      if (answer.duas.length) {
+        parts.push(`<div class="tiny answer-label">🤲 INVOCATIONS PERTINENTES</div>`);
+        parts.push(answer.duas.map(d => duaCardMini(d, q)).join(''));
+        answer.duas.forEach(d => { shownD.add(d.id); if (d.source) srcSet.add(`${d.title} — ${d.source}`); });
       }
-      // Explications : descriptions vérifiées des concepts reconnus
-      if (answer.explanations && answer.explanations.length) {
-        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">💡 EXPLICATIONS</div>`);
-        parts.push(answer.explanations.slice(0, 2).map(e =>
-          `<div class="card card-plain" style="border-left:4px solid var(--gold)"><b>${esc(e.label)}</b>
-           <p class="muted" style="margin:5px 0 0">${esc(e.desc)}</p></div>`).join(''));
-      }
-      // Sources : récapitulatif clair
+
+      parts.push(`<div class="tiny answer-label">CONTEXTE ET NUANCES</div>
+        <div class="card card-plain rag-context">
+          <p>${esc(answer.context)}</p>
+          <p class="tiny">La synthèse ci-dessus est un texte éditorial enregistré dans le sujet vérifié ou, à défaut, un constat descriptif sur les résultats. Nour ne complète jamais les sources avec une génération libre.</p>
+        </div>`);
+
       if (srcSet.size) {
-        parts.push(`<div class="tiny" style="margin:10px 2px 2px;font-weight:700">📚 SOURCES</div>`);
+        parts.push(`<div class="tiny answer-label">📚 SOURCES EXACTES</div>`);
         parts.push(`<div class="card card-plain" style="padding:10px 14px"><ul style="margin:0;padding-left:18px" class="muted">
-          ${[...srcSet].slice(0, 6).map(s => `<li style="font-size:.82rem">${esc(s)}</li>`).join('')}</ul></div>`);
+          ${[...srcSet].map(s => `<li style="font-size:.82rem">${esc(s)}</li>`).join('')}</ul></div>`);
       }
-      parts.push(`<div class="notice">📚 Réponse assemblée uniquement à partir des sources citées ci-dessus,
-        présentes dans la base vérifiée de Nour — rien n'est généré ni inventé.
-        Pour un avis religieux, consultez un savant ou un imam.</div>`);
+      parts.push(`<div class="notice">Réponse extractive assemblée uniquement à partir de la base locale de Nour.
+        Aucun verset, hadith, invocation ou avis n'est créé. Pour un avis religieux personnel,
+        consultez un savant ou un imam qualifié.</div>`);
     }
 
     // ---------- 2-4. Coran / Hadiths / Invocations ----------
@@ -323,72 +337,6 @@ export async function viewSearch(initial = '') {
     }
     results.innerHTML = parts.join('');
     window.scrollTo({ top: 0 });
-
-    // ---------- Réponse IA en ligne (optionnelle, désactivée par défaut) ----------
-    // On envoie UNIQUEMENT la question + les passages déjà trouvés à un proxy que
-    // l'utilisateur déploie (voir nour/server/). L'IA rédige une synthèse ; les
-    // textes religieux affichés restent ceux de la base vérifiée, jamais l'IA.
-    const aiCfg = state.settings.ai;
-    if (aiCfg && aiCfg.enabled && (aiCfg.mode === 'simple' || aiCfg.endpoint)) {
-      const card = document.createElement('div');
-      card.className = 'ai-answer';
-      card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
-        <div class="card"><div class="skel" style="height:16px;margin:2px 0 8px"></div>
-          <div class="skel" style="height:16px;width:80%;margin:0 0 8px"></div>
-          <div class="tiny" style="color:var(--muted)">L'assistant rédige une synthèse à partir des sources…</div></div>`;
-      results.insertBefore(card, results.firstChild);
-      window.scrollTo({ top: 0 });
-      (async () => {
-        try {
-          const passages = await collectPassages(answer, r, meta, q);
-          if (!passages.length) { card.remove(); return; }
-          const { aiAnswer } = await import('./ai.js');
-          const txt = await aiAnswer(q, passages, { mode: aiCfg.mode, endpoint: aiCfg.endpoint, token: aiCfg.token });
-          if (lastQuery !== q) { card.remove(); return; }
-          card.innerHTML = `<div class="result-cat" style="font-size:1.05rem">✨ Réponse IA</div>
-            <div class="card" style="border-left:4px solid var(--brand)">
-              <p style="margin:0 0 8px;white-space:pre-wrap;line-height:1.55">${esc(txt)}</p>
-              <div class="tiny" style="color:var(--muted);line-height:1.5">Synthèse générée par une IA à partir des sources vérifiées ci-dessous.
-              Les versets, hadiths et invocations affichés proviennent toujours de la base de Nour — rien n'est inventé.
-              Pour un avis religieux, consultez un savant.</div>
-            </div>`;
-        } catch (e) {
-          if (lastQuery !== q) { card.remove(); return; }
-          card.innerHTML = `<div class="notice" style="margin-bottom:10px">✨ Assistant IA indisponible pour l'instant
-            (${esc(String(e && e.message || e).slice(0, 50))}). La réponse locale sourcée ci-dessous reste complète.</div>`;
-        }
-      })();
-    }
-  }
-
-  // rassemble les meilleurs passages vérifiés à envoyer à l'IA (question + sources)
-  async function collectPassages(answer, r, meta, q) {
-    const P = [];
-    const src = answer || {
-      verses: (r.verses || []).slice(0, 3),
-      hadiths: (r.hadiths || []).slice(0, 3),
-      duas: (r.duas || []).slice(0, 2),
-      explanations: r.explanations,
-    };
-    (src.duas || []).slice(0, 3).forEach(d => P.push({
-      type: 'Invocation', ref: d.title, source: d.source || 'Invocation',
-      text: [d.fr, d.translit].filter(Boolean).join(' — '),
-    }));
-    (src.hadiths || []).slice(0, 3).forEach(h => P.push({
-      type: 'Hadith', ref: h.source, source: h.narrator || h.source, text: h.fr,
-    }));
-    const vs = (src.verses || []).slice(0, 3);
-    if (vs.length) {
-      const getV = await enrich(vs, 3);
-      vs.forEach(v => {
-        const e = getV(v);
-        P.push({ type: 'Coran', ref: `${meta(v.s).phonetic} (${v.s}):${v.v}`, source: 'Coran', text: e ? e[1] : v.fr });
-      });
-    }
-    (src.explanations || []).slice(0, 2).forEach(e => P.push({
-      type: 'Explication', ref: e.label, source: 'Nour', text: e.desc,
-    }));
-    return P.filter(p => p.text && p.text.trim());
   }
 
   input.oninput = () => {

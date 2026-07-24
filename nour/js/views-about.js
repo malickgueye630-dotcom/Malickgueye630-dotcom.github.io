@@ -54,16 +54,35 @@ export function viewAbout() {
       </ul>
       <p><b>🔎 Recherche</b></p>
       <ul class="muted" style="padding-left:18px;margin:6px 0">
-        <li>Le moteur (plein texte, fautes d'orthographe, phonétique arabe, sujets, questions)
-          interroge uniquement les textes ci-dessus. Le thésaurus de sujets relie des mots-clés
-          français à des passages précis, vérifiés un par un.</li>
+        <li>Le moteur local combine plein texte, correction orthographique, synonymes,
+          phonétique arabe/française, thésaurus vérifié, vecteurs TF-IDF conceptuels et classement
+          BM25. Les questions et les passages ne quittent pas l’appareil.</li>
+        <li>Il ne s’agit pas d’un grand modèle neuronal embarqué. La réponse est extractive :
+          elle assemble des textes et synthèses éditoriales déjà présents dans Nour, puis refuse
+          de conclure lorsque les sources locales sont insuffisantes.</li>
       </ul>
       <p><b>🎨 Interface & localisation</b></p>
       <ul class="muted" style="padding-left:18px;margin:6px 0">
         <li>Icônes : <i>Lucide</i> (licence ISC), complétées de quelques tracés originaux
           (mosquée, Kaaba, tasbih).</li>
-        <li>Illustrations des lieux saints (en-tête de recherche) et des étapes « Apprendre » :
-          dessins vectoriels <b>originaux et stylisés</b> — ce ne sont pas des photographies.</li>
+        <li>En-tête de recherche : photographies embarquées depuis Wikimedia Commons —
+          <a href="https://commons.wikimedia.org/wiki/File:Kaaba,_Makkah3.jpg" target="_blank" rel="noopener">Kaaba</a>
+          (Moataz Egbaria, CC BY-SA 3.0),
+          <a href="https://commons.wikimedia.org/wiki/File:Al-Masjid_an-Nabawi.jpg" target="_blank" rel="noopener">Mosquée du Prophète ﷺ</a>
+          (Fawaz Mohammed, CC BY-SA 4.0),
+          <a href="https://commons.wikimedia.org/wiki/File:Al_Aqsa.jpg" target="_blank" rel="noopener">Al-Aqsa</a>
+          (Nikeman916, domaine public),
+          <a href="https://commons.wikimedia.org/wiki/File:Sheikh_Zayed_Grand_Mosque_in_Abu_Dhabi_-_panoramio_(8).jpg" target="_blank" rel="noopener">Cheikh Zayed</a>
+          (Jaseem Hamza, CC BY 3.0),
+          <a href="https://commons.wikimedia.org/wiki/File:Hassan_II_Mosque_Plaza.jpg" target="_blank" rel="noopener">Hassan II</a>
+          (FuriousYogi, CC BY-SA 4.0) et
+          <a href="https://commons.wikimedia.org/wiki/File:The_Blue_Mosque_-_Istanbul,_Turkey._(24113491979).jpg" target="_blank" rel="noopener">Sultan Ahmed</a>
+          (Leandro Centomo, CC0).</li>
+        <li>Mode « Apprendre » : illustrations numériques originales créées pour Nour en 2026.
+          Elles sont volontairement indiquées comme <b>illustrations non photographiques</b>.
+          Référence gestuelle complémentaire :
+          <a href="https://commons.wikimedia.org/wiki/File:Salat_positions.jpg" target="_blank" rel="noopener">Salat positions</a>,
+          Sureyya Aydin, CC BY-SA 3.0 / GFDL.</li>
         <li>Localité précise et mosquée la plus proche : services ouverts d'<i>OpenStreetMap</i>
           (Nominatim, Overpass — données © contributeurs OSM, licence ODbL), utilisés seulement
           lorsque vous activez la localisation.</li>
@@ -89,7 +108,9 @@ export function viewAbout() {
     <h2>Vie privée</h2>
     <div class="card">
       <p class="muted">Vos favoris, marque-pages, réglages et historique restent uniquement
-      sur votre appareil (stockage local du navigateur). Aucune donnée n'est envoyée à un serveur.</p>
+      sur votre appareil (stockage local du navigateur). La recherche religieuse est entièrement
+      locale. Seules les fonctions explicitement en ligne — géocodage OpenStreetMap, traduction
+      de secours à la demande et audio du Coran — contactent leurs services respectifs.</p>
     </div>
   `;
 }

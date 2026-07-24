@@ -5,37 +5,270 @@
       "title": "Les ablutions (wudû’)",
       "subtitle": "La purification avant la prière",
       "icon": "droplet",
-      "intro": "Le wudû’ est la purification rituelle accomplie avant la prière. Voici la méthode générale, telle que décrite dans la Sunna. De légères différences existent entre les écoles ; en cas de doute, demandez à un imam.",
+      "cover": "assets/learn/wudu-hands.webp",
+      "mediaLabel": "Illustrations pédagogiques originales",
+      "mediaCredit": "Illustrations numériques originales créées pour Nour en 2026. Ce ne sont pas des photographies.",
+      "intro": "Le wudû’ est la purification rituelle accomplie avant la prière. Ce parcours présente une méthode générale fondée sur le verset 5:6 et la description du wudû’ de ‘Uthmân. De légères différences existent entre les écoles.",
       "steps": [
-        { "fig": "heart", "title": "L’intention (niyya)", "fr": "Ayez l’intention, dans le cœur, de faire les ablutions pour Allah. Aucune formule prononcée à voix haute n’est requise.", "ar": "بِسْمِ اللَّهِ", "tl": "Bismi-Llâh", "trad": "Au nom d’Allah", "note": "On commence en disant « Bismi-Llâh »." },
-        { "fig": "hands", "title": "Laver les mains", "fr": "Lavez vos deux mains jusqu’aux poignets, trois fois, en commençant par la droite." },
-        { "fig": "mouth", "title": "Rincer la bouche", "fr": "Prenez de l’eau dans la main droite et rincez la bouche trois fois (al-madmada)." },
-        { "fig": "nose", "title": "Aspirer l’eau par le nez", "fr": "Aspirez un peu d’eau par le nez puis expulsez-la, trois fois (al-istinshâq)." },
-        { "fig": "face", "title": "Laver le visage", "fr": "Lavez tout le visage, du front au menton et d’une oreille à l’autre, trois fois." },
-        { "fig": "arm", "title": "Laver les bras", "fr": "Lavez le bras droit jusqu’au coude trois fois, puis le bras gauche de même." },
-        { "fig": "head", "title": "Essuyer la tête", "fr": "Passez les mains humides sur la tête une fois (al-mash‘), de l’avant vers l’arrière, puis essuyez les oreilles." },
-        { "fig": "foot", "title": "Laver les pieds", "fr": "Lavez le pied droit jusqu’à la cheville trois fois, puis le pied gauche, en passant entre les orteils." },
-        { "fig": "sparkle", "title": "L’invocation finale", "fr": "Après le wudû’, il est recommandé de dire :", "ar": "أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ", "tl": "Ash-hadou an lâ ilâha illâ-Llâhou wahdahou lâ charîka lah, wa ash-hadou anna Mouhammadan ‘abdouhou wa rasoûlouh", "trad": "J’atteste qu’il n’y a de divinité digne d’adoration qu’Allah, Seul, sans associé, et j’atteste que Muhammad est Son serviteur et Son messager.", "note": "Rapporté par Mouslim." }
+        {
+          "title": "L’intention (niyya)",
+          "image": "assets/learn/wudu-intention.webp",
+          "imageAlt": "Illustration pédagogique d’une personne formulant intérieurement l’intention des ablutions",
+          "fr": "Ayez dans le cœur l’intention de vous purifier pour accomplir la prière. L’intention est intérieure : aucune formule particulière à voix haute n’est exigée.",
+          "ar": "بِسْمِ اللَّهِ",
+          "audioText": "بِسْمِ اللَّهِ",
+          "tl": "Bismi-Llâh",
+          "trad": "Au nom d’Allah.",
+          "detail": "Commencez calmement et utilisez seulement l’eau nécessaire. La basmala est enseignée au début du wudû’ ; son statut détaillé diffère selon les écoles.",
+          "errors": [
+            "Croire qu’il faut prononcer l’intention à voix haute.",
+            "Gaspiller l’eau avant même de commencer."
+          ],
+          "proof": "Principe de l’intention : Sahih al-Bukhari 1 ; prescription du wudû’ : Coran 5:6."
+        },
+        {
+          "title": "Laver les mains",
+          "image": "assets/learn/wudu-hands.webp",
+          "imageAlt": "Illustration pédagogique des deux mains lavées jusqu’aux poignets",
+          "fr": "Lavez les deux mains jusqu’aux poignets, en faisant passer l’eau entre les doigts. La méthode rapportée les lave trois fois.",
+          "detail": "Commencez par la droite et veillez à mouiller la paume, le dos de la main, les doigts et le poignet.",
+          "errors": [
+            "Oublier les espaces entre les doigts.",
+            "Considérer trois lavages comme une permission d’en faire davantage."
+          ],
+          "proof": "Description du wudû’ de ‘Uthmân : Sahih al-Bukhari 164 ; Sahih Muslim 226."
+        },
+        {
+          "title": "Rincer la bouche",
+          "image": "assets/learn/wudu-mouth.webp",
+          "imageAlt": "Illustration pédagogique du rinçage de la bouche pendant les ablutions",
+          "fr": "Prenez de l’eau avec la main droite et rincez soigneusement la bouche (al-madmada), sans avaler l’eau.",
+          "detail": "Faites circuler l’eau dans toute la bouche. Trois rinçages sont décrits dans la méthode prophétique rapportée.",
+          "errors": [
+            "Se contenter de mouiller uniquement les lèvres.",
+            "Avaler volontairement l’eau, notamment pendant le jeûne."
+          ],
+          "proof": "Description du wudû’ de ‘Uthmân : Sahih al-Bukhari 164 ; Sahih Muslim 226."
+        },
+        {
+          "title": "Nettoyer le nez",
+          "image": "assets/learn/wudu-nose.webp",
+          "imageAlt": "Illustration pédagogique de l’eau aspirée doucement par le nez",
+          "fr": "Aspirez doucement un peu d’eau par le nez, puis expulsez-la, sans vous faire mal.",
+          "detail": "Utilisez la main droite pour faire entrer l’eau et la gauche pour l’expulser. Pendant le jeûne, n’aspirez pas excessivement.",
+          "errors": [
+            "Renifler trop fortement.",
+            "Oublier d’expulser l’eau et de nettoyer les narines."
+          ],
+          "proof": "Description du wudû’ de ‘Uthmân : Sahih al-Bukhari 164 ; Sahih Muslim 226."
+        },
+        {
+          "title": "Laver le visage",
+          "image": "assets/learn/wudu-face.webp",
+          "imageAlt": "Illustration pédagogique du visage entièrement lavé",
+          "fr": "Lavez tout le visage, de la naissance habituelle des cheveux jusqu’au menton, et d’une oreille à l’autre.",
+          "detail": "Assurez-vous que l’eau atteint les contours du visage. Pour une barbe épaisse, appliquez l’eau sur sa surface ; les détails varient selon les écoles.",
+          "errors": [
+            "Laisser secs le menton, les tempes ou le contour des oreilles.",
+            "Frotter les yeux avec force."
+          ],
+          "proof": "« Lavez vos visages » : Coran 5:6."
+        },
+        {
+          "title": "Laver les avant-bras",
+          "image": "assets/learn/wudu-arms.webp",
+          "imageAlt": "Illustration pédagogique du lavage de l’avant-bras jusqu’au coude",
+          "fr": "Lavez le bras droit, main comprise, jusqu’au coude inclus, puis le bras gauche de la même manière.",
+          "detail": "Faites le tour du coude et retirez ce qui empêcherait l’eau d’atteindre la peau.",
+          "errors": [
+            "S’arrêter avant le coude.",
+            "Laisser une zone sèche sous une montre, un bracelet ou une manche."
+          ],
+          "proof": "« Et vos mains jusqu’aux coudes » : Coran 5:6."
+        },
+        {
+          "title": "Essuyer la tête",
+          "image": "assets/learn/wudu-head.webp",
+          "imageAlt": "Illustration pédagogique des mains humides passant sur la tête",
+          "fr": "Avec les mains humides, essuyez la tête une fois (al-mash‘), puis les oreilles selon la méthode enseignée.",
+          "detail": "Il s’agit d’un essuyage avec des mains humides, pas d’un nouveau lavage abondant. La surface minimale détaillée varie selon les écoles.",
+          "errors": [
+            "Essuyer seulement les cheveux qui dépassent sans toucher la zone de la tête.",
+            "Transformer l’essuyage en lavage complet."
+          ],
+          "proof": "« Passez les mains mouillées sur vos têtes » : Coran 5:6 ; description : Sahih al-Bukhari 164."
+        },
+        {
+          "title": "Laver les pieds",
+          "image": "assets/learn/wudu-feet.webp",
+          "imageAlt": "Illustration pédagogique du pied lavé jusqu’à la cheville",
+          "fr": "Lavez le pied droit jusqu’à la cheville incluse, puis le pied gauche, en faisant passer l’eau entre les orteils.",
+          "detail": "Vérifiez le talon, la plante du pied et les espaces entre les orteils : ce sont les zones les plus souvent oubliées.",
+          "errors": [
+            "Laisser les talons secs.",
+            "Verser de l’eau sans s’assurer qu’elle atteint toute la peau."
+          ],
+          "proof": "« Et lavez-vous les pieds jusqu’aux chevilles » : Coran 5:6 ; avertissement sur les talons : Sahih al-Bukhari 165 ; Sahih Muslim 241."
+        },
+        {
+          "title": "L’invocation finale",
+          "image": "assets/learn/wudu-complete.webp",
+          "imageAlt": "Illustration pédagogique d’une personne ayant terminé ses ablutions",
+          "fr": "Après avoir terminé le wudû’, dites l’attestation rapportée authentiquement :",
+          "ar": "أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+          "audioText": "أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+          "tl": "Ach-hadou an lâ ilâha illâ-Llâhou wahdahou lâ charîka lah, wa ach-hadou anna Mouhammadan ‘abdouhou wa rasoûlouh.",
+          "trad": "J’atteste qu’il n’y a de divinité digne d’adoration qu’Allah, Seul, sans associé, et j’atteste que Muhammad est Son serviteur et Son messager.",
+          "detail": "Prenez un instant pour vérifier qu’aucune zone obligatoire n’est restée sèche.",
+          "errors": [
+            "Réciter trop vite au point de déformer les mots.",
+            "Recommencer tout le wudû’ par simple doute sans raison certaine."
+          ],
+          "proof": "Invocation après le wudû’ : Sahih Muslim 234."
+        }
       ],
-      "source": "Méthode générale d’après le Coran (sourate 5, verset 6) et la Sunna (al-Bukhârî, Mouslim)."
+      "source": "Méthode générale : Coran 5:6 ; Sahih al-Bukhari 164-165 ; Sahih Muslim 226, 234 et 241."
     },
     {
       "id": "salat",
       "title": "La prière (salât)",
-      "subtitle": "Une unité (rak‘a) expliquée pas à pas",
+      "subtitle": "Une unité de prière expliquée pas à pas",
       "icon": "mosque",
-      "intro": "Voici le déroulement d’une prière, présenté de façon simplifiée pour débuter. La prière se compose d’unités (rak‘ât). Les détails varient selon les écoles : apprenez idéalement auprès d’un imam ou d’un enseignant qualifié.",
+      "cover": "assets/learn/salat-takbir.webp",
+      "mediaLabel": "Illustrations pédagogiques originales",
+      "mediaCredit": "Illustrations numériques originales créées pour Nour en 2026. Ce ne sont pas des photographies. Référence libre complémentaire : « Salat positions », Sureyya Aydin, CC BY-SA 3.0.",
+      "intro": "Ce parcours montre la trame générale d’une rak‘a et la fin de la prière. Il ne remplace pas un apprentissage accompagné : certaines positions, formulations et obligations détaillées diffèrent selon les écoles et la situation de la personne.",
       "steps": [
-        { "fig": "stand", "title": "L’intention et le takbîr", "fr": "Tenez-vous debout, tourné vers la Qibla. Formulez l’intention dans le cœur, levez les mains et dites :", "ar": "اللَّهُ أَكْبَرُ", "tl": "Allâhou akbar", "trad": "Allah est le plus grand." },
-        { "fig": "stand", "title": "La récitation debout (qiyâm)", "fr": "Récitez la sourate Al-Fâtiha, puis une autre sourate ou quelques versets.", "ar": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "tl": "Bismi-Llâhi r-Rahmâni r-Rahîm", "trad": "Au nom d’Allah, le Tout-Miséricordieux, le Très-Miséricordieux.", "note": "Al-Fâtiha est obligatoire dans chaque rak‘a." },
-        { "fig": "ruku", "title": "L’inclinaison (rukû‘)", "fr": "Inclinez-vous, dos droit, mains sur les genoux, et dites trois fois :", "ar": "سُبْحَانَ رَبِّيَ الْعَظِيمِ", "tl": "Soubhâna Rabbiya-l-‘Adhîm", "trad": "Gloire à mon Seigneur, le Très-Grand." },
-        { "fig": "stand", "title": "Le redressement (i‘tidâl)", "fr": "Relevez-vous en disant, puis une fois debout :", "ar": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ، رَبَّنَا وَلَكَ الْحَمْدُ", "tl": "Sami‘a-Llâhou liman hamidah, Rabbanâ wa laka-l-hamd", "trad": "Allah entend celui qui Le loue. Notre Seigneur, à Toi la louange." },
-        { "fig": "sujud", "title": "La prosternation (soujoûd)", "fr": "Prosternez-vous, le front, le nez, les paumes, les genoux et les orteils au sol, et dites trois fois :", "ar": "سُبْحَانَ رَبِّيَ الْأَعْلَىٰ", "tl": "Soubhâna Rabbiya-l-A‘lâ", "trad": "Gloire à mon Seigneur, le Très-Haut." },
-        { "fig": "sit", "title": "L’assise entre les deux prosternations", "fr": "Redressez-vous en position assise, puis dites :", "ar": "رَبِّ اغْفِرْ لِي", "tl": "Rabbi-ghfir lî", "trad": "Seigneur, pardonne-moi.", "note": "Puis prosternez-vous une seconde fois de la même manière." },
-        { "fig": "sit", "title": "Le tashahhoud", "fr": "Après deux rak‘ât, restez assis et récitez le tashahhoud :", "ar": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...", "tl": "At-tahiyyâtou li-Llâhi wa-s-salawâtou wa-t-tayyibât…", "trad": "Les salutations, les prières et les bonnes œuvres appartiennent à Allah…", "note": "On y ajoute la prière sur le Prophète ﷺ. Texte complet à apprendre auprès d’un enseignant." },
-        { "fig": "salam", "title": "Le salut final (taslîm)", "fr": "Terminez en tournant le visage à droite puis à gauche, en disant à chaque fois :", "ar": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ", "tl": "As-salâmou ‘alaykoum wa rahmatou-Llâh", "trad": "Que la paix et la miséricorde d’Allah soient sur vous." }
+        {
+          "title": "Takbîr d’entrée",
+          "image": "assets/learn/salat-takbir.webp",
+          "imageAlt": "Illustration pédagogique du takbîr, debout avec les mains levées près des oreilles",
+          "fr": "Tenez-vous debout face à la Qibla, avec l’intention dans le cœur. Levez les mains selon la manière apprise et entrez dans la prière en disant :",
+          "ar": "اللَّهُ أَكْبَرُ",
+          "audioText": "اللَّهُ أَكْبَرُ",
+          "tl": "Allâhou akbar.",
+          "trad": "Allah est le plus grand.",
+          "detail": "Après le takbîr, placez les mains selon la pratique enseignée dans votre école et fixez un point de prosternation sans rigidité excessive.",
+          "errors": [
+            "Prononcer l’intention à voix haute comme si c’était une formule obligatoire.",
+            "Commencer à bouger avant d’avoir terminé le takbîr."
+          ],
+          "proof": "Méthode générale : « Priez comme vous m’avez vu prier » — Sahih al-Bukhari 631."
+        },
+        {
+          "title": "Qiyâm et Al-Fâtiha",
+          "image": "assets/learn/salat-qiyam.webp",
+          "imageAlt": "Illustration pédagogique de la station debout qiyâm, mains posées sur le buste",
+          "fr": "Restez debout et récitez Al-Fâtiha. Dans les rak‘ât où cela est prévu, récitez ensuite une autre sourate ou quelques versets.",
+          "ar": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ\nٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nمَٰلِكِ يَوْمِ ٱلدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ\nصِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّالِّينَ",
+          "audioText": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ. ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ. ٱلرَّحْمَٰنِ ٱلرَّحِيمِ. مَٰلِكِ يَوْمِ ٱلدِّينِ. إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ. ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ. صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّالِّينَ",
+          "tl": "Bismi Llâhi r-Rahmâni r-Rahîm. Al-hamdou lillâhi Rabbi l-‘âlamîn. Ar-Rahmâni r-Rahîm. Mâliki yawmi d-dîn. Iyyâka na‘boudou wa iyyâka nasta‘în. Ihdinâ s-sirâta l-moustaqîm. Sirâta lladhîna an‘amta ‘alayhim, ghayri l-maghdûbi ‘alayhim wa lâ d-dâllîn.",
+          "trad": "Au nom d’Allah, le Tout Miséricordieux, le Très Miséricordieux. Louange à Allah, Seigneur de l’univers… Guide-nous dans le droit chemin, le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.",
+          "detail": "Apprenez la récitation lentement et vérifiez-la auprès d’une personne compétente. Les règles concernant la récitation derrière l’imam comportent des détails selon les écoles.",
+          "errors": [
+            "Avaler les syllabes par précipitation.",
+            "Croire que la phonétique remplace définitivement l’apprentissage du texte arabe."
+          ],
+          "proof": "Al-Fâtiha : Coran 1:1-7 ; place de sa récitation : Sahih al-Bukhari 756 ; Sahih Muslim 394."
+        },
+        {
+          "title": "Inclinaison (rukû‘)",
+          "image": "assets/learn/salat-ruku.webp",
+          "imageAlt": "Illustration pédagogique du rukû‘, dos incliné et mains sur les genoux",
+          "fr": "Dites le takbîr, inclinez-vous avec stabilité, les mains sur les genoux et le dos aussi droit que votre capacité le permet. Dites calmement :",
+          "ar": "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+          "audioText": "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+          "tl": "Soubhâna Rabbiya-l-‘Adhîm.",
+          "trad": "Gloire à mon Seigneur, le Très-Grand.",
+          "detail": "Répétez la formule avec présence du cœur ; trois répétitions sont couramment enseignées. L’essentiel est de marquer une réelle stabilité.",
+          "errors": [
+            "Courber seulement la nuque sans véritable inclinaison.",
+            "Remonter immédiatement sans marquer un temps de stabilité."
+          ],
+          "proof": "Méthode générale des positions : Sahih al-Bukhari 631."
+        },
+        {
+          "title": "Redressement (i‘tidâl)",
+          "image": "assets/learn/salat-ready.webp",
+          "imageAlt": "Illustration pédagogique de la station debout après le rukû‘",
+          "fr": "Relevez-vous complètement et marquez un temps de stabilité. En vous relevant puis debout, dites :",
+          "ar": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ\nرَبَّنَا وَلَكَ الْحَمْدُ",
+          "audioText": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ. رَبَّنَا وَلَكَ الْحَمْدُ",
+          "tl": "Sami‘a-Llâhou liman hamidah. Rabbanâ wa laka-l-hamd.",
+          "trad": "Allah entend celui qui Le loue. Notre Seigneur, à Toi la louange.",
+          "detail": "Les formulations du fidèle derrière l’imam comportent des détails ; suivez l’enseignement de votre école.",
+          "errors": [
+            "Descendre en prosternation avant d’être revenu complètement debout.",
+            "Prononcer la formule sans laisser au corps le temps de se stabiliser."
+          ],
+          "proof": "Formule et redressement rapportés dans Sahih al-Bukhari 795 ; Sahih Muslim 392."
+        },
+        {
+          "title": "Prosternation (soujoûd)",
+          "image": "assets/learn/salat-sujud.webp",
+          "imageAlt": "Illustration pédagogique du soujoûd, front et nez posés sur le tapis",
+          "fr": "Dites le takbîr et prosternez-vous sur le front et le nez, les deux mains, les deux genoux et les orteils, selon votre capacité. Dites :",
+          "ar": "سُبْحَانَ رَبِّيَ الْأَعْلَىٰ",
+          "audioText": "سُبْحَانَ رَبِّيَ الْأَعْلَىٰ",
+          "tl": "Soubhâna Rabbiya-l-A‘lâ.",
+          "trad": "Gloire à mon Seigneur, le Très-Haut.",
+          "detail": "La prosternation est un moment privilégié pour invoquer Allah. Restez stable et évitez de gêner la personne voisine.",
+          "errors": [
+            "Laisser le nez ou les orteils constamment décollés sans raison.",
+            "Poser les avant-bras entièrement au sol comme un animal."
+          ],
+          "proof": "« Prosterne-toi et rapproche-toi » : Coran 96:19 ; les sept appuis : Sahih al-Bukhari 812 ; Sahih Muslim 490."
+        },
+        {
+          "title": "Assise entre deux prosternations (jalsa)",
+          "image": "assets/learn/salat-jalsa.webp",
+          "imageAlt": "Illustration pédagogique de la jalsa, assis entre les deux prosternations",
+          "fr": "Relevez-vous en position assise, marquez la stabilité et dites :",
+          "ar": "رَبِّ اغْفِرْ لِي",
+          "audioText": "رَبِّ اغْفِرْ لِي",
+          "tl": "Rabbi-ghfir lî.",
+          "trad": "Seigneur, pardonne-moi.",
+          "detail": "Prosternez-vous ensuite une seconde fois comme précédemment. La manière de placer les pieds est détaillée différemment selon les écoles et les capacités physiques.",
+          "errors": [
+            "Ne pas s’asseoir réellement entre les deux prosternations.",
+            "Se faire mal en forçant une position des pieds."
+          ],
+          "proof": "Stabilité entre les positions : Sahih al-Bukhari 757 ; formule rapportée dans Sunan Abi Dawud 874."
+        },
+        {
+          "title": "Tashahhoud",
+          "image": "assets/learn/salat-tashahhud.webp",
+          "imageAlt": "Illustration pédagogique du tashahhoud assis, index droit levé",
+          "fr": "Après deux rak‘ât, restez assis et récitez le tashahhoud. Voici la formulation rapportée d’Ibn Mas‘ûd :",
+          "ar": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+          "audioText": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ. السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ. السَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ. أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+          "tl": "At-tahiyyâtou li-Llâhi wa-s-salawâtou wa-t-tayyibât. As-salâmou ‘alayka ayyouha n-nabiyyou wa rahmatou-Llâhi wa barakâtouh. As-salâmou ‘alaynâ wa ‘alâ ‘ibâdi-Llâhi s-sâlihîn. Ach-hadou an lâ ilâha illâ-Llâh, wa ach-hadou anna Mouhammadan ‘abdouhou wa rasoûlouh.",
+          "trad": "Les salutations, les prières et les bonnes œuvres appartiennent à Allah. Que la paix, la miséricorde d’Allah et Ses bénédictions soient sur toi, ô Prophète. Que la paix soit sur nous et sur les serviteurs vertueux d’Allah. J’atteste qu’il n’y a de divinité qu’Allah et que Muhammad est Son serviteur et Son messager.",
+          "detail": "Dans le dernier tashahhoud, on ajoute la prière sur le Prophète ﷺ selon la formulation apprise. Les gestes de l’index et la position assise comportent des variantes reconnues.",
+          "errors": [
+            "Transformer une variante reconnue du geste de l’index en motif de dispute.",
+            "Omettre d’apprendre progressivement la prière sur le Prophète pour le dernier tashahhoud."
+          ],
+          "proof": "Tashahhoud d’Ibn Mas‘ûd : Sahih al-Bukhari 831 ; Sahih Muslim 402."
+        },
+        {
+          "title": "Salut final (taslîm)",
+          "image": "assets/learn/salat-taslim.webp",
+          "imageAlt": "Illustration pédagogique du taslîm assis, visage tourné vers la droite",
+          "fr": "Terminez la prière en tournant le visage à droite puis à gauche, selon la manière apprise, et dites :",
+          "ar": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+          "audioText": "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+          "tl": "As-salâmou ‘alaykoum wa rahmatou-Llâh.",
+          "trad": "Que la paix et la miséricorde d’Allah soient sur vous.",
+          "detail": "Le taslîm met fin à la prière. Restez posé et ne vous levez pas avant d’avoir achevé la formule.",
+          "errors": [
+            "Tourner tout le buste au lieu du visage.",
+            "Couper la formule ou se lever avant sa fin."
+          ],
+          "proof": "Le taslîm à droite et à gauche est rapporté dans Sahih Muslim 582."
+        }
       ],
-      "source": "Déroulement général d’après la Sunna (al-Bukhârî, Mouslim). Le nombre de rak‘ât et certains détails dépendent de la prière et de l’école juridique."
+      "source": "Trame générale : Sahih al-Bukhari 631. Al-Fâtiha : Coran 1:1-7. Chaque étape affiche sa référence propre ; les détails d’école doivent être appris auprès d’une personne qualifiée."
     }
   ]
 }

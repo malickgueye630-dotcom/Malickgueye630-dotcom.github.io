@@ -218,11 +218,20 @@ function matchTopics(q, toks, base) {
       if (k.length > 3 && padded.includes(` ${k} `)) s = Math.max(s, 3 + k.split(' ').length);
     }
     let overlap = 0;
+    const countedConcepts = new Set();
     for (const kt of t._keyTokens) {
-      if (stems.has(kt)) overlap += 1;
-      else if (base.lex.has(kt) && groups.has(base.lex.get(kt))) overlap += 0.8;
+      const group = base.lex.get(kt);
+      const concept = group === undefined ? `t:${kt}` : `g:${group}`;
+      if (countedConcepts.has(concept)) continue;
+      let gain = 0;
+      if (stems.has(kt)) gain = 1;
+      else if (group !== undefined && groups.has(group)) gain = 0.8;
       // token tronqué (« do » → « dos ») : préfixe à une lettre près
-      else if ([...stems].some(s => s.length >= 2 && kt.startsWith(s) && kt.length - s.length <= 1)) overlap += 0.6;
+      else if ([...stems].some(s => s.length >= 2 && kt.startsWith(s) && kt.length - s.length <= 1)) gain = 0.6;
+      if (gain) {
+        countedConcepts.add(concept);
+        overlap += gain;
+      }
     }
     if (toks.length && overlap) s = Math.max(s, overlap * 1.4 * (overlap / toks.length));
     if (s > 0.9) out.push({ topic: t, score: s });
@@ -236,8 +245,9 @@ function matchTopics(q, toks, base) {
 // par un vecteur creux TF-IDF. Les dimensions incluent, en plus des racines de
 // mots, un identifiant de « groupe de synonymes » (du lexique) : ainsi des mots
 // différents mais de sens proche partagent une dimension → la similarité cosinus
-// capture le SENS, pas seulement les mots exacts. 100 % local, déterministe,
-// aucun modèle externe : c'est ce qui garantit qu'aucun contenu n'est inventé.
+// capte une proximité conceptuelle au-delà des mots exacts. Le score final fusionne
+// cette similarité cosinus avec BM25 (classement plein texte) et un bonus de phrase.
+// Il ne s'agit pas d'embeddings neuronaux : tout est local, déterministe et traçable.
 function expandVec(text, base) {
   const out = [];
   for (const t of tokens(text)) {
@@ -262,12 +272,14 @@ async function buildVec(base) {
   for (const d of base.allDuas) docs.push({ type: 'd', id: d.id, text: `${d.title} ${d.fr} ${d.catName} ${d.note || ''}` });
 
   const df = new Map();
+  const lengths = new Uint32Array(docs.length);
   const tfs = docs.map(doc => {
     const tf = new Map();
     for (const t of expandVec(doc.text, base)) tf.set(t, (tf.get(t) || 0) + 1);
     for (const t of tf.keys()) df.set(t, (df.get(t) || 0) + 1);
     return tf;
   });
+  tfs.forEach((tf, i) => { lengths[i] = [...tf.values()].reduce((a, b) => a + b, 0); });
   const N = docs.length;
   const idf = t => Math.log((N + 1) / ((df.get(t) || 0) + 1)) + 1;
   const inv = new Map();       // terme → [[docIdx, poids]]
@@ -282,12 +294,13 @@ async function buildVec(base) {
     }
     norms[i] = Math.sqrt(sq) || 1;
   });
-  VEC = { docs, inv, idf, norms };
+  const avgdl = lengths.reduce((a, b) => a + b, 0) / Math.max(1, N);
+  VEC = { docs, inv, idf, norms, tfs, df, lengths, avgdl, N };
   return VEC;
 }
 
 async function semanticSearch(qText, base) {
-  const { docs, inv, idf, norms } = await buildVec(base);
+  const { docs, inv, idf, norms, tfs, df, lengths, avgdl, N } = await buildVec(base);
   const qtf = new Map();
   for (const t of expandVec(qText, base)) qtf.set(t, (qtf.get(t) || 0) + 1);
   if (!qtf.size) return { v: [], h: [], d: [], top: 0 };
@@ -303,8 +316,19 @@ async function semanticSearch(qText, base) {
   }
   const hits = [];
   for (const [i, dot] of acc) {
-    const sim = dot / (qnorm * norms[i]);
-    if (sim > 0.1) hits.push({ ...docs[i], sim });
+    const cosine = dot / (qnorm * norms[i]);
+    let bm25 = 0;
+    const k1 = 1.35, b = 0.72;
+    for (const t of qw.keys()) {
+      const f = tfs[i].get(t) || 0;
+      if (!f) continue;
+      const bmIdf = Math.log(1 + (N - (df.get(t) || 0) + 0.5) / ((df.get(t) || 0) + 0.5));
+      bm25 += bmIdf * (f * (k1 + 1)) / (f + k1 * (1 - b + b * lengths[i] / Math.max(1, avgdl)));
+    }
+    const bmNorm = 1 - Math.exp(-bm25 / 5);
+    const phrase = fold(qText).length >= 5 && fold(docs[i].text).includes(fold(qText)) ? 0.08 : 0;
+    const sim = Math.min(1, 0.62 * cosine + 0.38 * bmNorm + phrase);
+    if (sim > 0.1) hits.push({ ...docs[i], sim, cosine, bm25 });
   }
   hits.sort((a, b) => b.sim - a.sim);
   const out = { v: [], h: [], d: [], top: hits.length ? hits[0].sim : 0 };
@@ -517,7 +541,12 @@ export async function searchAll(q, opts = {}) {
   // explications : descriptions vérifiées des sujets reconnus (orientation, pas un avis religieux)
   result.explanations = result.topics
     .filter(t => t.topic.desc)
-    .map(t => ({ label: t.topic.label, desc: t.topic.desc, id: t.topic.id }));
+    .map(t => ({
+      label: t.topic.label,
+      desc: t.topic.desc,
+      nuances: t.topic.nuances || '',
+      id: t.topic.id,
+    }));
 
   // --- phonétique (si la requête ressemble à de l'arabe latinisé, ou si peu de résultats)
   const latinish = !hasArabic && /^[a-z0-9'\s]+$/i.test(fold(q));
@@ -552,9 +581,29 @@ export function buildAnswer(result) {
     : strong(exactArr, minAlone).slice(0, 3);
   const duas = pick(result.duasTopic, result.duas, 4, 2.2);
   const hadiths = pick(result.hadithsTopic, result.hadiths, 4, 2.2);
-  const verses = pick(result.versesTopic, result.verses, 5, 2.2);
+  const verses = useTopic && result.versesTopic.length
+    ? [...result.versesTopic.slice(0, 5), ...strong(result.verses, 5).slice(0, 1)].slice(0, 5)
+    : pick(result.versesTopic, result.verses, 5, 2.2);
   if (!t && !duas.length && !hadiths.length && !verses.length) return null;
-  return { topic: t ? t.topic : null, duas, hadiths, verses, explanations: result.explanations || [] };
+  const topic = t ? t.topic : null;
+  const summary = topic?.answer || topic?.desc ||
+    "La base locale de Nour a retrouvé les passages ci-dessous comme correspondances les plus proches. Elle ne peut pas rédiger une conclusion doctrinale au-delà de ces textes.";
+  const context = topic?.nuances ||
+    "Cette sélection locale aide à retrouver des sources ; elle ne remplace pas l'étude du contexte complet ni l'avis d'une personne qualifiée pour un cas particulier.";
+  return {
+    topic,
+    summary,
+    context,
+    duas,
+    hadiths,
+    verses,
+    explanations: result.explanations || [],
+    retrieval: {
+      mode: 'hybride-local',
+      semantic: 'TF-IDF conceptuel + BM25',
+      score: result.semanticTop || 0,
+    },
+  };
 }
 
 // ---------------- suggestions pendant la saisie ----------------

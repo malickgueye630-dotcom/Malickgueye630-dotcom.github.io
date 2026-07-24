@@ -2,7 +2,7 @@
 const KEY = 'nour:v1';
 
 const defaults = {
-  v: 3,
+  v: 4,
   settings: {
     theme: 'auto',            // auto | light | dark
     palette: 'emeraude',      // emeraude | sable | nuit | lavande | custom
@@ -29,11 +29,11 @@ const defaults = {
     searchSuggest: true,      // suggestions pendant la saisie
     searchPhonetic: true,     // recherche phonétique arabe
     searchSmart: true,        // compréhension intelligente (sujets, réponse directe)
-    ai: {                     // assistant IA en ligne
-      enabled: true,          // actif : une carte « Réponse IA » complète les résultats
-      mode: 'simple',         // 'simple' = service public gratuit sans clé ; 'proxy' = votre serveur
-      endpoint: '',           // (mode proxy) URL du Worker Cloudflare — voir nour/server/README-IA.md
-      token: '',              // (mode proxy) jeton partagé optionnel
+    ai: {                     // conservé uniquement pour migrer les anciens réglages
+      enabled: false,         // la recherche religieuse est désormais strictement locale
+      mode: 'local',
+      endpoint: '',
+      token: '',
     },
     reciter: 'ar.alafasy',
     audio: {
@@ -53,6 +53,7 @@ const defaults = {
   recents: [],                // [{ s, ts }]
   readLog: {},                // "YYYY-MM-DD" → nb versets lus
   searchHistory: [],
+  learnProgress: { wudu: [], salat: [] },
   tasbih: { current: 0, target: 33, dhikrId: 0, totals: {}, custom: [] },
 };
 
@@ -66,6 +67,7 @@ function load() {
       ...d,
       settings: { ...structuredClone(defaults.settings), ...(d.settings || {}) },
       favorites: { ...structuredClone(defaults.favorites), ...(d.favorites || {}) },
+      learnProgress: { ...structuredClone(defaults.learnProgress), ...(d.learnProgress || {}) },
       tasbih: { ...structuredClone(defaults.tasbih), ...(d.tasbih || {}) },
     };
     merged.settings.audio = { ...structuredClone(defaults.settings.audio), ...((d.settings || {}).audio || {}) };
@@ -79,6 +81,11 @@ function load() {
     if (merged.v < 3) {
       if (merged.settings.palette === 'violet') merged.settings.palette = 'lavande';
       merged.v = 3;
+    }
+    // migration v3 → v4 : aucune question ni source ne quitte l'appareil.
+    if (merged.v < 4) {
+      merged.settings.ai = { enabled: false, mode: 'local', endpoint: '', token: '' };
+      merged.v = 4;
     }
     return merged;
   } catch {
