@@ -24,14 +24,23 @@ des favoris, l'audio du Coran et un mode sombre.
   - **recherche phonétique** de versets : « lakhadjaakoul » retrouve *Laqad jâakum* (9:128),
     avec normalisation des variantes (kh/7, gh/3, q/k/9, ou/oo, dj/j…) et alignement
     semi-global à distance d'édition bornée ;
-  - **recherche sémantique** par thésaurus de 56 sujets vérifiés (`data/topics.json`) :
+  - **recherche sémantique locale** par thésaurus vérifié et index vectoriel creux
+    (TF-IDF conceptuel + BM25, sans embeddings neuronaux) :
     « le peuple entre les deux montagnes » → Dhul-Qarnayn (Coran 18:83-98) ;
-  - **questions naturelles** → réponse structurée (🤲 invocations, 📜 hadiths, 📖 versets)
-    assemblée uniquement depuis la base, avec le message honnête « je n'ai pas trouvé de
-    source suffisamment fiable » quand c'est le cas ;
+  - **questions naturelles** → réponse structurée (synthèse, versets, hadiths, nuances,
+    sources exactes) assemblée uniquement depuis la base, avec le message honnête
+    « je n'ai pas trouvé de source suffisamment fiable » quand c'est le cas ;
   - recherche dans le **texte arabe** (index sans diacritiques) et suggestions en temps réel ;
   - badges « Correspondance exacte » / « Lié au sujet » / « Correspondance phonétique ».
-  Aucun contenu religieux n'est généré : chaque résultat vient de la base et cite sa source.
+  Aucun contenu religieux n'est généré et aucune question n'est envoyée à un service d'IA :
+  chaque résultat vient de la base et cite sa source. Limite assumée : sans grand modèle local,
+  le moteur reste extractif et ne produit pas de raisonnement religieux ouvert.
+- 🖼️ **Accueil photographique** : six photographies HD libres embarquées (Masjid al-Harâm,
+  Mosquée du Prophète ﷺ, Al-Aqsa, Cheikh Zayed, Hassan II et Sultan Ahmed), carrousel de
+  5,5 minutes, fondu, mouvement cinématographique lent et ambiance selon l'heure locale.
+- 🎓 **Mode Apprendre** : parcours interactifs wudû’ et salât, progression mémorisée,
+  illustrations pédagogiques non photographiques, arabe, phonétique française, traduction,
+  prononciation par la voix arabe de l'appareil, erreurs fréquentes et preuves exactes.
 - 🕌 **Horaires de prière** : calcul local (bibliothèque `adhan`, MIT) par géolocalisation ou
   ville (base hors-ligne), méthodes configurables (12° Musulmans de France, 15°, 18°, MWL,
   Umm al-Qura, ISNA, Diyanet…), madhhab pour l'Asr, ajustements manuels par prière,
@@ -70,6 +79,9 @@ nour/
 │   ├── duas.json         # invocations rédigées et sourcées
 │   └── hadiths_fr.json   # sélection FR (refId vérifié par script contre la base arabe)
 ├── fonts/                # Amiri (arabe), embarquée pour le hors-ligne
+├── assets/
+│   ├── mosques/          # photographies libres du carrousel
+│   └── learn/            # illustrations pédagogiques non photographiques
 ├── icons/                # icônes générées par scripts/gen_icons.py
 └── scripts/
     ├── build_data.py     # régénère data/ depuis les paquets npm sources
@@ -91,6 +103,9 @@ Pour ajouter une traduction, un récitateur ou un recueil : voir `scripts/build_
 | Police arabe Amiri | @fontsource/amiri | SIL OFL 1.1 |
 | Audio Coran | cdn.islamic.network (Islamic Network) | usage libre, en ligne |
 | Sélection hadiths FR & invocations | rédigées pour Nour, références vérifiées | — |
+| Photos de mosquées | Wikimedia Commons — crédits détaillés dans l'écran « À propos » | CC0, domaine public, CC BY 3.0, CC BY-SA 3.0/4.0 selon l'image |
+| Illustrations « Apprendre » | créations numériques originales pour Nour (2026), explicitement non photographiques | usage du projet Nour |
+| Référence des positions de prière | « Salat positions », Sureyya Aydin, Wikimedia Commons | CC BY-SA 3.0 / GFDL |
 
 ⚠️ La numérotation interne des recueils de hadiths est celle de la base (elle peut différer
 légèrement de la numérotation imprimée). La sélection française cite, elle, la numérotation

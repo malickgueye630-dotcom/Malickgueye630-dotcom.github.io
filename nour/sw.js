@@ -1,5 +1,5 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v11';
+const VERSION = 'nour-v12';
 const SHELL = [
   './',
   'index.html',
@@ -11,12 +11,19 @@ const SHELL = [
   'js/vendor/adhan.esm.min.js',
   'js/views-home.js', 'js/views-quran.js', 'js/views-search.js', 'js/views-prayer.js',
   'js/views-hadith.js', 'js/views-duas.js', 'js/views-favorites.js', 'js/views-about.js',
-  'js/ai.js',
   'fonts/amiri-arabic-400-normal.woff2', 'fonts/amiri-arabic-700-normal.woff2',
   'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'data/quran/index.json', 'data/duas.json', 'data/hadiths_fr.json', 'data/hadith/index.json',
   'data/topics.json', 'data/cities.json', 'data/hadith/chapters_fr.json',
+  'assets/mosques/haram.webp', 'assets/mosques/nabawi.webp', 'assets/mosques/aqsa.webp',
+  'assets/mosques/zayed.webp', 'assets/mosques/hassan2.webp', 'assets/mosques/sultanahmet.webp',
+  'assets/learn/wudu-intention.webp', 'assets/learn/wudu-hands.webp', 'assets/learn/wudu-mouth.webp',
+  'assets/learn/wudu-nose.webp', 'assets/learn/wudu-face.webp', 'assets/learn/wudu-arms.webp',
+  'assets/learn/wudu-head.webp', 'assets/learn/wudu-feet.webp', 'assets/learn/wudu-complete.webp',
+  'assets/learn/salat-takbir.webp', 'assets/learn/salat-qiyam.webp', 'assets/learn/salat-ruku.webp',
+  'assets/learn/salat-sujud.webp', 'assets/learn/salat-jalsa.webp', 'assets/learn/salat-tashahhud.webp',
+  'assets/learn/salat-taslim.webp', 'assets/learn/salat-ready.webp',
 ];
 
 self.addEventListener('install', e => {

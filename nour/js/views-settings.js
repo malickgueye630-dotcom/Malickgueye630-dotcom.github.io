@@ -130,36 +130,16 @@ export function viewSettings(section) {
     </div>
 
     <div class="setgroup" id="sec-ia">
-      <h2>${icon('search', 15)} Assistant IA en ligne</h2>
-      ${row('Activer l’assistant IA', 'Une synthèse rédigée par une IA <b>à partir des sources déjà trouvées</b>.', sw('ai.enabled', s.ai.enabled))}
-      <div id="aiPanel" ${s.ai.enabled ? '' : 'hidden'}>
-        ${row('Mode', 'Simple = aucun réglage. Avancé = votre propre serveur.',
-          seg('ai.mode', [['simple', 'IA simple'], ['proxy', 'Mon serveur']], s.ai.mode))}
-        <div id="aiSimpleNote" class="setrow" ${s.ai.mode === 'proxy' ? 'hidden' : ''} style="display:block;border-bottom:none">
-          <small style="color:var(--muted);line-height:1.5">✅ <b>Rien à configurer.</b> Utilise un service d’IA
-          public et gratuit. Votre question et les passages trouvés <b>quittent l’appareil</b> vers ce service.
-          Service partagé : parfois lent ou indisponible — l’app revient alors à la réponse locale sourcée.</small>
+      <h2>${icon('search', 15)} Moteur local de réponse</h2>
+      <div class="setrow" style="display:block;border-bottom:none">
+        <div class="lab">Actif, privé et sans clé API
+          <small style="line-height:1.55;margin-top:6px">La recherche combine plein texte, correction orthographique,
+          synonymes, phonétique arabe/française, sujets vérifiés, TF-IDF conceptuel et BM25. Les questions et les
+          passages ne quittent jamais l’appareil.</small>
         </div>
-        <div id="aiProxyFields" ${s.ai.mode === 'proxy' ? '' : 'hidden'}>
-          <div class="setrow" style="display:block">
-            <div class="lab" style="margin-bottom:8px">Adresse du proxy<small>URL du serveur que vous déployez (voir le dossier <code>nour/server/</code>). La clé reste sur votre serveur, jamais dans l’app.</small></div>
-            <input type="url" id="aiEndpoint" value="${esc(s.ai.endpoint || '')}" placeholder="https://nour-ia.exemple.workers.dev"
-              autocapitalize="off" autocorrect="off" spellcheck="false"
-              style="width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
-          </div>
-          <div class="setrow" style="display:block">
-            <div class="lab" style="margin-bottom:8px">Jeton (facultatif)<small>Si vous avez défini un <code>NOUR_TOKEN</code> anti-abus sur le serveur.</small></div>
-            <input type="text" id="aiToken" value="${esc(s.ai.token || '')}" placeholder="—"
-              autocapitalize="off" autocorrect="off" spellcheck="false"
-              style="width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
-          </div>
-        </div>
-        <div class="setrow"><div class="lab">Tester la connexion<small id="aiTestMsg">Vérifie que l’IA répond</small></div>
-          <button class="btn btn-ghost" id="btnAiTest">Tester</button></div>
-        <div class="setrow" style="display:block;border-bottom:none">
-          <small style="color:var(--muted);line-height:1.5">L’IA ne peut citer que les passages déjà trouvés : elle
-          n’invente jamais un verset, un hadith ni une règle. Le texte religieux affiché reste toujours celui de la
-          base vérifiée. Vous pouvez désactiver l’assistant à tout moment — l’app redevient alors 100 % locale.</small></div>
+        <div class="notice" style="margin:12px 0 0">Limite honnête : Nour n’embarque pas de grand modèle de langage.
+          La synthèse est extractive et éditoriale, construite uniquement avec les contenus locaux. Si les sources
+          sont insuffisantes, l’application refuse de conclure.</div>
       </div>
     </div>
 
@@ -182,15 +162,9 @@ export function viewSettings(section) {
       if (key === 'speed') { s.audio.speed = val; player.audio.playbackRate = val; }
       else if (key === 'repeatVerse') s.audio.repeatVerse = val;
       else if (key === 'madhab') p.madhab = val;
-      else if (key === 'ai.mode') s.ai.mode = val;
       else s[key] = val;
       save(); applyTheme(); applySizes();
       segEl.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === e.target));
-      if (key === 'ai.mode') {
-        const proxy = val === 'proxy';
-        const pf = document.getElementById('aiProxyFields'); if (pf) pf.hidden = !proxy;
-        const sn = document.getElementById('aiSimpleNote'); if (sn) sn.hidden = proxy;
-      }
       if (key === 'palette') {
         document.getElementById('hueRow').innerHTML = val === 'custom' ? customPanel(s) : '';
         bindColorPanel();
@@ -199,12 +173,7 @@ export function viewSettings(section) {
   });
   root.querySelectorAll('input[data-k]').forEach(inp => inp.onchange = () => {
     const k = inp.dataset.k;
-    if (k === 'ai.enabled') {
-      s.ai.enabled = inp.checked;
-      const panel = document.getElementById('aiPanel');
-      if (panel) panel.hidden = !inp.checked;
-    }
-    else if (k.startsWith('a.')) s.audio[k.slice(2)] = inp.checked;
+    if (k.startsWith('a.')) s.audio[k.slice(2)] = inp.checked;
     else s[k] = inp.checked;
     save();
     // les deux interrupteurs « vibrations » (Apparence / Qibla) restent synchronisés
@@ -235,27 +204,6 @@ export function viewSettings(section) {
   bindColorPanel();
   const uname = document.getElementById('userName');
   if (uname) uname.oninput = () => { s.userName = uname.value.trim().slice(0, 24); save(); };
-  const aiEp = document.getElementById('aiEndpoint');
-  if (aiEp) aiEp.oninput = () => { s.ai.endpoint = aiEp.value.trim(); save(); };
-  const aiTk = document.getElementById('aiToken');
-  if (aiTk) aiTk.oninput = () => { s.ai.token = aiTk.value.trim(); save(); };
-  const aiTest = document.getElementById('btnAiTest');
-  if (aiTest) aiTest.onclick = async () => {
-    const msg = document.getElementById('aiTestMsg');
-    if (s.ai.mode === 'proxy' && !s.ai.endpoint) { if (msg) msg.textContent = 'Renseignez d’abord l’adresse du proxy'; return; }
-    aiTest.disabled = true; aiTest.textContent = '…'; if (msg) msg.textContent = 'Connexion en cours…';
-    try {
-      const { aiPing } = await import('./ai.js');
-      await aiPing({ mode: s.ai.mode, endpoint: s.ai.endpoint, token: s.ai.token });
-      if (msg) msg.textContent = 'Connexion réussie ✓';
-      aiTest.textContent = 'OK ✓';
-      toast('Assistant IA connecté');
-    } catch (err) {
-      if (msg) msg.textContent = 'Échec : ' + String(err.message || err).slice(0, 60);
-      aiTest.textContent = 'Réessayer';
-      toast('Connexion impossible');
-    } finally { aiTest.disabled = false; }
-  };
   root.querySelector('#selReciter').onchange = e => { s.reciter = e.target.value; save(); };
   root.querySelector('#selMethod').onchange = e => { p.method = e.target.value; save(); toast('Méthode enregistrée'); };
   root.querySelector('#btnGeoSet').onclick = async e => {

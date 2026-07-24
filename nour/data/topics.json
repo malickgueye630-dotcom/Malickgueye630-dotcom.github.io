@@ -782,6 +782,71 @@
    ]
   },
   {
+   "id": "femmes",
+   "label": "La femme en Islam : dignité, droits et responsabilités",
+   "keys": [
+    "role de la femme",
+    "place de la femme",
+    "femme en islam",
+    "femmes en islam",
+    "droits de la femme",
+    "droits des femmes",
+    "statut de la femme",
+    "dignite de la femme",
+    "responsabilites de la femme",
+    "egalite spirituelle",
+    "croyantes",
+    "mere epouse fille",
+    "que dit islam sur femme"
+   ],
+   "desc": "Les textes présents dans Nour affirment une même origine humaine, une responsabilité spirituelle partagée, la récompense des bonnes œuvres pour les femmes comme pour les hommes, des droits patrimoniaux et l'obligation de traiter les femmes avec bonté.",
+   "answer": "Dans les sources locales de Nour, la femme est présentée comme une croyante responsable devant Allah, alliée des croyants dans le bien et bénéficiaire de la même récompense spirituelle. Le Coran lui reconnaît aussi une part d'héritage et le fruit de ce qu'elle acquiert. Dans la vie familiale, les hadiths retenus ordonnent la bonté envers les femmes et valorisent le bon comportement envers l'épouse et la mère.",
+   "nuances": "Ces passages donnent des principes sûrs mais ne constituent pas, à eux seuls, un traité complet de jurisprudence sur tous les rôles familiaux, sociaux ou juridiques. Les applications détaillées peuvent dépendre du domaine, du contexte et de l'école juridique ; une question personnelle doit être soumise à une personne qualifiée.",
+   "quran": [
+    [
+     4,
+     1,
+     1
+    ],
+    [
+     4,
+     7,
+     7
+    ],
+    [
+     4,
+     32,
+     32
+    ],
+    [
+     9,
+     71,
+     71
+    ],
+    [
+     16,
+     97,
+     97
+    ],
+    [
+     33,
+     35,
+     35
+    ],
+    [
+     49,
+     13,
+     13
+    ]
+   ],
+   "hadiths": [
+    8,
+    36,
+    68
+   ],
+   "duas": []
+  },
+  {
    "id": "mariage",
    "label": "Le mariage",
    "keys": [
