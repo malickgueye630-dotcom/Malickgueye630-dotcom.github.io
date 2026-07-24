@@ -1,5 +1,5 @@
 // Paramètres — page dédiée, organisée en catégories :
-// Apparence / Coran / Prières / Qibla / Recherche.
+// Apparence / Coran / Prières / Qibla / Assistant.
 // Chaque contrôle est fonctionnel et persisté immédiatement.
 import { $view, esc, toast, player } from './app.js';
 import { icon } from './icons.js';
@@ -120,26 +120,29 @@ export function viewSettings(section) {
     </div>
 
     <div class="setgroup" id="sec-recherche">
-      <h2>${icon('search', 15)} Recherche</h2>
-      ${row('Recherche intelligente', 'Compréhension des questions, sujets, réponse directe', sw('searchSmart', s.searchSmart))}
+      <h2>${icon('sparkle', 15)} Assistant</h2>
+      ${row('Récupération intelligente', 'BM25, TF-IDF, synonymes et sujets vérifiés pour sélectionner les sources', sw('searchSmart', s.searchSmart))}
       ${row('Recherche phonétique', 'Arabe écrit en lettres latines (« laqad jaakoum »)', sw('searchPhonetic', s.searchPhonetic))}
-      ${row('Suggestions pendant la saisie', '', sw('searchSuggest', s.searchSuggest))}
-      ${row('Historique des recherches', 'Mémoriser les recherches récentes sur cet appareil', sw('searchHistoryOn', s.searchHistoryOn))}
-      ${row('Effacer l’historique', `${state.searchHistory.length} recherche${state.searchHistory.length > 1 ? 's' : ''} mémorisée${state.searchHistory.length > 1 ? 's' : ''}`,
-        '<button class="btn btn-ghost" id="btnClearHist">Effacer</button>')}
+      ${row('Historique des conversations', 'Conservé uniquement sur cet appareil',
+        `<span class="tiny">${state.chatConversations.length} conversation${state.chatConversations.length > 1 ? 's' : ''}</span>`)}
+      ${row('Effacer les conversations', 'Supprime les échanges enregistrés sur cet appareil',
+        '<button class="btn btn-ghost" id="btnClearChats">Effacer</button>')}
     </div>
 
     <div class="setgroup" id="sec-ia">
-      <h2>${icon('search', 15)} Moteur local de réponse</h2>
+      <h2>${icon('sparkle', 15)} Modèle conversationnel</h2>
       <div class="setrow" style="display:block;border-bottom:none">
-        <div class="lab">Actif, privé et sans clé API
-          <small style="line-height:1.55;margin-top:6px">La recherche combine plein texte, correction orthographique,
-          synonymes, phonétique arabe/française, sujets vérifiés, TF-IDF conceptuel et BM25. Les questions et les
-          passages ne quittent jamais l’appareil.</small>
+        <div class="lab">Backend sécurisé
+          <small style="line-height:1.55;margin-top:6px">La clé du fournisseur reste dans le Worker et n’est jamais
+          envoyée au navigateur. L’adresse ci-dessous est publique et peut être enregistrée sans risque.</small>
         </div>
-        <div class="notice" style="margin:12px 0 0">Limite honnête : Nour n’embarque pas de grand modèle de langage.
-          La synthèse est extractive et éditoriale, construite uniquement avec les contenus locaux. Si les sources
-          sont insuffisantes, l’application refuse de conclure.</div>
+        <label class="lab" for="assistantEndpoint" style="margin-top:12px">Adresse du Worker</label>
+        <input type="url" id="assistantEndpoint" value="${esc(s.ai?.endpoint || '')}"
+          placeholder="https://nour-assistant.…workers.dev"
+          style="width:100%;margin-top:6px;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg-soft);color:var(--ink)">
+        <div class="notice" style="margin:12px 0 0"><b>Mode de secours :</b> si le Worker ou le modèle distant est
+          indisponible, l’écran indique clairement « Recherche locale ». BM25 et TF-IDF récupèrent alors des textes,
+          mais ne sont jamais présentés comme une IA comparable à ChatGPT.</div>
       </div>
     </div>
 
@@ -211,10 +214,22 @@ export function viewSettings(section) {
     try { await geolocate(); toast('Position mise à jour'); viewSettings('prieres'); }
     catch { e.target.textContent = 'Réessayer'; toast('Géolocalisation refusée — choisissez une ville dans Prières'); }
   };
-  root.querySelector('#btnClearHist').onclick = e => {
-    state.searchHistory = []; save();
-    e.target.closest('.setrow').querySelector('small').textContent = '0 recherche mémorisée';
-    toast('Historique effacé');
+  root.querySelector('#btnClearChats').onclick = () => {
+    state.chatConversations = [];
+    state.activeConversationId = null;
+    save();
+    toast('Conversations effacées');
+    viewSettings('recherche');
+  };
+  root.querySelector('#assistantEndpoint').onchange = event => {
+    const value = event.target.value.trim().replace(/\/+$/, '');
+    if (value && !/^https:\/\//i.test(value) && !/^http:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/i.test(value)) {
+      toast('Utilisez une adresse HTTPS');
+      return;
+    }
+    s.ai.endpoint = value;
+    save();
+    toast(value ? 'Backend enregistré' : 'Mode local activé');
   };
   root.querySelector('#btnOffline').onclick = async e => {
     const btn = e.target;

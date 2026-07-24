@@ -233,7 +233,7 @@ async function route() {
 const TABS = [
   ['home', 'Accueil', 'home'],
   ['quran', 'Coran', 'book'],
-  ['search', 'Recherche', 'search'],
+  ['search', 'Assistant', 'sparkle'],
   ['prayer', 'Prières', 'mosque'],
   ['more', 'Plus', 'grid'],
 ];

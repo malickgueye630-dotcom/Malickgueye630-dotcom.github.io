@@ -19,7 +19,20 @@ des favoris, l'audio du Coran et un mode sombre.
   sélection thématique traduite en français avec degré d'authenticité et référence vérifiée.
 - 🤲 **Invocations** : 44 du'â du Coran et de la Sunna (type Hisn al-Muslim), classées
   par situation, avec arabe, phonétique, français, source et nombre de répétitions.
-- 🔍 **Moteur de recherche islamique** multicouche :
+- 💬 **Assistant islamique conversationnel RAG** :
+  - interface de discussion avec historique, contexte multi-tour, suggestions, arrêt,
+    régénération, copie, partage et références ouvertes directement dans l’application ;
+  - un **vrai LLM distant configurable** comprend et reformule la question, puis rédige
+    une réponse naturelle en français à partir des seuls passages récupérés ;
+  - passerelle Cloudflare Worker : clé secrète côté serveur, fournisseur
+    OpenAI-compatible, CORS strict, limite de requêtes et validation des citations ;
+  - réponse structurée distinguant réponse directe, explication, nuances, versets,
+    hadiths authentiques et références cliquables ;
+  - contrôle SHA-256 des passages contre la base locale, puis rejet automatique d’une
+    sortie qui cite un identifiant inconnu ou une référence littérale absente ;
+  - mode de secours honnêtement intitulé **Recherche locale** si aucun modèle distant
+    n’est configuré ou disponible. Ce mode reste extractif et ne prétend pas être ChatGPT.
+- 🔍 **Récupération religieuse locale** multicouche, utilisée par le RAG :
   - plein texte français avec racines légères, synonymes et tolérance aux fautes ;
   - **recherche phonétique** de versets : « lakhadjaakoul » retrouve *Laqad jâakum* (9:128),
     avec normalisation des variantes (kh/7, gh/3, q/k/9, ou/oo, dj/j…) et alignement
@@ -27,14 +40,10 @@ des favoris, l'audio du Coran et un mode sombre.
   - **recherche sémantique locale** par thésaurus vérifié et index vectoriel creux
     (TF-IDF conceptuel + BM25, sans embeddings neuronaux) :
     « le peuple entre les deux montagnes » → Dhul-Qarnayn (Coran 18:83-98) ;
-  - **questions naturelles** → réponse structurée (synthèse, versets, hadiths, nuances,
-    sources exactes) assemblée uniquement depuis la base, avec le message honnête
-    « je n'ai pas trouvé de source suffisamment fiable » quand c'est le cas ;
   - recherche dans le **texte arabe** (index sans diacritiques) et suggestions en temps réel ;
   - badges « Correspondance exacte » / « Lié au sujet » / « Correspondance phonétique ».
-  Aucun contenu religieux n'est généré et aucune question n'est envoyée à un service d'IA :
-  chaque résultat vient de la base et cite sa source. Limite assumée : sans grand modèle local,
-  le moteur reste extractif et ne produit pas de raisonnement religieux ouvert.
+  Ces techniques sélectionnent les documents ; elles ne sont jamais présentées comme le
+  modèle de langage.
 - 🖼️ **Accueil photographique** : six photographies HD libres embarquées (Masjid al-Harâm,
   Mosquée du Prophète ﷺ, Al-Aqsa, Cheikh Zayed, Hassan II et Sultan Ahmed), carrousel de
   5,5 minutes, fondu, mouvement cinématographique lent et ambiance selon l'heure locale.
@@ -68,8 +77,13 @@ nour/
 │   ├── app.js            # routeur, lecteur audio, réglages, utilitaires
 │   ├── state.js          # état persistant (localStorage)
 │   ├── data.js           # accès aux données + métadonnées Coran + récitateurs
-│   ├── search.js         # recherche (normalisation, variantes, distance d'édition)
+│   ├── engine.js         # récupération hybride locale
+│   ├── rag.js            # paquets de sources et secours local
+│   ├── ai.js             # client sans secret du backend conversationnel
 │   └── views-*.js        # vues (accueil, coran, recherche, hadiths, duas, favoris…)
+├── server/
+│   ├── cloudflare-worker.js # planification LLM, génération et validation
+│   └── wrangler.jsonc       # configuration publique et limite de requêtes
 ├── data/
 │   ├── quran/index.json  # 114 sourates + tables juz'/hizb/sajda
 │   ├── quran/s/N.json    # une sourate = [arabe, français, translittération] par verset
@@ -115,4 +129,10 @@ arabe normalisé à celui de la base.
 ## Développement
 
 Servir localement : `python3 -m http.server` puis ouvrir `http://localhost:8000/nour/`.
-Aucune étape de build : HTML/CSS/JS natifs (ES modules), données JSON statiques.
+Le frontend reste en HTML/CSS/JS natifs. `npm test` contrôle le RAG et les citations ;
+`npm run build` valide les scripts, les JSON, les médias et le précache PWA.
+
+Le backend et ses variables sont documentés dans
+[`server/README-IA.md`](server/README-IA.md). GitHub Pages ne peut pas conserver une
+clé de modèle : un Worker (ou une fonction serverless équivalente) est nécessaire
+pour activer la génération distante.

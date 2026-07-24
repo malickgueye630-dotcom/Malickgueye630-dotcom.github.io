@@ -1,0 +1,2 @@
+# Copiez ce fichier vers .dev.vars. Ne committez jamais la copie remplie.
+LLM_API_KEY=remplacer_par_un_secret_local

@@ -1,352 +1,528 @@
-// Recherche globale : moteur unifié (exact + flou + phonétique + sujets + questions).
-// Tous les résultats proviennent de la base locale et affichent leur source.
-import { $view, esc, bindTopbar, topbar } from './app.js';
-import { state, pushHistory } from './state.js';
-import { searchAll, buildAnswer, suggest, tokens, fold, stem } from './engine.js';
-import { arToLatin } from './translit.js';
-import * as data from './data.js';
+// Assistant conversationnel Nour : historique, contexte, reformulation par LLM,
+// récupération locale, génération distante sourcée et secours local explicite.
+import {
+  $view, esc, bindTopbar, topbar, copyText, shareText, toast, sheet, closeSheet,
+} from './app.js';
+import { icon } from './icons.js';
+import {
+  state, save, createConversation, activeConversation, selectConversation,
+  appendConversationMessage, deleteConversation,
+} from './state.js';
+import { aiHealth, aiPlan, aiAnswer } from './ai.js';
+import {
+  retrieveSources, buildLocalFallback, conversationHistory,
+} from './rag.js';
 
-const SUGGESTIONS = [
+const STARTERS = [
+  'Quel est le rôle de l’homme dans l’Islam ?',
   'Quel est le rôle de la femme dans l’Islam ?',
-  'quelle doua quand j\'ai peur ?', 'laqad jaakoum', 'verset sur quelqu\'un qui ment',
-  'quelqu\'un qui parle dans le dos des autres', 'que dit le prophète ﷺ sur la trahison ?',
-  'comment faire la prière de consultation ?', 'histoire de Dhul-Qarnayn',
-  'doua avant de dormir', 'que dit l\'islam sur la colère', 'adhkar du matin',
+  'Pourquoi la prière est-elle obligatoire ?',
+  'Que faire si je rate une prière ?',
+  'Explique-moi simplement la médisance.',
+  'Quelle invocation réciter lorsque j’ai peur ?',
 ];
 
-let debounce, sugDebounce, lastQuery = '';
+let currentController = null;
+let currentRun = 0;
+let status = { mode: 'checking', provider: null, model: null };
 
-// ---------- surlignage ----------
-function highlight(text, q, found = []) {
-  const words = new Set([...tokens(q), ...found.map(f => fold(f))].filter(w => w.length > 2));
-  const stems = new Set([...words].map(stem));
-  if (!words.size) return esc(text);
-  return esc(text).replace(/[A-Za-zÀ-ÿœ']+/g, m => {
-    const fm = fold(m), sm = stem(fm);
-    if (sm.length < 3) return m;
-    return (words.has(fm) || stems.has(sm) || [...stems].some(s => s.length > 3 && sm.length > 3 && (sm.startsWith(s) || s.startsWith(sm))))
-      ? `<mark>${m}</mark>` : m;
-  });
-}
-
-const badgeExact = `<span class="badge sahih" style="font-size:.62rem">Correspondance exacte</span>`;
-const badgeApprox = `<span class="badge badge-en" style="font-size:.62rem">Correspondance approximative</span>`;
-const badgeTopic = t => `<span class="badge" style="font-size:.62rem">Par le sens : ${esc(t)}</span>`;
-const badgePhon = `<span class="badge hasan" style="font-size:.62rem">Correspondance phonétique</span>`;
-const badgeSens = `<span class="badge" style="font-size:.62rem">Correspondance par le sens</span>`;
-const matchBadge = x => x.sem ? badgeSens : x.topic ? badgeTopic(x.topic) : x.phon ? badgePhon : x.approx ? badgeApprox : badgeExact;
-
-// ---------- cartes ----------
-const clamp = (t, n) => t && t.length > n ? t.slice(0, n).replace(/\s+\S*$/, '') + '…' : t;
-
-function verseCard(v, meta, q, enriched) {
-  const cfg = state.settings;
-  const label = matchBadge(v);
-  const ref = v.range
-    ? `${esc(meta.phonetic)} (${v.s}), versets ${v.range[1]}-${v.range[2]}`
-    : `${esc(meta.phonetic)} (${v.s}), verset ${v.v}`;
-  const arShort = enriched && enriched[0].length <= 260;
-  return `<a class="card card-plain" style="display:block;text-decoration:none;color:inherit" href="#/quran/s/${v.s}?v=${v.v}">
-    ${arShort && cfg.showAr ? `<div class="ar" style="font-size:calc(var(--ar-size)*.72)">${esc(enriched[0])}</div>` : ''}
-    ${arShort && cfg.showTl ? `<div class="tl" style="color:var(--ink-2);font-style:italic;font-size:.84rem;margin:4px 0">${esc(clamp(enriched[2], 220))}</div>` : ''}
-    ${v.phon && !arShort ? `<div class="tl" style="font-style:italic;font-size:.9rem;margin:2px 0"><mark>${esc(clamp(v.translit, 180))}</mark></div>` : ''}
-    ${(enriched || v.fr) && cfg.showFr !== false ? `<p class="fr" style="margin:6px 0 6px">${highlight(clamp(enriched ? enriched[1] : v.fr, 320), q, v.found || [])}</p>` : ''}
-    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <span class="tiny">📖 Coran — ${ref}</span>${label}
-    </div>
-  </a>`;
-}
-
-function hadithCard(h, q) {
-  const cfg = state.settings;
-  const label = matchBadge(h);
-  const grade = h.grade ? `<span class="badge ${h.grade.toLowerCase().startsWith('sahih') ? 'sahih' : 'hasan'}">${esc(h.grade)}</span>` : '';
-  const link = h.collection && h.refId ? `#/hadith/${h.collection}/find/${h.refId}` : `#/hadith/theme/${h.themes?.[0] || ''}`;
-  return `<a class="card card-plain hcard" style="display:block;text-decoration:none;color:inherit" href="${esc(link)}" data-hfr="${h.id}">
-    ${cfg.showAr ? `<div class="ar" style="font-size:calc(var(--ar-size)*.72)">${esc(h.ar)}</div>` : ''}
-    ${cfg.showTl ? `<div class="tl" style="color:var(--ink-2);font-style:italic;font-size:.84rem;margin:4px 0">${esc(arToLatin(h.ar))}</div>` : ''}
-    <p class="fr" style="margin:6px 0">${highlight(h.fr, q, h.found || [])}</p>
-    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <span class="s tiny">📜 ${esc(h.source)}${h.narrator ? ' — ' + esc(h.narrator) : ''}</span>
-      <span>${grade} ${label}</span>
-    </div>
-  </a>`;
-}
-
-function duaCardMini(d, q) {
-  const cfg = state.settings;
-  const label = matchBadge(d);
-  return `<a class="card card-plain hcard" style="display:block;text-decoration:none;color:inherit" href="#/duas/${esc(d.cat)}?d=${esc(d.id)}">
-    <div class="dua-title">${d.icon || '🤲'} ${highlight(d.title, q, d.found || [])}${d.repeat ? `<span class="repeat-pill">× ${d.repeat}</span>` : ''}</div>
-    ${cfg.showAr ? `<div class="ar" style="font-size:calc(var(--ar-size)*.72)">${esc(d.ar)}</div>` : ''}
-    ${cfg.showTl !== false ? `<div class="tl" style="color:var(--ink-2);font-style:italic;font-size:.84rem;margin:4px 0">${esc(d.translit)}</div>` : ''}
-    <p class="fr" style="margin:6px 0">${highlight(d.fr, q, d.found || [])}</p>
-    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <span class="tiny">🤲 ${esc(d.source)} · ${esc(d.catName)}</span>${label}
-    </div>
-  </a>`;
-}
-
-function topicCard(t) {
-  return `<div class="card" style="border-left:4px solid var(--gold)">
-    <b>💡 ${esc(t.label)}</b>
-    <p class="muted" style="margin:6px 0 0">${esc(t.desc)}</p>
-  </div>`;
-}
-
-// enrichit les meilleurs versets avec arabe + phonétique + français
-async function enrich(list, n = 8) {
-  const map = new Map();
-  await Promise.all([...new Set(list.slice(0, n).map(v => v.s))].map(async s => {
-    try { map.set(s, await data.surah(s)); } catch {}
-  }));
-  return v => {
-    const sd = map.get(v.s);
-    return sd ? sd.verses[v.v - 1] : null;
-  };
-}
-
-// ---------- vue ----------
 export async function viewSearch(initial = '') {
+  stopGeneration();
+  let conversation = activeConversation() || createConversation();
+
   $view.innerHTML = `
-    ${topbar('Recherche')}
-    <div class="search-input big" style="position:relative">
-      <span>🔍</span>
-      <input id="qInput" type="search" placeholder="Posez votre question…"
-        autocomplete="off" autocapitalize="off" value="${esc(initial)}">
-      <button class="btn-icon" id="qClear" aria-label="Effacer">✕</button>
-    </div>
-    <div id="qSuggest" class="card card-plain" style="display:none;padding:4px;margin:-6px 0 10px"></div>
-    <div id="qResults"></div>
-  `;
+    ${topbar('Assistant Nour')}
+    <section class="chat-shell">
+      <header class="chat-toolbar">
+        <div>
+          <div class="chat-status" id="chatStatus"><span></span> Vérification du modèle…</div>
+          <p id="chatModel">Le moteur local prépare les sources vérifiées.</p>
+        </div>
+        <div class="chat-toolbar-actions">
+          <button class="btn-icon" id="chatHistory" aria-label="Historique des conversations">${icon('clock', 19)}</button>
+          <button class="btn-icon" id="chatNew" aria-label="Nouvelle conversation">${icon('plus', 20)}</button>
+        </div>
+      </header>
+
+      <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+
+      <div class="chat-suggestions" id="chatSuggestions"></div>
+
+      <form class="chat-composer" id="chatForm">
+        <textarea id="chatInput" rows="1" maxlength="1200"
+          placeholder="Posez votre question à Nour…" aria-label="Votre message"></textarea>
+        <button class="chat-send" id="chatSend" type="submit" aria-label="Envoyer">${icon('navigation', 20)}</button>
+        <button class="chat-stop" id="chatStop" type="button" hidden>${icon('stop', 15)} Arrêter</button>
+      </form>
+      <p class="chat-disclaimer">Les réponses religieuses doivent rester sourcées. Pour une situation personnelle,
+      consultez une personne qualifiée.</p>
+    </section>`;
   bindTopbar();
 
-  const input = document.getElementById('qInput');
-  const results = document.getElementById('qResults');
-  const sugEl = document.getElementById('qSuggest');
+  const input = document.getElementById('chatInput');
+  bindStaticActions();
+  renderConversation(conversation);
+  refreshStatus();
 
-  function renderIdle() {
-    const hist = state.settings.searchHistoryOn ? state.searchHistory : [];
-    results.innerHTML = `
-      <div class="ai-hero">
-        <b>🕌 Recherche locale sourcée</b>
-        <p>Posez une question naturelle, même mal orthographiée ou approximative. Le moteur
-        corrige les fautes, reconnaît la phonétique arabe et classe les passages par recherche
-        plein texte, thésaurus et index vectoriel conceptuel. Tout reste sur l'appareil.</p>
-      </div>
-      ${hist.length ? `<h2>Recherches récentes</h2>
-        <div class="chiprow">${hist.map(h => `<button class="chip" data-q="${esc(h)}">${esc(h)}</button>`).join('')}</div>` : ''}
-      <h2>Essayez par exemple</h2>
-      <div class="chiprow" style="flex-wrap:wrap">${SUGGESTIONS.map(sq => `<button class="chip" data-q="${esc(sq)}">${esc(sq)}</button>`).join('')}</div>
-      <div class="notice">Posez n'importe quelle <b>question naturelle</b>, même avec des fautes de frappe :
-      le moteur analyse votre intention, corrige l'orthographe, reconnaît l'<b>arabe écrit en phonétique</b>
-      approximative (« lakhadjaakoul ») et cherche par le <b>sens</b> (« quelqu'un qui parle dans le dos des
-      autres » → médisance). Il cherche ensuite dans le Coran, les hadiths et les invocations de l'application,
-      sélectionne les meilleurs passages et assemble une <b>réponse directe sourcée</b>.
-      L'index vectoriel est lexical et conceptuel (TF-IDF + BM25), pas un modèle neuronal génératif.
-      Rien n'est envoyé à un service externe et, faute de source locale suffisante, Nour refuse de conclure.</div>
-    `;
-    results.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { input.value = b.dataset.q; hideSug(); run(b.dataset.q); });
+  if (initial) {
+    input.value = initial;
+    requestAnimationFrame(() => sendNewMessage(initial));
+  } else {
+    requestAnimationFrame(() => input.focus());
   }
 
-  function hideSug() { sugEl.style.display = 'none'; sugEl.innerHTML = ''; }
-
-  async function showSuggestions(q) {
-    if (!state.settings.searchSuggest) { hideSug(); return; }
-    if (!q.trim() || q.trim().length < 2) { hideSug(); return; }
-    const sugs = await suggest(q);
-    if (!sugs.length || input.value !== q) { hideSug(); return; }
-    sugEl.innerHTML = sugs.map((s, i) => `
-      <div class="row" data-i="${i}" style="padding:9px 10px;border-radius:10px;cursor:pointer">
-        <span>${s.type === 'surah' ? '📖' : s.type === 'dua' ? '🤲' : '💡'}</span>
-        <div class="grow"><b style="font-size:.9rem">${esc(s.label)}</b>
-        <span class="tiny" style="margin-left:6px">${esc(s.sub || '')}</span></div>
-      </div>`).join('');
-    sugEl.style.display = '';
-    sugEl.querySelectorAll('[data-i]').forEach(el => el.onclick = () => {
-      const s = sugs[+el.dataset.i];
-      hideSug();
-      if (s.hash) location.hash = s.hash;
-      else { input.value = s.label; run(s.label); }
-    });
-  }
-
-  async function run(q) {
-    if (!q.trim()) { renderIdle(); return; }
-    hideSug();
-    lastQuery = q;
-    results.innerHTML = `
-      <div class="skel" style="height:64px;margin:10px 0"></div>
-      <div class="skel" style="height:120px;margin:10px 0"></div>
-      <div class="skel" style="height:120px;margin:10px 0"></div>`;
-    const r = await searchAll(q, {
-      smart: state.settings.searchSmart,
-      phonetic: state.settings.searchPhonetic,
-    });
-    if (lastQuery !== q) return; // une requête plus récente est partie
-    const answer = buildAnswer(r);
-    if (state.settings.searchHistoryOn) pushHistory(q.trim());
-
-    const total = r.verses.length + r.hadiths.length + r.duas.length +
-      r.versesTopic.length + r.hadithsTopic.length + r.duasTopic.length +
-      r.phonetic.length + r.surahs.length;
-
-    if (!total) {
-      results.innerHTML = `<div class="empty"><span class="em">🕊️</span>
-        ${r.question
-          ? `Je n'ai pas trouvé de source suffisamment fiable dans la base de données pour répondre avec certitude à cette question.`
-          : `Aucun résultat fiable trouvé pour « ${esc(q)} » dans nos sources.`}<br><br>
-        <small>Essayez d'autres mots, une orthographe différente, ou décrivez le passage dont vous vous souvenez.<br>
-        Nour ne propose jamais de contenu religieux sans source.</small></div>`;
-      return;
-    }
-
-    const idx = await data.quranIndex();
-    const meta = s => idx.surahs[s - 1];
-    const parts = [];
-
-    // ---------- compréhension de la requête (corrections affichées) ----------
-    if (r.corrections?.length) {
-      parts.push(`<div class="notice" style="padding:9px 12px;margin-bottom:10px">🧠 Recherche comprise comme
-        « <b>${esc(r.understood)}</b> »
-        <span class="tiny" style="display:block;margin-top:2px">${r.corrections.map(([a, b]) => `${esc(a)} → ${esc(b)}`).join(' · ')}</span></div>`);
-    }
-
-    // éléments déjà montrés dans la réponse directe (pour ne pas les répéter)
-    const shownV = new Set(), shownH = new Set(), shownD = new Set();
-
-    // ---------- 1. RÉPONSE LOCALE STRUCTURÉE ----------
-    const srcSet = new Set(); // pour la récapitulation « Sources »
-    if (answer) {
-      parts.push(`<div class="result-cat" style="font-size:1.05rem">🕌 Réponse locale sourcée</div>`);
-      parts.push(`<div class="tiny answer-label">RÉPONSE SYNTHÉTIQUE</div>
-        <div class="card rag-summary">
-          <p>${esc(answer.summary)}</p>
-          <div class="tiny">Classement hybride local : plein texte, synonymes, sujets vérifiés, TF-IDF conceptuel et BM25.</div>
-        </div>`);
-      const getV = await enrich([...answer.verses], 6);
-
-      parts.push(`<div class="tiny answer-label">📖 VERSETS PERTINENTS</div>`);
-      if (answer.verses.length) {
-        parts.push(answer.verses.map(v => verseCard(v, meta(v.s), q, getV(v))).join(''));
-        answer.verses.forEach(v => {
-          shownV.add(`${v.s}:${v.v}`);
-          const range = v.range ? `${v.range[1]}-${v.range[2]}` : v.v;
-          srcSet.add(`Coran — ${meta(v.s).phonetic} (${v.s}), verset${String(range).includes('-') ? 's' : ''} ${range}`);
-        });
-      } else {
-        parts.push(`<div class="notice">Aucun verset n'a franchi le seuil de fiabilité pour cette question.</div>`);
-      }
-
-      parts.push(`<div class="tiny answer-label">📜 HADITHS AUTHENTIQUES</div>`);
-      if (answer.hadiths.length) {
-        parts.push(answer.hadiths.map(h => hadithCard(h, q)).join(''));
-        answer.hadiths.forEach(h => { shownH.add(h.id); if (h.source) srcSet.add(h.source); });
-      } else {
-        parts.push(`<div class="notice">Aucun hadith français authentifié n'a franchi le seuil de fiabilité.</div>`);
-      }
-
-      if (answer.duas.length) {
-        parts.push(`<div class="tiny answer-label">🤲 INVOCATIONS PERTINENTES</div>`);
-        parts.push(answer.duas.map(d => duaCardMini(d, q)).join(''));
-        answer.duas.forEach(d => { shownD.add(d.id); if (d.source) srcSet.add(`${d.title} — ${d.source}`); });
-      }
-
-      parts.push(`<div class="tiny answer-label">CONTEXTE ET NUANCES</div>
-        <div class="card card-plain rag-context">
-          <p>${esc(answer.context)}</p>
-          <p class="tiny">La synthèse ci-dessus est un texte éditorial enregistré dans le sujet vérifié ou, à défaut, un constat descriptif sur les résultats. Nour ne complète jamais les sources avec une génération libre.</p>
-        </div>`);
-
-      if (srcSet.size) {
-        parts.push(`<div class="tiny answer-label">📚 SOURCES EXACTES</div>`);
-        parts.push(`<div class="card card-plain" style="padding:10px 14px"><ul style="margin:0;padding-left:18px" class="muted">
-          ${[...srcSet].map(s => `<li style="font-size:.82rem">${esc(s)}</li>`).join('')}</ul></div>`);
-      }
-      parts.push(`<div class="notice">Réponse extractive assemblée uniquement à partir de la base locale de Nour.
-        Aucun verset, hadith, invocation ou avis n'est créé. Pour un avis religieux personnel,
-        consultez un savant ou un imam qualifié.</div>`);
-    }
-
-    // ---------- 2-4. Coran / Hadiths / Invocations ----------
-    const versesEx = r.verses.filter(v => !shownV.has(`${v.s}:${v.v}`));
-    const phonEx = r.phonetic.filter(p => !shownV.has(`${p.s}:${p.v}`));
-    const hadithsEx = r.hadiths.filter(h => !shownH.has(h.id));
-    const duasEx = r.duas.filter(d => !shownD.has(d.id));
-    const sections = {
-      quran: async () => {
-        const total = versesEx.length + phonEx.length;
-        if (!total) return '';
-        let html = `<div class="result-cat">📖 Coran <span class="cnt">${total} résultat${total > 1 ? 's' : ''}</span></div>`;
-        if (phonEx.length) {
-          const getP = await enrich(phonEx.map(p => ({ s: p.s, v: p.v })), 6);
-          html += phonEx.map(p => verseCard({ ...p, phon: true }, meta(p.s), q, getP(p))).join('');
-        }
-        if (versesEx.length && !phonEx.length) {
-          const getV2 = await enrich(versesEx, 8);
-          html += versesEx.slice(0, 12).map(v => verseCard(v, meta(v.s), q, getV2(v))).join('');
-        }
-        return html;
-      },
-      hadith: async () => hadithsEx.length
-        ? `<div class="result-cat">📜 Hadiths <span class="cnt">${hadithsEx.length} résultat${hadithsEx.length > 1 ? 's' : ''}</span></div>`
-          + hadithsEx.slice(0, 10).map(h => hadithCard(h, q)).join('')
-        : '',
-      dua: async () => duasEx.length
-        ? `<div class="result-cat">🤲 Invocations <span class="cnt">${duasEx.length}</span></div>`
-          + duasEx.slice(0, 8).map(d => duaCardMini(d, q)).join('')
-        : '',
+  function bindStaticActions() {
+    document.getElementById('chatForm').onsubmit = event => {
+      event.preventDefault();
+      sendNewMessage(input.value);
     };
-    const order = r.hints.dua ? ['dua', 'quran', 'hadith']
-      : r.hints.hadith ? ['hadith', 'quran', 'dua']
-      : r.hints.quran ? ['quran', 'dua', 'hadith']
-      : ['quran', 'hadith', 'dua'];
-    for (const key of order) parts.push(await sections[key]());
-
-    // ---------- 5. RÉSULTATS LIÉS ----------
-    // sujets détectés + contenus référencés pour ces sujets non encore affichés + sourates
-    const linkedV = r.versesTopic.filter(v => !shownV.has(`${v.s}:${v.v}`)).slice(0, 5);
-    const linkedH = r.hadithsTopic.filter(h => !shownH.has(h.id)).slice(0, 4);
-    const linkedD = r.duasTopic.filter(d => !shownD.has(d.id)).slice(0, 3);
-    const otherTopics = r.topics.filter(t => !answer || !answer.topic || t.topic.id !== answer.topic.id).slice(0, answer ? 2 : 1);
-    if (linkedV.length + linkedH.length + linkedD.length + r.surahs.length + (answer ? otherTopics.length : 0) > 0) {
-      parts.push(`<div class="result-cat">🔗 Résultats liés</div>`);
-      if (!answer && otherTopics.length) parts.push(otherTopics.map(t => topicCard(t.topic)).join(''));
-      if (r.surahs.length) {
-        parts.push(r.surahs.map(s => `
-          <a class="list-item" href="#/quran/s/${s.n}">
-            <div class="num">${s.n}</div>
-            <div class="t"><b>${esc(s.phonetic)}</b><small>${esc(s.fr)} · ${s.verses} versets</small></div>
-            <div class="arname">${esc(s.name)}</div>
-          </a>`).join(''));
+    document.getElementById('chatStop').onclick = stopGeneration;
+    document.getElementById('chatNew').onclick = () => {
+      stopGeneration();
+      conversation = createConversation();
+      input.value = '';
+      renderConversation(conversation);
+      input.focus();
+    };
+    document.getElementById('chatHistory').onclick = openHistory;
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = `${Math.min(132, input.scrollHeight)}px`;
+    });
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendNewMessage(input.value);
       }
-      if (linkedV.length) {
-        const getT = await enrich(linkedV, 5);
-        parts.push(linkedV.map(v => verseCard(v, meta(v.s), q, getT(v))).join(''));
-      }
-      if (linkedH.length) parts.push(linkedH.map(h => hadithCard(h, q)).join(''));
-      if (linkedD.length) parts.push(linkedD.map(d => duaCardMini(d, q)).join(''));
-      if (answer && otherTopics.length) parts.push(otherTopics.map(t => topicCard(t.topic)).join(''));
-    }
-
-    if (!answer) {
-      parts.push(`<div class="notice">Résultats issus exclusivement des textes de l'application, avec leurs sources.
-        « Correspondance exacte » = vos mots apparaissent dans le texte ·
-        « Correspondance phonétique » = proche de l'arabe que vous avez écrit en lettres latines ·
-        « Par le sens » = passage référencé pour ce thème dans notre base vérifiée.</div>`);
-    }
-    results.innerHTML = parts.join('');
-    window.scrollTo({ top: 0 });
+    });
   }
 
-  input.oninput = () => {
-    clearTimeout(debounce); clearTimeout(sugDebounce);
-    const v = input.value;
-    sugDebounce = setTimeout(() => showSuggestions(v), 120);
-    debounce = setTimeout(() => run(v), 350);
-  };
-  input.onkeydown = e => { if (e.key === 'Enter') { clearTimeout(debounce); hideSug(); run(input.value); } };
-  document.getElementById('qClear').onclick = () => { input.value = ''; hideSug(); renderIdle(); input.focus(); };
+  async function refreshStatus() {
+    const health = await aiHealth();
+    status = health.configured
+      ? { mode: 'remote', provider: health.provider, model: health.model }
+      : { mode: 'local', provider: null, model: null };
+    renderStatus();
+  }
 
-  if (initial) run(initial); else { renderIdle(); setTimeout(() => input.focus(), 80); }
+  function renderStatus() {
+    const badge = document.getElementById('chatStatus');
+    const model = document.getElementById('chatModel');
+    if (!badge || !model) return;
+    const remote = status.mode === 'remote';
+    badge.className = `chat-status ${remote ? 'remote' : 'local'}`;
+    badge.innerHTML = `<span></span> ${remote ? 'Assistant IA distant' : 'Recherche locale'}`;
+    model.textContent = remote
+      ? `${status.provider || 'Fournisseur compatible'} · ${status.model || 'modèle configuré'}`
+      : 'Aucun LLM distant disponible : Nour affiche uniquement les contenus locaux.';
+  }
+
+  function renderConversation(selected, options = {}) {
+    conversation = selected;
+    const root = document.getElementById('chatMessages');
+    if (!root) return;
+    root.innerHTML = conversation.messages.length
+      ? conversation.messages.map(message => messageHtml(message)).join('')
+      : welcomeHtml();
+    bindMessageActions();
+    renderSuggestions(options.suggestions);
+    requestAnimationFrame(() => {
+      root.lastElementChild?.scrollIntoView({ block: 'end', behavior: options.instant ? 'auto' : 'smooth' });
+    });
+  }
+
+  function welcomeHtml() {
+    return `<div class="chat-welcome">
+      <div class="chat-mark">${icon('sparkle', 25)}</div>
+      <h2>As-salâm ‘alaykoum, ${esc(state.settings.userName || 'Malick')}</h2>
+      <p>Posez une question, demandez une explication plus simple ou poursuivez la conversation.
+      Avec un modèle distant configuré, Nour reformule la demande, récupère ses sources locales puis rédige
+      une réponse dont les citations sont contrôlées avant affichage.</p>
+      <div class="chat-honesty"><b>Deux modes clairement distingués</b>
+        <span><strong>Assistant IA distant</strong> : réponse rédigée par le modèle configuré.</span>
+        <span><strong>Recherche locale</strong> : extraits et synthèses éditoriales, sans prétendre être ChatGPT.</span>
+      </div>
+    </div>`;
+  }
+
+  function messageHtml(message) {
+    if (message.role === 'user') {
+      return `<article class="chat-row user" data-message="${esc(message.id)}">
+        <div class="chat-bubble user-bubble">${esc(message.content)}</div>
+      </article>`;
+    }
+    const response = message.response || {};
+    const sources = message.sources || [];
+    const verses = sources.filter(source => source.type === 'quran');
+    const hadiths = sources.filter(source => source.type === 'hadith');
+    const duas = sources.filter(source => source.type === 'dua');
+    const modeLabel = message.mode === 'remote'
+      ? `${esc(message.model?.provider || 'IA')} · ${esc(message.model?.model || 'modèle distant')}`
+      : message.kind === 'clarification' ? 'Question de clarification' : 'Recherche locale';
+    const validation = message.validation?.status === 'validated'
+      ? `<span class="chat-validated">${icon('check', 12)} Citations validées</span>` : '';
+
+    return `<article class="chat-row assistant" data-message="${esc(message.id)}">
+      <div class="assistant-avatar">${icon('sparkle', 16)}</div>
+      <div class="chat-bubble assistant-bubble">
+        <div class="assistant-meta">
+          <span class="mode-pill ${message.mode === 'remote' ? 'remote' : 'local'}">${modeLabel}</span>
+          ${validation}
+        </div>
+        ${message.kind === 'clarification' ? `
+          <section class="answer-section direct"><p>${esc(response.answer_directe || '')}</p></section>
+        ` : `
+          <section class="answer-section direct">
+            <h3>1. Réponse directe</h3>
+            <p>${renderCitations(response.answer_directe || '', sources)}</p>
+          </section>
+          <section class="answer-section">
+            <h3>2. Explication</h3>
+            <p>${renderCitations(response.explication || 'Aucune explication supplémentaire disponible.', sources)}</p>
+          </section>
+          <section class="answer-section">
+            <h3>3. Nuances importantes</h3>
+            ${response.nuances?.length
+              ? `<ul>${response.nuances.map(item => `<li>${renderCitations(item, sources)}</li>`).join('')}</ul>`
+              : '<p class="muted">Aucune nuance supplémentaire n’est établie par les sources récupérées.</p>'}
+          </section>
+          ${sourceSection('4. Versets utilisés', verses, 'Aucun verset utilisé dans cette réponse.')}
+          ${sourceSection('5. Hadiths authentiques utilisés', hadiths, 'Aucun hadith utilisé dans cette réponse.')}
+          ${duas.length ? sourceSection('Invocations utilisées', duas, '') : ''}
+          ${sourceSection('6. Références cliquables', sources, 'Aucune référence validée.')}
+        `}
+        ${message.mode !== 'remote' ? `<div class="local-mode-warning">
+          ${icon('info', 14)} Recherche locale : aucun LLM distant n’a rédigé cette réponse.
+        </div>` : ''}
+        <div class="assistant-actions">
+          <button data-copy="${esc(message.id)}">${icon('copy', 14)} Copier</button>
+          <button data-share="${esc(message.id)}">${icon('share', 14)} Partager</button>
+          <button data-regen="${esc(message.id)}">${icon('refresh', 14)} Régénérer</button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function sourceSection(title, sources, empty) {
+    return `<section class="answer-section sources">
+      <h3>${title}</h3>
+      ${sources.length ? `<div class="source-list">${sources.map(sourceHtml).join('')}</div>`
+        : `<p class="muted">${esc(empty)}</p>`}
+    </section>`;
+  }
+
+  function sourceHtml(source) {
+    const type = source.type === 'quran' ? 'Coran'
+      : source.type === 'hadith' ? 'Hadith'
+      : source.type === 'dua' ? 'Invocation' : 'Explication';
+    return `<a class="chat-source" href="${esc(source.url)}">
+      <span class="source-type">${type}</span>
+      <span><b>${esc(source.ref)}</b>${source.grade ? `<small>${esc(source.grade)}</small>` : ''}</span>
+      ${icon('chevR', 14)}
+    </a>`;
+  }
+
+  function renderCitations(text, sources) {
+    const sourceMap = new Map(sources.map(source => [source.id.toUpperCase(), source]));
+    return esc(text).replace(/\[([A-Z]:[^\]\s]+)\]/gi, (whole, id) => {
+      const source = sourceMap.get(id.toUpperCase());
+      return source
+        ? `<a class="inline-citation" href="${esc(source.url)}" title="${esc(source.ref)}">[${esc(id)}]</a>`
+        : '';
+    }).replace(/\n/g, '<br>');
+  }
+
+  function renderSuggestions(suggestions) {
+    const root = document.getElementById('chatSuggestions');
+    if (!root) return;
+    const list = suggestions?.length
+      ? suggestions
+      : conversation.messages.length ? ['Explique davantage', 'Quelles sont tes sources ?', 'Résume simplement']
+        : STARTERS;
+    root.innerHTML = list.slice(0, 6).map(question =>
+      `<button class="chat-suggestion" data-question="${esc(question)}">${esc(question)}</button>`).join('');
+    root.querySelectorAll('[data-question]').forEach(button => {
+      button.onclick = () => sendNewMessage(button.dataset.question);
+    });
+  }
+
+  function bindMessageActions() {
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.onclick = () => {
+        const message = conversation.messages.find(item => item.id === button.dataset.copy);
+        if (message) copyText(assistantPlainText(message));
+      };
+    });
+    document.querySelectorAll('[data-share]').forEach(button => {
+      button.onclick = () => {
+        const message = conversation.messages.find(item => item.id === button.dataset.share);
+        if (message) shareText('Réponse de Nour', assistantPlainText(message));
+      };
+    });
+    document.querySelectorAll('[data-regen]').forEach(button => {
+      button.onclick = () => regenerate(button.dataset.regen);
+    });
+  }
+
+  function assistantPlainText(message) {
+    const response = message.response || {};
+    const lines = [
+      'Réponse directe', response.answer_directe,
+      '', 'Explication', response.explication,
+      ...(response.nuances?.length ? ['', 'Nuances', ...response.nuances.map(item => `• ${item}`)] : []),
+      ...(message.sources?.length ? ['', 'Sources', ...message.sources.map(source => `• ${source.ref}`)] : []),
+      '', message.mode === 'remote'
+        ? `Réponse générée par ${message.model?.provider || 'un modèle distant'} — ${message.model?.model || ''}`
+        : 'Mode Recherche locale — aucune génération par un LLM distant.',
+    ];
+    return lines.filter(item => item !== undefined && item !== null).join('\n').trim();
+  }
+
+  async function sendNewMessage(raw) {
+    const text = String(raw || '').trim();
+    if (!text || currentController) return;
+    if (!conversation.messages.length && conversation.title === 'Nouvelle conversation') conversation.title = text.slice(0, 52);
+    const userMessage = { role: 'user', content: text };
+    appendConversationMessage(conversation, userMessage);
+    input.value = '';
+    input.style.height = 'auto';
+    renderConversation(conversation);
+    await generateReply(conversation.messages[conversation.messages.length - 1]);
+  }
+
+  async function regenerate(assistantId) {
+    if (currentController) return;
+    const assistantIndex = conversation.messages.findIndex(message => message.id === assistantId);
+    if (assistantIndex < 0) return;
+    let userIndex = assistantIndex - 1;
+    while (userIndex >= 0 && conversation.messages[userIndex].role !== 'user') userIndex--;
+    if (userIndex < 0) return;
+    const userMessage = conversation.messages[userIndex];
+    conversation.messages.splice(assistantIndex, 1);
+    save();
+    renderConversation(conversation);
+    await generateReply(userMessage);
+  }
+
+  async function generateReply(userMessage) {
+    const run = ++currentRun;
+    currentController = new AbortController();
+    setBusy(true);
+    showTyping();
+    const previousAssistant = [...conversation.messages]
+      .reverse().find(message => message.role === 'assistant');
+    const history = conversationHistory(
+      conversation.messages.filter(message => message.id !== userMessage.id),
+    );
+
+    try {
+      const health = await aiHealth({ signal: currentController.signal, refresh: true });
+      let payload;
+      if (health.configured) {
+        status = { mode: 'remote', provider: health.provider, model: health.model };
+        renderStatus();
+        const plan = await aiPlan({
+          message: userMessage.content,
+          history,
+          signal: currentController.signal,
+        });
+        if (plan.clarification) {
+          payload = {
+            role: 'assistant',
+            mode: 'remote',
+            kind: 'clarification',
+            response: {
+              answer_directe: plan.clarification,
+              explication: '',
+              nuances: [],
+              follow_up_suggestions: [],
+            },
+            sources: [],
+            validation: { status: 'clarification' },
+            model: plan.model,
+          };
+        } else {
+          const retrieval = await retrieveSources(plan.search_query, {
+            smart: state.settings.searchSmart,
+            phonetic: state.settings.searchPhonetic,
+          });
+          const generated = await aiAnswer({
+            message: userMessage.content,
+            searchQuery: plan.search_query,
+            history,
+            sources: retrieval.sources,
+            style: plan.style,
+            signal: currentController.signal,
+          });
+          payload = {
+            role: 'assistant',
+            mode: 'remote',
+            response: generated.response,
+            sources: generated.sources,
+            validation: generated.validation,
+            model: generated.model,
+            retrieval: retrieval.stats,
+          };
+        }
+      } else {
+        status = { mode: 'local', provider: null, model: null };
+        renderStatus();
+        const retrieval = await retrieveSources(userMessage.content, {
+          smart: state.settings.searchSmart,
+          phonetic: state.settings.searchPhonetic,
+        });
+        payload = {
+          role: 'assistant',
+          ...buildLocalFallback(retrieval, previousAssistant, userMessage.content),
+          retrieval: retrieval.stats,
+        };
+      }
+
+      if (currentController.signal.aborted || run !== currentRun) return;
+      await progressivePreview(payload, currentController.signal);
+      if (currentController.signal.aborted || run !== currentRun) return;
+      appendConversationMessage(conversation, payload);
+      renderConversation(conversation, { suggestions: payload.response?.follow_up_suggestions });
+    } catch (error) {
+      if (error?.name === 'AbortError' || currentController?.signal.aborted) {
+        showStopped();
+      } else {
+        const retrieval = await retrieveSources(userMessage.content, {
+          smart: state.settings.searchSmart,
+          phonetic: state.settings.searchPhonetic,
+        });
+        const fallback = {
+          role: 'assistant',
+          ...buildLocalFallback(retrieval, previousAssistant, userMessage.content),
+          retrieval: retrieval.stats,
+        };
+        appendConversationMessage(conversation, fallback);
+        status = { mode: 'local', provider: null, model: null };
+        renderStatus();
+        renderConversation(conversation, { suggestions: fallback.response.follow_up_suggestions });
+        toast('Modèle distant indisponible — recherche locale affichée');
+      }
+    } finally {
+      if (run === currentRun) {
+        currentController = null;
+        setBusy(false);
+      }
+    }
+  }
+
+  function showTyping() {
+    const root = document.getElementById('chatMessages');
+    root.insertAdjacentHTML('beforeend', `<article class="chat-row assistant" id="chatTyping">
+      <div class="assistant-avatar">${icon('sparkle', 16)}</div>
+      <div class="chat-bubble assistant-bubble typing-bubble">
+        <span></span><span></span><span></span>
+        <small>Analyse de la question et vérification des sources…</small>
+      </div>
+    </article>`);
+    root.lastElementChild?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  }
+
+  async function progressivePreview(payload, signal) {
+    document.getElementById('chatTyping')?.remove();
+    const root = document.getElementById('chatMessages');
+    const draft = document.createElement('article');
+    draft.className = 'chat-row assistant';
+    draft.id = 'chatDraft';
+    draft.innerHTML = `<div class="assistant-avatar">${icon('sparkle', 16)}</div>
+      <div class="chat-bubble assistant-bubble">
+        <div class="assistant-meta"><span class="mode-pill ${payload.mode === 'remote' ? 'remote' : 'local'}">
+          ${payload.mode === 'remote' ? 'Assistant IA distant' : 'Recherche locale'}</span></div>
+        <section class="answer-section direct"><p id="streamDirect"></p></section>
+        <section class="answer-section"><p id="streamExplain"></p></section>
+      </div>`;
+    root.appendChild(draft);
+    const direct = payload.response?.answer_directe || '';
+    const explanation = payload.response?.explication || '';
+    await typeText(document.getElementById('streamDirect'), direct, signal);
+    await typeText(document.getElementById('streamExplain'), explanation, signal);
+  }
+
+  async function typeText(element, text, signal) {
+    if (!element || !text) return;
+    const chunks = text.match(/.{1,8}(?:\s|$)/g) || [text];
+    for (const chunk of chunks) {
+      if (signal.aborted) throw new DOMException('Génération arrêtée', 'AbortError');
+      element.textContent += chunk;
+      await new Promise(resolve => setTimeout(resolve, 12));
+    }
+  }
+
+  function showStopped() {
+    document.getElementById('chatTyping')?.remove();
+    document.getElementById('chatDraft')?.remove();
+    const root = document.getElementById('chatMessages');
+    root.insertAdjacentHTML('beforeend', `<div class="chat-stopped">${icon('stop', 13)}
+      Génération arrêtée. Vous pouvez régénérer la réponse.</div>`);
+  }
+
+  function setBusy(busy) {
+    document.getElementById('chatSend').hidden = busy;
+    document.getElementById('chatStop').hidden = !busy;
+    document.getElementById('chatInput').disabled = busy;
+    document.getElementById('chatSuggestions').classList.toggle('disabled', busy);
+  }
+
+  function openHistory() {
+    const conversations = state.chatConversations;
+    sheet(`<h2 style="margin:0 0 12px">Conversations</h2>
+      <button class="btn" id="historyNew" style="width:100%;margin-bottom:10px">${icon('plus', 16)} Nouvelle conversation</button>
+      <div class="conversation-list">
+        ${conversations.map(item => `<div class="conversation-item ${item.id === conversation.id ? 'active' : ''}">
+          <button class="conversation-open" data-open-chat="${esc(item.id)}">
+            <b>${esc(item.title)}</b>
+            <small>${formatDate(item.updatedAt)} · ${item.messages.length} message${item.messages.length > 1 ? 's' : ''}</small>
+          </button>
+          <button class="btn-icon" data-delete-chat="${esc(item.id)}" aria-label="Supprimer">${icon('trash', 16)}</button>
+        </div>`).join('') || '<p class="muted">Aucune conversation enregistrée.</p>'}
+      </div>`, root => {
+      root.querySelector('#historyNew').onclick = () => {
+        closeSheet();
+        conversation = createConversation();
+        renderConversation(conversation);
+        input.focus();
+      };
+      root.querySelectorAll('[data-open-chat]').forEach(button => {
+        button.onclick = () => {
+          const selected = selectConversation(button.dataset.openChat);
+          if (!selected) return;
+          conversation = selected;
+          closeSheet();
+          renderConversation(conversation, { instant: true });
+        };
+      });
+      root.querySelectorAll('[data-delete-chat]').forEach(button => {
+        button.onclick = () => {
+          const id = button.dataset.deleteChat;
+          deleteConversation(id);
+          conversation = activeConversation() || createConversation();
+          closeSheet();
+          renderConversation(conversation);
+        };
+      });
+    });
+  }
+}
+
+function stopGeneration() {
+  if (!currentController) return;
+  currentController.abort();
+  currentController = null;
+  currentRun += 1;
+  const input = document.getElementById('chatInput');
+  if (input) input.disabled = false;
+  const send = document.getElementById('chatSend');
+  const stop = document.getElementById('chatStop');
+  if (send) send.hidden = false;
+  if (stop) stop.hidden = true;
+}
+
+function formatDate(timestamp) {
+  try {
+    return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' }).format(new Date(timestamp));
+  } catch { return ''; }
 }

@@ -1,10 +1,11 @@
 // Service worker Nour — app shell pré-caché + cache à la demande des données.
-const VERSION = 'nour-v12';
+const VERSION = 'nour-v13';
 const SHELL = [
   './',
   'index.html',
   'css/app.css',
   'js/app.js', 'js/state.js', 'js/data.js', 'js/search.js',
+  'js/ai.js', 'js/assistant-config.js', 'js/rag.js',
   'js/engine.js', 'js/phonetic.js', 'js/translit.js', 'js/prayer.js', 'js/notify.js',
   'js/icons.js', 'js/views-qibla.js', 'js/views-tasbih.js', 'js/views-more.js', 'js/views-settings.js',
   'js/scenes.js', 'js/views-learn.js', 'js/geo.js', 'data/learn.json',
@@ -20,7 +21,7 @@ const SHELL = [
   'assets/mosques/zayed.webp', 'assets/mosques/hassan2.webp', 'assets/mosques/sultanahmet.webp',
   'assets/learn/wudu-intention.webp', 'assets/learn/wudu-hands.webp', 'assets/learn/wudu-mouth.webp',
   'assets/learn/wudu-nose.webp', 'assets/learn/wudu-face.webp', 'assets/learn/wudu-arms.webp',
-  'assets/learn/wudu-head.webp', 'assets/learn/wudu-feet.webp', 'assets/learn/wudu-complete.webp',
+  'assets/learn/wudu-head.webp', 'assets/learn/wudu-ears.webp', 'assets/learn/wudu-feet.webp', 'assets/learn/wudu-complete.webp',
   'assets/learn/salat-takbir.webp', 'assets/learn/salat-qiyam.webp', 'assets/learn/salat-ruku.webp',
   'assets/learn/salat-sujud.webp', 'assets/learn/salat-jalsa.webp', 'assets/learn/salat-tashahhud.webp',
   'assets/learn/salat-taslim.webp', 'assets/learn/salat-ready.webp',
